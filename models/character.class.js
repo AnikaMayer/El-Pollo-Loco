@@ -1,4 +1,6 @@
 class Character extends MovableObject {
+    height = 280;
+    y = 155;
     imgPath = ImageHub.PEPE;
 
     constructor() {
