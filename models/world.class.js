@@ -18,8 +18,9 @@ class World {
     }
 
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //am Anfang wird canvas immer geleert
 
+        //Objekte werden eingefügt bzw. "gezeichnet"
         this.addObjectsToMap(this.backgroundObjects);
         this.addToMap(this.character);
         this.addObjectsToMap(this.clouds);
@@ -38,6 +39,7 @@ class World {
         });
     }
 
+    //mO = movable Object -> Objekt wird mit entsprechender Höhe, Weite u. Koordinaten gezeichnet
     addToMap(mO) {
         this.ctx.drawImage(mO.img, mO.x, mO.y, mO.width, mO.height);
     }
