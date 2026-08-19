@@ -1,4 +1,4 @@
-class MovableObject {
+export class MovableObject {
     x = 120;
     y = 280;
     width = 100;

@@ -1,3 +1,6 @@
+import { Keyboard } from "../models/keyboard.class.js";
+import { World } from "../models/world.class.js";
+
 let canvas;
 let world;
 let keyboard = new Keyboard();
@@ -42,3 +45,5 @@ window.addEventListener("keyup", (event) => {
         keyboard.SPACE = false;
     }
 });
+
+init();

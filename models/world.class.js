@@ -1,4 +1,7 @@
-class World {
+import { level1 } from "../levels/level1.js";
+import { Character } from "./character.class.js";
+
+export class World {
     character = new Character();
     level = level1;
     canvas;

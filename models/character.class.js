@@ -1,4 +1,7 @@
-class Character extends MovableObject {
+import { ImageHub } from "./img-hub.class.js";
+import { MovableObject } from "./movable-object.class.js";
+
+export class Character extends MovableObject {
     y = 155;
     height = 280;
     speed = 10;

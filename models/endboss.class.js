@@ -1,4 +1,7 @@
-class Endboss extends MovableObject {
+import { ImageHub } from "./img-hub.class.js";
+import { MovableObject } from "./movable-object.class.js";
+
+export class Endboss extends MovableObject {
     y = 55;
     width = 250;
     height = 400;
