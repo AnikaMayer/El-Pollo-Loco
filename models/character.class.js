@@ -2,8 +2,8 @@ import { ImageHub } from "./img-hub.class.js";
 import { MovableObject } from "./movable-object.class.js";
 
 export class Character extends MovableObject {
-    y = 155;
-    height = 280;
+    y = 80;
+    height = 250;
     speed = 10;
     imgPath = ImageHub.PEPE;
     world;
@@ -11,6 +11,7 @@ export class Character extends MovableObject {
     constructor() {
         super().loadImage(this.imgPath.walk[0]);
         this.loadImages(this.imgPath.walk);
+        this.applyGravity();
         this.animate();
     }
 
