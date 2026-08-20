@@ -4,4 +4,5 @@ export class Keyboard {
     UP = false;
     DOWN = false;
     SPACE = false;
+    D = false;
 }

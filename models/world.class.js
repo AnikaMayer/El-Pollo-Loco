@@ -1,6 +1,7 @@
 import { level1 } from "../levels/level1.js";
 import { Character } from "./character.class.js";
 import { StatusBar } from "./status-bar.class.js";
+import { ThrowableObject } from "./throwable-object.class.js";
 
 export class World {
     character = new Character();
@@ -10,6 +11,7 @@ export class World {
     keyboard;
     camera_x = 0;
     statusbar = new StatusBar();
+    throwableObjects = [];
 
     constructor(_canvas, _keyboard) {
         this.ctx = _canvas.getContext("2d");
@@ -17,22 +19,37 @@ export class World {
         this.keyboard = _keyboard;
         this.draw();
         this.setWorld();
-        this.checkCollisions();
+        this.run();
     }
 
     setWorld() {
         this.character.world = this;
     }
 
-    checkCollisions() {
+    run() {
         setInterval(() => {
-            this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy)) {
-                    this.character.hit();
-                    this.statusbar.setPercentage(this.character.energy);
-                }
-            });
+            this.checkCollisions();
+            this.checkThrownObjects();
         }, 200);
+    }
+
+    checkThrownObjects() {
+        if (this.keyboard.D) {
+            let bottle = new ThrowableObject(
+                this.character.x + 100,
+                this.character.y + 100,
+            );
+            this.throwableObjects.push(bottle);
+        }
+    }
+
+    checkCollisions() {
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy)) {
+                this.character.hit();
+                this.statusbar.setPercentage(this.character.energy);
+            }
+        });
     }
 
     draw() {
@@ -48,6 +65,8 @@ export class World {
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.throwableObjects);
+
         this.ctx.translate(-this.camera_x, 0); //Map wird wieder nach rechts verschoben
 
         // draw() wird immer wieder aufgerufen

@@ -7,6 +7,7 @@ export class MovableObject extends DrawableObject {
     otherDirection = false;
     energy = 100;
     lastHit = 0;
+    keepFalling = false;
 
     applyGravity() {
         setInterval(() => {
@@ -18,7 +19,12 @@ export class MovableObject extends DrawableObject {
     }
 
     isAboveGround() {
-        return this.y < 180;
+        if (this.keepFalling) {
+            // throwable Object soll immer fallen
+            return true;
+        } else {
+            return this.y < 180;
+        }
     }
 
     //z.B.:character.isColliding(chicken);

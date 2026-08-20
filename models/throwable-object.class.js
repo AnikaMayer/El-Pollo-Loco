@@ -1,0 +1,24 @@
+import { ImageHub } from "./img-hub.class.js";
+import { MovableObject } from "./movable-object.class.js";
+
+export class ThrowableObject extends MovableObject {
+    imgPath = ImageHub.BOTTLE;
+    keepFalling = true;
+
+    constructor(x, y) {
+        super().loadImage(this.imgPath.rotation[0]);
+        this.x = x;
+        this.y = y;
+        this.width = 50;
+        this.height = 60;
+        this.throw();
+    }
+
+    throw() {
+        this.speedY = 30;
+        this.applyGravity();
+        setInterval(() => {
+            this.x += 10;
+        }, 25);
+    }
+}
