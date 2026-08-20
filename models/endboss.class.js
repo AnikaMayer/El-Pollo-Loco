@@ -1,4 +1,5 @@
 import { ImageHub } from "./img-hub.class.js";
+import { IntervalHub } from "./intervall-hub.class.js";
 import { MovableObject } from "./movable-object.class.js";
 
 export class Endboss extends MovableObject {
@@ -11,13 +12,11 @@ export class Endboss extends MovableObject {
         super().loadImage(this.imgPath.alert[0]);
         this.loadImages(this.imgPath.alert);
         this.x = 2500;
-        this.animate();
+        IntervalHub.startInterval(this.animate, 200);
     }
 
-    animate() {
-        setInterval(() => {
-            //alert animation
-            this.playAnimation(this.imgPath.alert);
-        }, 200);
-    }
+    animate = () => {
+        //alert animation
+        this.playAnimation(this.imgPath.alert);
+    };
 }

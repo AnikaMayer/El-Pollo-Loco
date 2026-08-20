@@ -1,4 +1,5 @@
 import { ImageHub } from "./img-hub.class.js";
+import { IntervalHub } from "./intervall-hub.class.js";
 import { MovableObject } from "./movable-object.class.js";
 
 export class Character extends MovableObject {
@@ -16,42 +17,42 @@ export class Character extends MovableObject {
         this.loadImages(this.imgPath.dead);
         this.loadImages(this.imgPath.hurt);
         this.applyGravity();
-        this.animate();
+        IntervalHub.startInterval(this.applyGravity, 1000 / 25);
+        IntervalHub.startInterval(this.moveCharacter, 1000 / 60);
+        IntervalHub.startInterval(this.animateCharacter, 50);
     }
 
-    animate() {
-        setInterval(() => {
-            if (
-                this.world.keyboard.RIGHT &&
-                this.x < this.world.level.level_end_x
-            ) {
-                this.moveRight();
-                this.otherDirection = false;
-            }
-            if (this.world.keyboard.LEFT && this.x > 0) {
-                this.moveLeft();
-                this.otherDirection = true;
-            }
-            if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-                this.jump();
-            }
-            this.world.camera_x = -this.x + 100; //Map wird gegenteilig zum Character verschoben
-        }, 1000 / 60);
+    moveCharacter = () => {
+        if (
+            this.world.keyboard.RIGHT &&
+            this.x < this.world.level.level_end_x
+        ) {
+            this.moveRight();
+            this.otherDirection = false;
+        }
+        if (this.world.keyboard.LEFT && this.x > 0) {
+            this.moveLeft();
+            this.otherDirection = true;
+        }
+        if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+            this.jump();
+        }
+        this.world.camera_x = -this.x + 100; //Map wird gegenteilig zum Character verschoben
+    };
 
-        setInterval(() => {
-            if (this.isDead()) {
-                this.playAnimation(this.imgPath.dead); //dead animation
-            } else if (this.isHurt()) {
-                this.playAnimation(this.imgPath.hurt);
-            } else if (this.isAboveGround()) {
-                this.playAnimation(this.imgPath.jump); //jump animation
-            } else {
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                    this.playAnimation(this.imgPath.walk); //walk animation
-                }
+    animateCharacter = () => {
+        if (this.isDead()) {
+            this.playAnimation(this.imgPath.dead); //dead animation
+        } else if (this.isHurt()) {
+            this.playAnimation(this.imgPath.hurt);
+        } else if (this.isAboveGround()) {
+            this.playAnimation(this.imgPath.jump); //jump animation
+        } else {
+            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                this.playAnimation(this.imgPath.walk); //walk animation
             }
-        }, 50);
-    }
+        }
+    };
 
     jump() {
         this.speedY = 30;

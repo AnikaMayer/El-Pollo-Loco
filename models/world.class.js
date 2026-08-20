@@ -1,5 +1,6 @@
 import { level1 } from "../levels/level1.js";
 import { Character } from "./character.class.js";
+import { IntervalHub } from "./intervall-hub.class.js";
 import { StatusBar } from "./status-bar.class.js";
 import { ThrowableObject } from "./throwable-object.class.js";
 
@@ -19,19 +20,17 @@ export class World {
         this.keyboard = _keyboard;
         this.draw();
         this.setWorld();
-        this.run();
+        IntervalHub.startInterval(this.run, 200);
     }
 
     setWorld() {
         this.character.world = this;
     }
 
-    run() {
-        setInterval(() => {
-            this.checkCollisions();
-            this.checkThrownObjects();
-        }, 200);
-    }
+    run = () => {
+        this.checkCollisions();
+        this.checkThrownObjects();
+    };
 
     checkThrownObjects() {
         if (this.keyboard.D) {

@@ -1,4 +1,5 @@
 import { ImageHub } from "./img-hub.class.js";
+import { IntervalHub } from "./intervall-hub.class.js";
 import { MovableObject } from "./movable-object.class.js";
 
 export class ThrowableObject extends MovableObject {
@@ -16,9 +17,11 @@ export class ThrowableObject extends MovableObject {
 
     throw() {
         this.speedY = 30;
-        this.applyGravity();
-        setInterval(() => {
-            this.x += 10;
-        }, 25);
+        IntervalHub.startInterval(this.applyGravity, 1000 / 25);
+        IntervalHub.startInterval(this.flyingBottle, 25);
     }
+
+    flyingBottle = () => {
+        this.x += 10;
+    };
 }
