@@ -6,6 +6,7 @@ export class Chicken extends MovableObject {
     width = 80;
     height = 60;
     imgPath = ImageHub.CHICKEN;
+    showFrame = true;
 
     constructor() {
         super().loadImage(this.imgPath.walk[0]);

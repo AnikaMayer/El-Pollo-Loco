@@ -1,5 +1,6 @@
 import { level1 } from "../levels/level1.js";
 import { Character } from "./character.class.js";
+import { StatusBar } from "./status-bar.class.js";
 
 export class World {
     character = new Character();
@@ -8,6 +9,7 @@ export class World {
     ctx;
     keyboard;
     camera_x = 0;
+    statusbar = new StatusBar();
 
     constructor(_canvas, _keyboard) {
         this.ctx = _canvas.getContext("2d");
@@ -15,16 +17,34 @@ export class World {
         this.keyboard = _keyboard;
         this.draw();
         this.setWorld();
+        this.checkCollisions();
     }
 
     setWorld() {
         this.character.world = this;
     }
 
+    checkCollisions() {
+        setInterval(() => {
+            this.level.enemies.forEach((enemy) => {
+                if (this.character.isColliding(enemy)) {
+                    this.character.hit();
+                    this.statusbar.setPercentage(this.character.energy);
+                }
+            });
+        }, 200);
+    }
+
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //am Anfang wird canvas immer geleert
         this.ctx.translate(this.camera_x, 0); //Map wird nach links verschoben
         this.addObjectsToMap(this.level.backgroundObjects); //Objekte werden eingefügt bzw. "gezeichnet"
+
+        this.ctx.translate(-this.camera_x, 0); // Kameraperspektive zurücksetzen
+        // ------ Space for fixed objects ------
+        this.addToMap(this.statusbar);
+        this.ctx.translate(this.camera_x, 0); // Kameraperspektive wieder positionieren
+
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
@@ -46,15 +66,24 @@ export class World {
     //mO = movable Object -> Objekt wird mit entsprechender Höhe, Weite u. Koordinaten gezeichnet
     addToMap(mO) {
         if (mO.otherDirection) {
-            this.ctx.save();
-            this.ctx.translate(mO.width, 0);
-            this.ctx.scale(-1, 1);
-            mO.x = mO.x * -1;
+            this.flipImage(mO);
         }
-        this.ctx.drawImage(mO.img, mO.x, mO.y, mO.width, mO.height);
+        mO.draw(this.ctx);
+        mO.drawFrame(this.ctx);
         if (mO.otherDirection) {
-            mO.x = mO.x * -1;
-            this.ctx.restore();
+            this.flipImageBack(mO);
         }
+    }
+
+    flipImage(mO) {
+        this.ctx.save();
+        this.ctx.translate(mO.width, 0);
+        this.ctx.scale(-1, 1);
+        mO.x = mO.x * -1;
+    }
+
+    flipImageBack(mO) {
+        mO.x = mO.x * -1;
+        this.ctx.restore();
     }
 }

@@ -1,15 +1,12 @@
-export class MovableObject {
-    x = 120;
-    y = 280;
-    width = 100;
-    height = 150;
-    img;
-    imageCache = {};
-    currentImage = 0;
+import { DrawableObject } from "./drawable-object.class.js";
+
+export class MovableObject extends DrawableObject {
     speed = 0.15;
     speedY = 0;
     acceleration = 2.5;
     otherDirection = false;
+    energy = 100;
+    lastHit = 0;
 
     applyGravity() {
         setInterval(() => {
@@ -24,17 +21,33 @@ export class MovableObject {
         return this.y < 180;
     }
 
-    loadImage(path) {
-        this.img = new Image();
-        this.img.src = path;
+    //z.B.:character.isColliding(chicken);
+    isColliding(mO) {
+        return (
+            this.x + this.width > mO.x &&
+            this.y + this.height > mO.y &&
+            this.x < mO.x + mO.width &&
+            this.y < mO.y + mO.height
+        );
     }
 
-    loadImages(arr) {
-        arr.forEach((path) => {
-            let img = new Image();
-            img.src = path;
-            this.imageCache[path] = img;
-        });
+    hit() {
+        this.energy -= 5;
+        if (this.energy < 0) {
+            this.energy = 0;
+        } else {
+            this.lastHit = new Date().getTime();
+        }
+    }
+
+    isHurt() {
+        let timepassed = new Date().getTime() - this.lastHit; // Difference in ms
+        timepassed = timepassed / 1000; // Difference in s
+        return timepassed < 1;
+    }
+
+    isDead() {
+        return this.energy === 0;
     }
 
     playAnimation(images) {

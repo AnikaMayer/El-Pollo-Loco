@@ -7,11 +7,14 @@ export class Character extends MovableObject {
     speed = 10;
     imgPath = ImageHub.PEPE;
     world;
+    showFrame = true;
 
     constructor() {
         super().loadImage(this.imgPath.walk[0]);
         this.loadImages(this.imgPath.walk);
         this.loadImages(this.imgPath.jump);
+        this.loadImages(this.imgPath.dead);
+        this.loadImages(this.imgPath.hurt);
         this.applyGravity();
         this.animate();
     }
@@ -36,7 +39,11 @@ export class Character extends MovableObject {
         }, 1000 / 60);
 
         setInterval(() => {
-            if (this.isAboveGround()) {
+            if (this.isDead()) {
+                this.playAnimation(this.imgPath.dead); //dead animation
+            } else if (this.isHurt()) {
+                this.playAnimation(this.imgPath.hurt);
+            } else if (this.isAboveGround()) {
                 this.playAnimation(this.imgPath.jump); //jump animation
             } else {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
