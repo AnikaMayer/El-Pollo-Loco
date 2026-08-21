@@ -55,6 +55,7 @@ export class World {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //am Anfang wird canvas immer geleert
         this.ctx.translate(this.camera_x, 0); //Map wird nach links verschoben
         this.addObjectsToMap(this.level.backgroundObjects); //Objekte werden eingefügt bzw. "gezeichnet"
+        this.addObjectsToMap(this.level.clouds);
 
         this.ctx.translate(-this.camera_x, 0); // Kameraperspektive zurücksetzen
         // ------ Space for fixed objects ------
@@ -62,7 +63,6 @@ export class World {
         this.ctx.translate(this.camera_x, 0); // Kameraperspektive wieder positionieren
 
         this.addToMap(this.character);
-        this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.throwableObjects);
 
