@@ -3,6 +3,8 @@ import { Character } from "./character.class.js";
 import { IntervalHub } from "./intervall-hub.class.js";
 import { HealthBar } from "./health-bar.class.js";
 import { ThrowableObject } from "./throwable-object.class.js";
+import { BottleBar } from "./bottle-bar.class.js";
+import { CoinBar } from "./coin-bar.class.js";
 
 export class World {
     character = new Character();
@@ -12,6 +14,8 @@ export class World {
     keyboard;
     camera_x = 0;
     healthBar = new HealthBar();
+    bottleBar = new BottleBar();
+    coinBar = new CoinBar();
     throwableObjects = [];
 
     constructor(_canvas, _keyboard) {
@@ -46,7 +50,10 @@ export class World {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
                 this.character.hit();
-                this.healthBar.setPercentage(this.character.energy);
+                this.healthBar.setPercentage(
+                    this.character.energy,
+                    this.healthBar.imgPath,
+                );
             }
         });
     }
@@ -60,6 +67,8 @@ export class World {
         this.ctx.translate(-this.camera_x, 0); // Kameraperspektive zurücksetzen
         // ------ Space for fixed objects ------
         this.addToMap(this.healthBar);
+        this.addToMap(this.bottleBar);
+        this.addToMap(this.coinBar);
         this.ctx.translate(this.camera_x, 0); // Kameraperspektive wieder positionieren
 
         this.addToMap(this.character);
