@@ -9,6 +9,17 @@ export class MovableObject extends DrawableObject {
     energy = 100;
     lastHit = 0;
     keepFalling = false;
+    rX;
+    rY;
+    rW;
+    rH;
+
+    getRealFrame() {
+        this.rX = this.x + this.offset.left;
+        this.rY = this.y + this.offset.top;
+        this.rW = this.width - this.offset.left - this.offset.right;
+        this.rH = this.height - this.offset.top - this.offset.bottom;
+    }
 
     applyGravity = () => {
         if (this.isAboveGround() || this.speedY > 0) {
@@ -28,11 +39,13 @@ export class MovableObject extends DrawableObject {
 
     //z.B.:character.isColliding(chicken);
     isColliding(mO) {
+        this.getRealFrame();
+        mO.getRealFrame();
         return (
-            this.x + this.width > mO.x &&
-            this.y + this.height > mO.y &&
-            this.x < mO.x + mO.width &&
-            this.y < mO.y + mO.height
+            this.rX + this.rW > mO.rX &&
+            this.rY + this.rH > mO.rY &&
+            this.rX < mO.rX + mO.rW &&
+            this.rY < mO.rY + mO.rH
         );
     }
 

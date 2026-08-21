@@ -8,6 +8,12 @@ export class Chicken extends MovableObject {
     height = 60;
     imgPath = ImageHub.CHICKEN;
     showFrame = true;
+    offset = {
+        top: 10,
+        right: 10,
+        bottom: 5,
+        left: 10,
+    };
 
     constructor() {
         super().loadImage(this.imgPath.walk[0]);
@@ -17,10 +23,11 @@ export class Chicken extends MovableObject {
         this.speed = 0.15 + Math.random() * 0.5;
         IntervalHub.startInterval(this.moveChicken, 1000 / 60);
         IntervalHub.startInterval(this.animateChicken, 200);
+        this.getRealFrame();
     }
 
     moveChicken = () => {
-        this.moveLeft();
+        // this.moveLeft();
     };
 
     animateChicken = () => {

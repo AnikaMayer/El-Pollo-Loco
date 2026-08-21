@@ -9,6 +9,12 @@ export class Character extends MovableObject {
     imgPath = ImageHub.PEPE;
     world;
     showFrame = true;
+    offset = {
+        top: 120,
+        right: 27,
+        bottom: 17,
+        left: 25,
+    };
 
     constructor() {
         super().loadImage(this.imgPath.walk[0]);
@@ -20,6 +26,7 @@ export class Character extends MovableObject {
         IntervalHub.startInterval(this.applyGravity, 1000 / 25);
         IntervalHub.startInterval(this.moveCharacter, 1000 / 60);
         IntervalHub.startInterval(this.animateCharacter, 50);
+        this.getRealFrame();
     }
 
     moveCharacter = () => {
