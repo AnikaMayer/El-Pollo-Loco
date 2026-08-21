@@ -5,6 +5,7 @@ import { HealthBar } from "./health-bar.class.js";
 import { ThrowableObject } from "./throwable-object.class.js";
 import { BottleBar } from "./bottle-bar.class.js";
 import { CoinBar } from "./coin-bar.class.js";
+import { EndbossBar } from "./endboss-bar.class.js";
 
 export class World {
     character = new Character();
@@ -16,6 +17,7 @@ export class World {
     healthBar = new HealthBar();
     bottleBar = new BottleBar();
     coinBar = new CoinBar();
+    endbossBar = new EndbossBar();
     throwableObjects = [];
 
     constructor(_canvas, _keyboard) {
@@ -69,6 +71,7 @@ export class World {
         this.addToMap(this.healthBar);
         this.addToMap(this.bottleBar);
         this.addToMap(this.coinBar);
+        this.addToMap(this.endbossBar);
         this.ctx.translate(this.camera_x, 0); // Kameraperspektive wieder positionieren
 
         this.addToMap(this.character);
