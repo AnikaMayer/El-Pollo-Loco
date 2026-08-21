@@ -1,4 +1,5 @@
 import { ImageHub } from "./img-hub.class.js";
+import { IntervalHub } from "./intervall-hub.class.js";
 import { MovableObject } from "./movable-object.class.js";
 
 export class Cloud extends MovableObject {
@@ -11,10 +12,10 @@ export class Cloud extends MovableObject {
         super().loadImage(this.imgPath[0]);
 
         this.x = Math.random() * 500; //zufällig generierte Zahl zwischen 0 und 500
-        this.animate();
+        IntervalHub.startInterval(this.moveClouds, 1000 / 60);
     }
 
-    animate() {
+    moveClouds = () => {
         this.moveLeft();
-    }
+    };
 }

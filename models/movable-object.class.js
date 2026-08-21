@@ -1,5 +1,4 @@
 import { DrawableObject } from "./drawable-object.class.js";
-import { IntervalHub } from "./intervall-hub.class.js";
 
 export class MovableObject extends DrawableObject {
     speed = 0.15;
