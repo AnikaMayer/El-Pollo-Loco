@@ -1,0 +1,25 @@
+import { CollectableObject } from "./collectable-object.class.js";
+import { ImageHub } from "./img-hub.class.js";
+
+export class Bottle extends CollectableObject {
+    x = 300;
+    y = 380;
+    width = 60;
+    height = 50;
+    imgPath = ImageHub.BOTTLE.onGround;
+    showFrame = true;
+    offset = {
+        top: 10,
+        right: 10,
+        bottom: 5,
+        left: 25,
+    };
+
+    constructor() {
+        super().loadImage(this.imgPath[0]);
+        this.loadImages(this.imgPath);
+        this.x = 200 + Math.random() * 500;
+        // this.y = 300 + Math.random() * -50;
+        this.getRealFrame();
+    }
+}

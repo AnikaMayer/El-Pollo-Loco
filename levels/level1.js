@@ -1,4 +1,5 @@
 import { BackgroundObject } from "../models/background-object.class.js";
+import { Bottle } from "../models/bottles.class.js";
 import { Chicken } from "../models/chicken.class.js";
 import { Cloud } from "../models/clouds.class.js";
 import { Coin } from "../models/coins.class.js";
@@ -9,6 +10,7 @@ import { Level } from "../models/level.class.js";
 export const level1 = new Level(
     [new Chicken(), new Chicken(), new Chicken(), new Endboss()],
     [new Cloud()],
+    [new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle()],
     [new Coin(), new Coin(), new Coin(), new Coin(), new Coin()],
     [
         new BackgroundObject(ImageHub.BACKGROUND.air, -720),
