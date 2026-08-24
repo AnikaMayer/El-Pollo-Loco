@@ -8,6 +8,6 @@ export class CoinBar extends StatusBar {
         super();
         this.loadImages(this.imgPath);
         this.y = 45;
-        this.setPercentage(100, this.imgPath);
+        this.setPercentage(0, this.imgPath);
     }
 }

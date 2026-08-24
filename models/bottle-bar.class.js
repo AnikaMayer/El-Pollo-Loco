@@ -8,6 +8,6 @@ export class BottleBar extends StatusBar {
         super();
         this.loadImages(this.imgPath);
         this.y = 0;
-        this.setPercentage(100, this.imgPath);
+        this.setPercentage(0, this.imgPath);
     }
 }
