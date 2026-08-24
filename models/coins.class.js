@@ -29,9 +29,9 @@ export class Coin extends CollectableObject {
         this.playAnimation(this.imgPath);
     };
 
-    placeCoins() {}
+    // placeCoins() {}
 
-    coinPatterns() {
-        return ((this.x = 400), (this.y = 280));
-    }
+    // coinPatterns() {
+    //     return ((this.x = 400), (this.y = 280));
+    // }
 }

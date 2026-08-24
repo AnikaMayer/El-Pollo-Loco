@@ -19,6 +19,8 @@ export class World {
     coinBar = new CoinBar();
     endbossBar = new EndbossBar();
     throwableObjects = [];
+    totalCoins = this.level.coin.length;
+    totalBottles = this.level.bottle.length;
 
     constructor(_canvas, _keyboard) {
         this.ctx = _canvas.getContext("2d");
@@ -27,6 +29,7 @@ export class World {
         this.draw();
         this.setWorld();
         IntervalHub.startInterval(this.run, 200);
+        IntervalHub.startInterval(this.checkObjectCollisions, 1000 / 60);
     }
 
     setWorld() {
@@ -34,7 +37,7 @@ export class World {
     }
 
     run = () => {
-        this.checkCollisions();
+        this.checkEnemyCollisions();
         this.checkThrownObjects();
     };
 
@@ -48,7 +51,7 @@ export class World {
         }
     }
 
-    checkCollisions() {
+    checkEnemyCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
                 this.character.hit();
@@ -60,12 +63,39 @@ export class World {
         });
     }
 
+    checkObjectCollisions = () => {
+        this.level.coin = this.checkCollectables(
+            this.level.coin,
+            this.coinBar,
+            this.totalCoins,
+        );
+        this.level.bottle = this.checkCollectables(
+            this.level.bottle,
+            this.bottleBar,
+            this.totalBottles,
+        );
+    };
+
+    checkCollectables(objects, bar, total) {
+        const remainingObjects = objects.filter((object) => {
+            return !this.character.isColliding(object);
+        });
+
+        if (remainingObjects.length < objects.length) {
+            const collected = total - remainingObjects.length;
+            const percentage = Math.round((collected / total) * 100);
+            bar.setPercentage(percentage, bar.imgPath);
+        }
+        return remainingObjects;
+    }
+
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //am Anfang wird canvas immer geleert
         this.ctx.translate(this.camera_x, 0); //Map wird nach links verschoben
         this.addObjectsToMap(this.level.backgroundObjects); //Objekte werden eingefügt bzw. "gezeichnet"
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.coin);
+        this.addObjectsToMap(this.level.bottle);
 
         this.ctx.translate(-this.camera_x, 0); // Kameraperspektive zurücksetzen
         // ------ Space for fixed objects ------
@@ -82,10 +112,7 @@ export class World {
         this.ctx.translate(-this.camera_x, 0); //Map wird wieder nach rechts verschoben
 
         // draw() wird immer wieder aufgerufen
-        const self = this;
-        requestAnimationFrame(function () {
-            self.draw();
-        });
+        requestAnimationFrame(() => this.draw());
     }
 
     addObjectsToMap(objects) {
