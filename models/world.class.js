@@ -65,7 +65,7 @@ export class World {
         this.ctx.translate(this.camera_x, 0); //Map wird nach links verschoben
         this.addObjectsToMap(this.level.backgroundObjects); //Objekte werden eingefügt bzw. "gezeichnet"
         this.addObjectsToMap(this.level.clouds);
-        this.addObjectsToMap(this.level.collectableObjects);
+        this.addObjectsToMap(this.level.coin);
 
         this.ctx.translate(-this.camera_x, 0); // Kameraperspektive zurücksetzen
         // ------ Space for fixed objects ------
