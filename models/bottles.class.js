@@ -15,10 +15,10 @@ export class Bottle extends CollectableObject {
         left: 25,
     };
 
-    constructor() {
+    constructor(_x) {
         super().loadImage(this.imgPath[0]);
         this.loadImages(this.imgPath);
-        this.x = 200 + Math.random() * 500;
+        this.x = _x;
         // this.y = 300 + Math.random() * -50;
         this.getRealFrame();
     }

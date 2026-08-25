@@ -10,7 +10,13 @@ import { Level } from "../models/level.class.js";
 export const level1 = new Level(
     [new Chicken(), new Chicken(), new Chicken(), new Endboss()],
     [new Cloud()],
-    [new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle()],
+    [
+        new Bottle(300),
+        new Bottle(600),
+        new Bottle(850),
+        new Bottle(1200),
+        new Bottle(1600),
+    ],
     [new Coin(), new Coin(), new Coin(), new Coin(), new Coin()],
     [
         new BackgroundObject(ImageHub.BACKGROUND.air, -720),
