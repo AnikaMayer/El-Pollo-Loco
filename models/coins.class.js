@@ -3,8 +3,8 @@ import { ImageHub } from "./img-hub.class.js";
 import { IntervalHub } from "./intervall-hub.class.js";
 
 export class Coin extends CollectableObject {
-    x = 300;
-    y = 300;
+    x;
+    y;
     width = 140;
     height = 140;
     imgPath = ImageHub.COIN;
@@ -16,11 +16,13 @@ export class Coin extends CollectableObject {
         left: 50,
     };
 
-    constructor() {
+    constructor(_x, _y) {
         super().loadImage(this.imgPath[0]);
         this.loadImages(this.imgPath);
         IntervalHub.startInterval(this.animateCoin, 400);
-        this.x = 200 + Math.random() * 500;
+        this.x = _x;
+        this.y = _y;
+        // this.x = 200 + Math.random() * 500;
         // this.y = 300 + Math.random() * -50;
         this.getRealFrame();
     }

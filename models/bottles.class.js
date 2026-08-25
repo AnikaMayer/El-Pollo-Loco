@@ -2,7 +2,7 @@ import { CollectableObject } from "./collectable-object.class.js";
 import { ImageHub } from "./img-hub.class.js";
 
 export class Bottle extends CollectableObject {
-    x = 300;
+    x;
     y = 380;
     width = 60;
     height = 50;
@@ -19,7 +19,6 @@ export class Bottle extends CollectableObject {
         super().loadImage(this.imgPath[0]);
         this.loadImages(this.imgPath);
         this.x = _x;
-        // this.y = 300 + Math.random() * -50;
         this.getRealFrame();
     }
 }
