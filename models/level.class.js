@@ -16,20 +16,17 @@ export class Level {
     }
 
     placeBottles() {
-        this.getSpaceBetween(this.bottle, this.level_end_x);
-    }
-
-    getSpaceBetween(objArray, canvasWidth) {
-        const numberOfObjects = objArray.length;
-        const objectWidth = objArray[0].width;
+        const numberOfBottles = this.bottle.length;
+        const canvasWidth = this.level_end_x;
+        const bottleWidth = this.bottle[0].width;
         const gap =
-            (canvasWidth - objectWidth * numberOfObjects) /
-            (numberOfObjects + 1);
+            (canvasWidth - bottleWidth * numberOfBottles) /
+            (numberOfBottles + 1);
         const x = gap;
-        objArray.forEach((object) => {
+        this.bottle.forEach((object) => {
             object.x = x;
-            x += gap + objectWidth;
+            x += gap + bottleWidth;
         });
-        return objArray;
+        return this.bottle;
     }
 }
