@@ -18,27 +18,10 @@ export const level1 = new Level(
         new Bottle(1900),
     ],
     [
-        new Coin(510, 275),
-        new Coin(620, 200),
-        new Coin(730, 125),
-        new Coin(840, 200),
-        new Coin(950, 275),
-
-        new Coin(1200, 250),
-        new Coin(1250, 250),
-        new Coin(1300, 250),
-        new Coin(1350, 250),
-        new Coin(1400, 250),
-
-        new Coin(1700, 250),
-        new Coin(1700, 200),
-        new Coin(1700, 150),
-
-        new Coin(1900, 250),
-        new Coin(1950, 225),
-        new Coin(2000, 200),
-        new Coin(2050, 175),
-        new Coin(2100, 150),
+        ...Coin.arcPattern(510, 275),
+        ...Coin.horizontalLinePattern(1200, 250),
+        ...Coin.verticalLinePattern(1700, 250),
+        ...Coin.diagonalPattern(1900, 250),
     ],
     [
         new BackgroundObject(ImageHub.BACKGROUND.air, -720),

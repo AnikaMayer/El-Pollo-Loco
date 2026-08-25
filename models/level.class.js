@@ -20,12 +20,12 @@ export class Level {
     }
 
     getSpaceBetween(objArray, canvasWidth) {
-        let numberOfObjects = objArray.length;
-        let objectWidth = objArray[0].width;
-        let gap =
+        const numberOfObjects = objArray.length;
+        const objectWidth = objArray[0].width;
+        const gap =
             (canvasWidth - objectWidth * numberOfObjects) /
             (numberOfObjects + 1);
-        let x = gap;
+        const x = gap;
         objArray.forEach((object) => {
             object.x = x;
             x += gap + objectWidth;
