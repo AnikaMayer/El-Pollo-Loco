@@ -21,6 +21,7 @@ export class World {
     throwableObjects = [];
     totalCoins = this.level.coin.length;
     totalBottles = this.level.bottle.length;
+    availableBottles = 0;
     bottleError = false;
 
     constructor(_canvas, _keyboard) {
@@ -43,7 +44,7 @@ export class World {
     };
 
     checkThrownObjects() {
-        if (this.totalBottles > 0) {
+        if (this.availableBottles > 0) {
             if (this.keyboard.D) {
                 let bottle = new ThrowableObject(
                     this.character.x + 100,
@@ -51,14 +52,14 @@ export class World {
                 );
                 this.throwableObjects.push(bottle);
                 console.log(this.throwableObjects);
-                this.totalBottles--;
-                console.log(this.totalBottles);
+                this.availableBottles--;
+                console.log(this.availableBottles);
             }
-        } else if (this.totalBottles === 0 && this.keyboard.D) {
+        } else if (this.availableBottles === 0 && this.keyboard.D) {
             this.bottleError = true;
             setTimeout(() => {
                 this.bottleError = false;
-            }, 2500);
+            }, 1200);
         }
     }
 
@@ -80,19 +81,23 @@ export class World {
             this.coinBar,
             this.totalCoins,
         );
+
+        const bottlesBefore = this.level.bottle.length;
         this.level.bottle = this.checkCollectables(
             this.level.bottle,
             this.bottleBar,
             this.totalBottles,
         );
+        this.availableBottles += bottlesBefore - this.level.bottle.length;
     };
 
     checkCollectables(objects, bar, total) {
         const remainingObjects = objects.filter((object) => {
-            return !this.character.isColliding(object);
+            return !this.character.isColliding(object); // wenn keine Kollision character/coin erfolgt: return, sonst weiter mit if-Abfrage
         });
 
         if (remainingObjects.length < objects.length) {
+            // bedeutet: es sind noch nicht gesammelte Münzen vorhanden im Lvl
             const collected = total - remainingObjects.length;
             const percentage = Math.round((collected / total) * 100);
             bar.setPercentage(percentage, bar.imgPath);
