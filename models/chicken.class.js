@@ -18,6 +18,7 @@ export class Chicken extends MovableObject {
     constructor() {
         super().loadImage(this.imgPath.walk[0]);
         this.loadImages(this.imgPath.walk);
+        this.loadImages(this.imgPath.dead);
 
         this.x = 200 + Math.random() * 500;
         this.speed = 0.15 + Math.random() * 0.5;
@@ -31,7 +32,10 @@ export class Chicken extends MovableObject {
     };
 
     animateChicken = () => {
-        //walk animation
-        this.playAnimation(this.imgPath.walk);
+        if (this.isDead()) {
+            this.playAnimation(this.imgPath.dead); // dead-animation
+        } else {
+            this.playAnimation(this.imgPath.walk); //walk animation
+        }
     };
 }
