@@ -33,6 +33,7 @@ export class Chicken extends MovableObject {
 
     animateChicken = () => {
         if (this.isDead()) {
+            // wenn isDead() zurückgegeben aus movableObj
             this.playAnimation(this.imgPath.dead); // dead-animation
         } else {
             this.playAnimation(this.imgPath.walk); //walk animation

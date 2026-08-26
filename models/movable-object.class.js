@@ -68,7 +68,7 @@ export class MovableObject extends DrawableObject {
     }
 
     isDead() {
-        return this.energy === 0;
+        return this.energy === 0; // wenn 0, wird "isDead()" zurückgegen, Aufruf dann im Objekt selbst unter animate
     }
 
     playAnimation(images) {
