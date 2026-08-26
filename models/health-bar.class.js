@@ -7,7 +7,7 @@ export class HealthBar extends StatusBar {
     constructor() {
         super();
         this.loadImages(this.imgPath);
-        this.y = 90;
+        this.y = 0;
         this.setPercentage(100, this.imgPath);
     }
 }

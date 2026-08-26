@@ -1,13 +1,14 @@
 import { ImageHub } from "./img-hub.class.js";
+import { StatusCounter } from "./status-counter.class.js";
 import { StatusBar } from "./statusbar.class.js";
 
-export class BottleBar extends StatusBar {
-    imgPath = ImageHub.STATUSBAR.bottle;
+export class BottleBar extends StatusCounter {
+    imgPath = ImageHub.STATUSBAR.iconBottle;
 
     constructor() {
         super();
-        this.loadImages(this.imgPath);
-        this.y = 0;
-        this.setPercentage(0, this.imgPath);
+        this.loadImage(this.imgPath);
+        this.y = 50;
+        this.x = 125;
     }
 }

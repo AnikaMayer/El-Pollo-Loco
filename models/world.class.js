@@ -20,6 +20,7 @@ export class World {
     endbossBar = new EndbossBar();
     throwableObjects = [];
     totalCoins = this.level.coin.length;
+    collectedCoins = 0;
     totalBottles = this.level.bottle.length;
     availableBottles = 0;
     bottleError = false;
@@ -31,7 +32,8 @@ export class World {
         this.draw();
         this.setWorld();
         IntervalHub.startInterval(this.run, 1000 / 5);
-        IntervalHub.startInterval(this.checkObjectCollisions, 1000 / 60);
+        IntervalHub.startInterval(this.checkCoinCollision, 1000 / 60);
+        IntervalHub.startInterval(this.checkBootleCollision, 1000 / 60);
     }
 
     setWorld() {
@@ -46,14 +48,13 @@ export class World {
     checkThrownObjects() {
         if (this.availableBottles > 0) {
             if (this.keyboard.D) {
-                let bottle = new ThrowableObject(
+                const bottle = new ThrowableObject(
                     this.character.x + 100,
                     this.character.y + 100,
                 );
                 this.throwableObjects.push(bottle);
-                console.log(this.throwableObjects);
                 this.availableBottles--;
-                console.log(this.availableBottles);
+                this.bottleBar.setCount(this.availableBottles);
             }
         } else if (this.availableBottles === 0 && this.keyboard.D) {
             this.bottleError = true;
@@ -72,38 +73,40 @@ export class World {
                     this.healthBar.imgPath,
                 );
             }
+            this.throwableObjects.forEach((thrObj) => {
+                if (thrObj.isColliding(enemy)) {
+                    enemy.hit();
+                    console.log(enemy.energy);
+                }
+            });
         });
     }
 
-    checkObjectCollisions = () => {
-        this.level.coin = this.checkCollectables(
-            this.level.coin,
-            this.coinBar,
-            this.totalCoins,
-        );
-
-        const bottlesBefore = this.level.bottle.length;
-        this.level.bottle = this.checkCollectables(
-            this.level.bottle,
-            this.bottleBar,
-            this.totalBottles,
-        );
-        this.availableBottles += bottlesBefore - this.level.bottle.length;
+    checkCoinCollision = () => {
+        this.level.coin = this.level.coin.filter((coin) => {
+            if (this.character.isColliding(coin)) {
+                coin.collected = true;
+                this.collectedCoins++;
+                console.log("münze gesammelt", this.collectedCoins);
+                this.coinBar.setCount(this.collectedCoins);
+                return false;
+            }
+            return true;
+        });
     };
 
-    checkCollectables(objects, bar, total) {
-        const remainingObjects = objects.filter((object) => {
-            return !this.character.isColliding(object); // wenn keine Kollision character/coin erfolgt: return, sonst weiter mit if-Abfrage
+    checkBootleCollision = () => {
+        this.level.bottle = this.level.bottle.filter((bottle) => {
+            if (this.character.isColliding(bottle)) {
+                bottle.collected = true;
+                this.availableBottles++;
+                console.log("münze gesammelt", this.availableBottles);
+                this.bottleBar.setCount(this.availableBottles);
+                return false;
+            }
+            return true;
         });
-
-        if (remainingObjects.length < objects.length) {
-            // bedeutet: es sind noch nicht gesammelte Münzen vorhanden im Lvl
-            const collected = total - remainingObjects.length;
-            const percentage = Math.round((collected / total) * 100);
-            bar.setPercentage(percentage, bar.imgPath);
-        }
-        return remainingObjects;
-    }
+    };
 
     drawErrorMsg() {
         if (this.bottleError === true) {
@@ -160,6 +163,9 @@ export class World {
         mO.drawFrame(this.ctx);
         if (mO.otherDirection) {
             this.flipImageBack(mO);
+        }
+        if (mO.drawCount) {
+            mO.drawCount(this.ctx);
         }
     }
 
