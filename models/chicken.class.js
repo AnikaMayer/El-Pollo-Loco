@@ -22,7 +22,7 @@ export class Chicken extends MovableObject {
         this.x = 200 + Math.random() * 500;
         this.speed = 0.15 + Math.random() * 0.5;
         IntervalHub.startInterval(this.moveChicken, 1000 / 60);
-        IntervalHub.startInterval(this.animateChicken, 200);
+        IntervalHub.startInterval(this.animateChicken, 1000 / 5);
         this.getRealFrame();
     }
 

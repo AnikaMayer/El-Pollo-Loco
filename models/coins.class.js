@@ -1,8 +1,8 @@
-import { CollectableObject } from "./collectable-object.class.js";
 import { ImageHub } from "./img-hub.class.js";
 import { IntervalHub } from "./intervall-hub.class.js";
+import { MovableObject } from "./movable-object.class.js";
 
-export class Coin extends CollectableObject {
+export class Coin extends MovableObject {
     x;
     y;
     width = 140;
@@ -19,7 +19,7 @@ export class Coin extends CollectableObject {
     constructor(_x, _y) {
         super().loadImage(this.imgPath[0]);
         this.loadImages(this.imgPath);
-        IntervalHub.startInterval(this.animateCoin, 400);
+        IntervalHub.startInterval(this.animateCoin, 1000 / 2.5);
         this.x = _x;
         this.y = _y;
         this.getRealFrame();

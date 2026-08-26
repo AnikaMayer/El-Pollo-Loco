@@ -1,7 +1,7 @@
-import { CollectableObject } from "./collectable-object.class.js";
 import { ImageHub } from "./img-hub.class.js";
+import { MovableObject } from "./movable-object.class.js";
 
-export class Bottle extends CollectableObject {
+export class Bottle extends MovableObject {
     x;
     y = 380;
     width = 60;

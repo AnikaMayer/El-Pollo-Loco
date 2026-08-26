@@ -18,7 +18,7 @@ export class ThrowableObject extends MovableObject {
     throw() {
         this.speedY = 30;
         IntervalHub.startInterval(this.applyGravity, 1000 / 25);
-        IntervalHub.startInterval(this.flyingBottle, 25);
+        IntervalHub.startInterval(this.flyingBottle, 1000 / 40);
     }
 
     flyingBottle = () => {

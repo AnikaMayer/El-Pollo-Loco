@@ -25,7 +25,7 @@ export class Character extends MovableObject {
         this.applyGravity();
         IntervalHub.startInterval(this.applyGravity, 1000 / 25);
         IntervalHub.startInterval(this.moveCharacter, 1000 / 60);
-        IntervalHub.startInterval(this.animateCharacter, 50);
+        IntervalHub.startInterval(this.animateCharacter, 1000 / 20);
         this.getRealFrame();
     }
 

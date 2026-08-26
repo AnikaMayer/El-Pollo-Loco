@@ -28,7 +28,7 @@ export class World {
         this.keyboard = _keyboard;
         this.draw();
         this.setWorld();
-        IntervalHub.startInterval(this.run, 200);
+        IntervalHub.startInterval(this.run, 1000 / 5);
         IntervalHub.startInterval(this.checkObjectCollisions, 1000 / 60);
     }
 

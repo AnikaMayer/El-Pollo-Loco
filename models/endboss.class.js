@@ -12,7 +12,7 @@ export class Endboss extends MovableObject {
         super().loadImage(this.imgPath.alert[0]);
         this.loadImages(this.imgPath.alert);
         this.x = 2500;
-        IntervalHub.startInterval(this.animate, 200);
+        IntervalHub.startInterval(this.animate, 1000 / 5);
     }
 
     animate = () => {
