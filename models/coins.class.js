@@ -29,6 +29,7 @@ export class Coin extends MovableObject {
         this.playAnimation(this.imgPath);
     };
 
+    // Vorlage für Münzbogen, Array mit Münzen wird erstellt, Münzen entsprechend unterschieldich angeordnet
     static arcPattern(baseX, baseY) {
         const coins = [];
         const coin1 = new Coin(baseX, baseY);
@@ -40,6 +41,7 @@ export class Coin extends MovableObject {
         return coins;
     }
 
+    // Münzvorlage für horizontale Linie
     static horizontalLinePattern(baseX, y) {
         const coins = [];
         const coin1 = new Coin(baseX, y);
@@ -51,6 +53,7 @@ export class Coin extends MovableObject {
         return coins;
     }
 
+    // Münzvorlage für vertikale Linie
     static verticalLinePattern(x, baseY) {
         const coins = [];
         const coin1 = new Coin(x, baseY);
@@ -60,6 +63,7 @@ export class Coin extends MovableObject {
         return coins;
     }
 
+    // Münzvorlage für Diagonale
     static diagonalPattern(baseX, baseY) {
         const coins = [];
         const coin1 = new Coin(baseX, baseY);

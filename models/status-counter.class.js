@@ -11,10 +11,12 @@ export class StatusCounter extends DrawableObject {
         this.height = 60;
     }
 
+    // count = Anzahl der Flaschen/ Münzen, wird hier aktualisiert
     setCount(newCount) {
         this.count = newCount;
     }
 
+    // aktuelle count wird gezeichnet/ sichtbar gemacht
     drawCount(ctx) {
         ctx.font = "28px Alfa Slab One";
         ctx.fillStyle = "white";

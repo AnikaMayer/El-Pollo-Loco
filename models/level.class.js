@@ -15,18 +15,19 @@ export class Level {
         // this.placeBottles();
     }
 
+    // Flaschen sollen mit einem gewissen Abstand platziert werden, muss noch überarbeitet werden
     placeBottles() {
-        const numberOfBottles = this.bottle.length;
+        const numberOfBottles = this.bottles.length;
         const canvasWidth = this.level_end_x;
-        const bottleWidth = this.bottle[0].width;
+        const bottleWidth = this.bottles[0].width;
         const gap =
             (canvasWidth - bottleWidth * numberOfBottles) /
             (numberOfBottles + 1);
         const x = gap;
-        this.bottle.forEach((object) => {
+        this.bottles.forEach((object) => {
             object.x = x;
             x += gap + bottleWidth;
         });
-        return this.bottle;
+        return this.bottles;
     }
 }

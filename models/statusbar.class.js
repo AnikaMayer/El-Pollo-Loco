@@ -20,6 +20,7 @@ export class StatusBar extends DrawableObject {
         this.img = this.imageCache[path];
     }
 
+    // Bilder der Statusbar werden aktualisiert je nachdem, wieviel Energie vorhanden
     resolveImageIndex() {
         if (this.percentage === 100) {
             return 5;

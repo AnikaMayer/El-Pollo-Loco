@@ -36,7 +36,8 @@ export class MovableObject extends DrawableObject {
         }
     }
 
-    //z.B.:character.isColliding(chicken);
+    // z.B.:character.isColliding(chicken);
+    // funktioniert, indem wir den offset-Rahmen holen
     isColliding(mO) {
         this.getRealFrame();
         mO.getRealFrame();
@@ -48,6 +49,8 @@ export class MovableObject extends DrawableObject {
         );
     }
 
+    // bei Kollision kriegt jedes Movable Obj. einen Treffer, bei dem ein übergebener Schaden von der vordefinierten Energie abgezogen wird
+    // also: damage = 50: von energey(100) werden 50 abgezogen, bleiben 50 übrig.
     hit(damage) {
         this.energy -= damage;
         if (this.energy < 0) {
@@ -57,6 +60,7 @@ export class MovableObject extends DrawableObject {
         }
     }
 
+    // Animation soll laufen nach Treffer, erst dann kommt der nächste hit()
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit; // Difference in ms
         timepassed = timepassed / 1000; // Difference in s

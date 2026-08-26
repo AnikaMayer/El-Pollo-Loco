@@ -41,96 +41,104 @@ export class World {
         this.character.world = this;
     }
 
+    // enemyCollisions und thrownObj. werden im selben Intervall wiederholt, etwas langsamer, damit nicht zu viele Treffer auf einmal bzw. nicht zu viele Bottles geworfen werden
     run = () => {
         this.checkEnemyCollisions();
         this.checkThrownObjects();
     };
 
+    // prüfen, ob genügend throwable Obj. vorhanden sind
     checkThrownObjects() {
         if (this.availableBottles > 0) {
+            // -> wenn availableBottles > 0, dann kann mit "D" eine Flasche geworfen werden.
             if (this.keyboard.D) {
                 const bottle = new ThrowableObject(
                     this.character.x + 100,
                     this.character.y + 100,
                 );
                 this.throwableObjects.push(bottle);
-                this.availableBottles--;
-                this.bottleBar.setCount(this.availableBottles);
+                this.availableBottles--; // wenn eine Flasche geworfen wurde, dann wird von available Bottles 1 abgezogen
+                this.bottleBar.setCount(this.availableBottles); // der counter der bottleBar wird entsprechend um 1 nach unten angepasst
             }
         } else if (this.availableBottles === 0 && this.keyboard.D) {
-            this.bottleError = true;
+            // -> wenn nicht genügend Flaschen UND D wird gedrückt
+            this.bottleError = true; // bottleError wird aktiviert, damit wird die Anzeige "no Bottles" gezeichnet in draw()
             setTimeout(() => {
+                // mit einem Timeout wird Error wieder auf false gesetzt, damit der Text wieder verschwindet (wird nur gezeichnet bei true)
                 this.bottleError = false;
             }, 1200);
         }
     }
 
+    // für jeden Gegner wird (oben im Interval) geprüft, ob der Gegner kollidiert
     checkEnemyCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
-                this.character.hit(5);
+                // wenn Kollision:
+                this.character.hit(5); // hit mit damage-Parameter übergeben, um entsprechend viel Schaden abzuziehen
                 this.healthBar.setPercentage(
+                    // healthbar wird aktualisiert, indem die aktuelle Energie (nachdem damage abgezogen wurde) u. die Bilder der Bar übergben werden
                     this.character.energy,
                     this.healthBar.imgPath,
                 );
             }
-            // this.throwableObjects.forEach((thrObj) => {
-            //     if (thrObj.isColliding(enemy)) {
-            //         enemy.hit();
-            //         console.log(enemy.energy);
-            //     }
-            // });
         });
     }
 
+    // im Interval wird geprüft, ob für jede Flasche für jeden Gegner eine Kollision erfolgt
     checkBottleDamage = () => {
         this.throwableObjects.forEach((bottle) => {
             this.level.enemies.forEach((enemy) => {
                 if (enemy.isColliding(bottle)) {
+                    // wenn Kollision Gegner mit Flasche: über hit Schadenszahl übergeben
                     enemy.hit(50);
-                    console.log(enemy.energy);
                 }
             });
         });
     };
 
+    // im Intervall prüfen, ob CHaracter mit Münzen kollidiert (für JEDE Münze!)
     checkCoinCollision = () => {
         this.level.coins = this.level.coins.filter((coin) => {
             if (this.character.isColliding(coin)) {
-                coin.collected = true;
+                // wenn Kollision: collectedCoins +1, count der coin-bar aktualisieren
                 this.collectedCoins++;
                 this.coinBar.setCount(this.collectedCoins);
-                return false;
+                return false; // der filter-methode sagen "Münze ist jetzt raus"
             }
-            return true;
+            return true; // der filter-Methode sagen "Münze bleibt drin / es passiert nichts"
         });
     };
 
+    // Prüfung Koll. CHar + Bottle
     checkBootleCollision = () => {
         this.level.bottles = this.level.bottles.filter((bottle) => {
             if (this.character.isColliding(bottle)) {
-                bottle.collected = true;
+                //availBott +1, bar-count +1
                 this.availableBottles++;
                 this.bottleBar.setCount(this.availableBottles);
-                return false;
+                return false; // bottle raus
             }
-            return true;
+            return true; // bottle bleibt drin bzw. passiert nichts
         });
     };
 
+    // zeichnen der Mitteilung, dass keine Flaschen zum Werfen vorhanden -- nur zeichnen, wenn true!
     drawErrorMsg() {
+        // x/y werden festgelegt, font, farbe stylt den Text
         if (this.bottleError === true) {
             const x = 290;
             const y = 200;
             this.ctx.font = "24px Alfa Slab One";
             this.ctx.fillStyle = "rgba(130, 35, 0, 1)";
-            this.ctx.fillText("no Bottles", x, y);
-            this.ctx.strokeStyle = "rgb(255, 255, 255)";
+            this.ctx.fillText("no Bottles", x, y); // mit x,y sagen, wo text stehen soll
+            this.ctx.strokeStyle = "rgb(255, 255, 255)"; // für Umrandung extra methode definieren
             this.ctx.lineWidth = 1;
             this.ctx.strokeText("no Bottles...", x, y);
         }
     }
 
+    // leinwand wird anfangs geleert, dann wird Kamera bewegt und Objekte werden hinzugefügt
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //am Anfang wird canvas immer geleert
         this.ctx.translate(this.camera_x, 0); //Map wird nach links verschoben
@@ -158,6 +166,7 @@ export class World {
         requestAnimationFrame(() => this.draw());
     }
 
+    // die entsprechenden Objekte werden hinzugefügt
     addObjectsToMap(objects) {
         objects.forEach((_object) => {
             this.addToMap(_object);
@@ -179,6 +188,7 @@ export class World {
         }
     }
 
+    // Bild wird gespiegelt, wenn sich chara in andere Richtung bewegt
     flipImage(mO) {
         this.ctx.save();
         this.ctx.translate(mO.width, 0);
@@ -186,6 +196,7 @@ export class World {
         mO.x = mO.x * -1;
     }
 
+    // Bild wieder zurückdrehen
     flipImageBack(mO) {
         mO.x = mO.x * -1;
         this.ctx.restore();

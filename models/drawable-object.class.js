@@ -14,11 +14,13 @@ export class DrawableObject {
         left: 0,
     };
 
+    // einzelnes Bild laden
     loadImage(path) {
         this.img = new Image();
         this.img.src = path;
     }
 
+    // mehrere Bilder laden
     loadImages(arr) {
         arr.forEach((path) => {
             let img = new Image();
@@ -31,6 +33,7 @@ export class DrawableObject {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
+    // Rahmen für Objekte
     drawFrame(ctx) {
         if (this.showFrame) {
             ctx.beginPath();
