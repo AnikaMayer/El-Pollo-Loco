@@ -21,6 +21,7 @@ export class World {
     throwableObjects = [];
     totalCoins = this.level.coin.length;
     totalBottles = this.level.bottle.length;
+    bottleError = false;
 
     constructor(_canvas, _keyboard) {
         this.ctx = _canvas.getContext("2d");
@@ -42,12 +43,22 @@ export class World {
     };
 
     checkThrownObjects() {
-        if (this.keyboard.D) {
-            let bottle = new ThrowableObject(
-                this.character.x + 100,
-                this.character.y + 100,
-            );
-            this.throwableObjects.push(bottle);
+        if (this.totalBottles > 0) {
+            if (this.keyboard.D) {
+                let bottle = new ThrowableObject(
+                    this.character.x + 100,
+                    this.character.y + 100,
+                );
+                this.throwableObjects.push(bottle);
+                console.log(this.throwableObjects);
+                this.totalBottles--;
+                console.log(this.totalBottles);
+            }
+        } else if (this.totalBottles === 0 && this.keyboard.D) {
+            this.bottleError = true;
+            setTimeout(() => {
+                this.bottleError = false;
+            }, 2500);
         }
     }
 
@@ -89,6 +100,19 @@ export class World {
         return remainingObjects;
     }
 
+    drawErrorMsg() {
+        if (this.bottleError === true) {
+            const x = 290;
+            const y = 200;
+            this.ctx.font = "24px Alfa Slab One";
+            this.ctx.fillStyle = "rgba(130, 35, 0, 1)";
+            this.ctx.fillText("no Bottles", x, y);
+            this.ctx.strokeStyle = "rgb(255, 255, 255)";
+            this.ctx.lineWidth = 1;
+            this.ctx.strokeText("no Bottles...", x, y);
+        }
+    }
+
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //am Anfang wird canvas immer geleert
         this.ctx.translate(this.camera_x, 0); //Map wird nach links verschoben
@@ -103,6 +127,7 @@ export class World {
         this.addToMap(this.bottleBar);
         this.addToMap(this.coinBar);
         this.addToMap(this.endbossBar);
+        this.drawErrorMsg();
         this.ctx.translate(this.camera_x, 0); // Kameraperspektive wieder positionieren
 
         this.addToMap(this.character);
