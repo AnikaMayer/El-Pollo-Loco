@@ -6,7 +6,9 @@ export class Bottle extends MovableObject {
     y = 380;
     width = 60;
     height = 50;
-    imgPath = ImageHub.BOTTLE.onGround;
+    imgPath = ImageHub.BOTTLE;
+    groundImages = this.imgPath.onGround;
+    randomIndex = Math.floor(Math.random() * this.groundImages.length);
     showFrame = true;
     offset = {
         top: 10,
@@ -16,8 +18,8 @@ export class Bottle extends MovableObject {
     };
 
     constructor(_x) {
-        super().loadImage(this.imgPath[0]);
-        this.loadImages(this.imgPath);
+        super().loadImage(this.groundImages[this.randomIndex]);
+        this.loadImages(this.groundImages);
         this.x = _x;
         this.getRealFrame();
     }

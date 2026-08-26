@@ -92,9 +92,13 @@ export class World {
                 if (enemy.isColliding(bottle)) {
                     // wenn Kollision Gegner mit Flasche: über hit Schadenszahl übergeben
                     enemy.hit(50);
+                    bottle.splash();
                 }
             });
         });
+        this.throwableObjects = this.throwableObjects.filter(
+            (bottle) => !bottle.removeBottle,
+        );
     };
 
     // im Intervall prüfen, ob CHaracter mit Münzen kollidiert (für JEDE Münze!)

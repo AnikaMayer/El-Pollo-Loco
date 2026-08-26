@@ -15,6 +15,8 @@ export class ThrowableObject extends MovableObject {
 
     constructor(x, y) {
         super().loadImage(this.imgPath.rotation[0]);
+        this.loadImages(this.imgPath.rotation);
+        this.loadImages(this.imgPath.splash);
         this.x = x;
         this.y = y;
         this.width = 50;
@@ -26,10 +28,32 @@ export class ThrowableObject extends MovableObject {
         this.speedY = 30;
         IntervalHub.startInterval(this.applyGravity, 1000 / 25);
         IntervalHub.startInterval(this.flyingBottle, 1000 / 40);
+        IntervalHub.startInterval(this.animateThrowObj, 1000 / 10);
         this.getRealFrame();
     }
 
     flyingBottle = () => {
+        if (this.isDead()) {
+            return; // Flasche bewegt sich nicht mehr auf x-Achse
+        } else if (this.y >= 360) {
+            this.keepFalling = false;
+            this.splash();
+        }
         this.x += 10;
+    };
+
+    splash() {
+        this.energy = 0; // Energie ist 0, Obj ist dead()
+        setTimeout(() => {
+            this.removeBottle = true; // Flasche soll nach Animation entfernt werden
+        }, 1000 / 1.5);
+    }
+
+    animateThrowObj = () => {
+        if (this.isDead()) {
+            this.playAnimation(this.imgPath.splash); //splash animation
+        } else {
+            this.playAnimation(this.imgPath.rotation);
+        } //splash animation, muss am Ende stehen, damit die Flasche sich immer dreht, wenn nichts anderes zutrifft (sonst immer nur rotation)
     };
 }

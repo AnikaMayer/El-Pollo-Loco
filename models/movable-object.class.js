@@ -3,7 +3,7 @@ import { DrawableObject } from "./drawable-object.class.js";
 export class MovableObject extends DrawableObject {
     speed = 0.15;
     speedY = 0;
-    acceleration = 2.5;
+    acceleration = 3;
     otherDirection = false;
     energy = 100;
     lastHit = 0;
@@ -21,6 +21,9 @@ export class MovableObject extends DrawableObject {
     }
 
     applyGravity = () => {
+        if (this.isDead()) {
+            return; // Objekte können nicht mehr fallen, wenn sie zerstört sind
+        }
         if (this.isAboveGround() || this.speedY > 0) {
             this.y -= this.speedY;
             this.speedY -= this.acceleration;
