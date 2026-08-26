@@ -19,10 +19,10 @@ export class World {
     coinBar = new CoinBar();
     endbossBar = new EndbossBar();
     throwableObjects = [];
-    totalCoins = this.level.coin.length;
+    totalCoins = this.level.coins.length;
     collectedCoins = 0;
-    totalBottles = this.level.bottle.length;
-    availableBottles = 0;
+    totalBottles = this.level.bottles.length;
+    availableBottles = 99;
     bottleError = false;
 
     constructor(_canvas, _keyboard) {
@@ -32,6 +32,7 @@ export class World {
         this.draw();
         this.setWorld();
         IntervalHub.startInterval(this.run, 1000 / 5);
+        IntervalHub.startInterval(this.checkBottleDamage, 1000 / 10);
         IntervalHub.startInterval(this.checkCoinCollision, 1000 / 60);
         IntervalHub.startInterval(this.checkBootleCollision, 1000 / 60);
     }
@@ -67,27 +68,37 @@ export class World {
     checkEnemyCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
-                this.character.hit();
+                this.character.hit(5);
                 this.healthBar.setPercentage(
                     this.character.energy,
                     this.healthBar.imgPath,
                 );
             }
-            this.throwableObjects.forEach((thrObj) => {
-                if (thrObj.isColliding(enemy)) {
-                    enemy.hit();
+            // this.throwableObjects.forEach((thrObj) => {
+            //     if (thrObj.isColliding(enemy)) {
+            //         enemy.hit();
+            //         console.log(enemy.energy);
+            //     }
+            // });
+        });
+    }
+
+    checkBottleDamage = () => {
+        this.throwableObjects.forEach((bottle) => {
+            this.level.enemies.forEach((enemy) => {
+                if (enemy.isColliding(bottle)) {
+                    enemy.hit(50);
                     console.log(enemy.energy);
                 }
             });
         });
-    }
+    };
 
     checkCoinCollision = () => {
-        this.level.coin = this.level.coin.filter((coin) => {
+        this.level.coins = this.level.coins.filter((coin) => {
             if (this.character.isColliding(coin)) {
                 coin.collected = true;
                 this.collectedCoins++;
-                console.log("münze gesammelt", this.collectedCoins);
                 this.coinBar.setCount(this.collectedCoins);
                 return false;
             }
@@ -96,11 +107,10 @@ export class World {
     };
 
     checkBootleCollision = () => {
-        this.level.bottle = this.level.bottle.filter((bottle) => {
+        this.level.bottles = this.level.bottles.filter((bottle) => {
             if (this.character.isColliding(bottle)) {
                 bottle.collected = true;
                 this.availableBottles++;
-                console.log("münze gesammelt", this.availableBottles);
                 this.bottleBar.setCount(this.availableBottles);
                 return false;
             }
@@ -126,8 +136,8 @@ export class World {
         this.ctx.translate(this.camera_x, 0); //Map wird nach links verschoben
         this.addObjectsToMap(this.level.backgroundObjects); //Objekte werden eingefügt bzw. "gezeichnet"
         this.addObjectsToMap(this.level.clouds);
-        this.addObjectsToMap(this.level.coin);
-        this.addObjectsToMap(this.level.bottle);
+        this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottles);
 
         this.ctx.translate(-this.camera_x, 0); // Kameraperspektive zurücksetzen
         // ------ Space for fixed objects ------
