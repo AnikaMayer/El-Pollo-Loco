@@ -89,9 +89,10 @@ export class World {
     checkBottleDamage = () => {
         this.throwableObjects.forEach((bottle) => {
             this.level.enemies.forEach((enemy) => {
-                if (enemy.isColliding(bottle)) {
+                if (enemy.isColliding(bottle) && !bottle.isSplashing) {
                     // wenn Kollision Gegner mit Flasche: über hit Schadenszahl übergeben
                     enemy.hit(50);
+                    bottle.hit(100);
                     bottle.splash();
                 }
             });

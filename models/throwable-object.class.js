@@ -6,6 +6,7 @@ export class ThrowableObject extends MovableObject {
     imgPath = ImageHub.BOTTLE;
     keepFalling = true;
     showFrame = true;
+    isSplashing = false;
     offset = {
         top: 10,
         right: 15,
@@ -37,20 +38,21 @@ export class ThrowableObject extends MovableObject {
             return; // Flasche bewegt sich nicht mehr auf x-Achse
         } else if (this.y >= 360) {
             this.keepFalling = false;
+            this.hit(100);
             this.splash();
         }
         this.x += 10;
     };
 
     splash() {
-        this.energy = 0; // Energie ist 0, Obj ist dead()
+        this.isSplashing = true; // Energie ist 0, Obj ist dead()
         setTimeout(() => {
             this.removeBottle = true; // Flasche soll nach Animation entfernt werden
         }, 1000 / 1.5);
     }
 
     animateThrowObj = () => {
-        if (this.isDead()) {
+        if (this.isSplashing) {
             this.playAnimation(this.imgPath.splash); //splash animation
         } else {
             this.playAnimation(this.imgPath.rotation);
