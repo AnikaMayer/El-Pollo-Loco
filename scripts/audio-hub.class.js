@@ -23,7 +23,7 @@ export class AudioHub {
         deadEndBoss: new Sound("./assets/sounds/endboss/endbossApproach.wav"),
     };
 
-    static COLLECTIBLES = {
+    static ITEMS = {
         bottle: new Sound(
             "./assets/sounds/collectibles/bottleCollectSound.wav",
         ),
@@ -38,7 +38,7 @@ export class AudioHub {
     static allSounds = [
         AudioHub.CHARACTER,
         AudioHub.ENEMIES,
-        AudioHub.COLLECTIBLES,
+        AudioHub.ITEMS,
         AudioHub.GAME,
     ];
 

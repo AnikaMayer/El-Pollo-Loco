@@ -1,3 +1,4 @@
+import { AudioHub } from "../scripts/audio-hub.class.js";
 import { ImageHub } from "../scripts/img-hub.class.js";
 import { IntervalHub } from "../scripts/intervall-hub.class.js";
 import { MovableObject } from "./movable-object.class.js";
@@ -7,6 +8,7 @@ export class Character extends MovableObject {
     height = 250;
     speed = 10;
     imgPath = ImageHub.PEPE;
+    audioPath = AudioHub.CHARACTER;
     world;
     showFrame = true;
     offset = {
@@ -26,6 +28,7 @@ export class Character extends MovableObject {
         IntervalHub.startInterval(this.applyGravity, 1000 / 25);
         IntervalHub.startInterval(this.moveCharacter, 1000 / 60);
         IntervalHub.startInterval(this.animateCharacter, 1000 / 20);
+        IntervalHub.startInterval(this.playSounds, 1000 / 60);
         this.getRealFrame();
     }
 
@@ -46,6 +49,23 @@ export class Character extends MovableObject {
         }
         this.world.camera_x = -this.x + 100; //Map wird gegenteilig zum Character verschoben
     };
+
+    playSounds = () => {
+        const audio = this.audioPath;
+        this.toggleSound(
+            audio.walk,
+            this.world.keyboard.LEFT || this.world.keyboard.RIGHT,
+        );
+        this.toggleSound(audio.jump, this.isAboveGround());
+    };
+
+    toggleSound(sound, playing) {
+        if (playing) {
+            AudioHub.playOne(sound);
+        } else {
+            AudioHub.stopOne(sound);
+        }
+    }
 
     animateCharacter = () => {
         if (this.isDead()) {
