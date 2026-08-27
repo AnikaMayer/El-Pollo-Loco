@@ -1,6 +1,6 @@
 import { level1 } from "../levels/level1.js";
 import { Character } from "./character.class.js";
-import { IntervalHub } from "./intervall-hub.class.js";
+import { IntervalHub } from "../scripts/intervall-hub.class.js";
 import { HealthBar } from "./health-bar.class.js";
 import { ThrowableObject } from "./throwable-object.class.js";
 import { BottleBar } from "./bottle-bar.class.js";
