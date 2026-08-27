@@ -1,4 +1,4 @@
-import { ImageHub } from "./img-hub.class.js";
+import { ImageHub } from "../scripts/img-hub.class.js";
 import { StatusBar } from "./statusbar.class.js";
 
 export class HealthBar extends StatusBar {

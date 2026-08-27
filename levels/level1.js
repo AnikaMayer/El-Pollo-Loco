@@ -4,7 +4,7 @@ import { Chicken } from "../models/chicken.class.js";
 import { Cloud } from "../models/clouds.class.js";
 import { Coin } from "../models/coins.class.js";
 import { Endboss } from "../models/endboss.class.js";
-import { ImageHub } from "../models/img-hub.class.js";
+import { ImageHub } from "../scripts/img-hub.class.js";
 import { Level } from "../models/level.class.js";
 
 export const level1 = new Level(
