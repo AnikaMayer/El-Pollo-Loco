@@ -13,6 +13,7 @@ export class Level {
         this.coins = _coins;
         this.backgroundObjects = _backgroundObjects;
         // this.placeBottles();
+        // this.placeClouds();
     }
 
     // Flaschen sollen mit einem gewissen Abstand platziert werden, muss noch überarbeitet werden
@@ -29,5 +30,19 @@ export class Level {
             x += gap + bottleWidth;
         });
         return this.bottles;
+    }
+
+    placeClouds() {
+        let numberOfClouds = this.clouds.length;
+        let canvasWidth = this.level_end_x;
+        let cloudWidth = this.clouds[0].width;
+        let gap =
+            (canvasWidth - cloudWidth * numberOfClouds) / (numberOfClouds + 1);
+        let x = gap;
+        this.clouds.forEach((object) => {
+            object.x = x;
+            x += gap + cloudWidth;
+        });
+        return this.clouds;
     }
 }

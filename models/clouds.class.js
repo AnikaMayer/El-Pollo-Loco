@@ -3,7 +3,6 @@ import { IntervalHub } from "../scripts/intervall-hub.class.js";
 import { MovableObject } from "./movable-object.class.js";
 
 export class Cloud extends MovableObject {
-    y = 20;
     width = 500;
     height = 250;
     imgPath = ImageHub.BACKGROUND.clouds;
@@ -11,7 +10,8 @@ export class Cloud extends MovableObject {
     constructor() {
         super().loadImage(this.imgPath[0]);
 
-        this.x = Math.random() * 500; //zufällig generierte Zahl zwischen 0 und 500
+        this.x = Math.random() * 3500; //zufällig generierte Zahl zwischen 0 und 2500
+        this.y = 20 + Math.random() * 20;
         IntervalHub.startInterval(this.moveClouds, 1000 / 60);
     }
 

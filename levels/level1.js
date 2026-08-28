@@ -20,7 +20,7 @@ export const level1 = new Level(
         new BabyChicken(),
         new Endboss(),
     ],
-    [new Cloud()],
+    [new Cloud(), new Cloud(), new Cloud(), new Cloud()],
     [
         new Bottle(600),
         new Bottle(850),
