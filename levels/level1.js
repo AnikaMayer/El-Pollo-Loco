@@ -6,9 +6,20 @@ import { Coin } from "../models/coins.class.js";
 import { Endboss } from "../models/endboss.class.js";
 import { ImageHub } from "../scripts/img-hub.class.js";
 import { Level } from "../models/level.class.js";
+import { BabyChicken } from "../models/baby-chicken.class.js";
 
 export const level1 = new Level(
-    [new Chicken(), new Chicken(), new Chicken(), new Endboss()],
+    [
+        new Chicken(),
+        new Chicken(),
+        new Chicken(),
+        new BabyChicken(),
+        new BabyChicken(),
+        new BabyChicken(),
+        new BabyChicken(),
+        new BabyChicken(),
+        new Endboss(),
+    ],
     [new Cloud()],
     [
         new Bottle(600),

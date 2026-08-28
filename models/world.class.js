@@ -22,7 +22,7 @@ export class World {
     totalCoins = this.level.coins.length;
     collectedCoins = 0;
     totalBottles = this.level.bottles.length;
-    availableBottles = 99;
+    availableBottles = 0;
     bottleError = false;
 
     constructor(_canvas, _keyboard) {
