@@ -35,7 +35,7 @@ export class World {
         IntervalHub.startInterval(this.checkBottleDamage, 1000 / 10);
         IntervalHub.startInterval(this.checkCoinCollision, 1000 / 60);
         IntervalHub.startInterval(this.checkBottleCollision, 1000 / 60);
-        IntervalHub.startInterval(this.checkJumpDamage, 1000 / 60);
+        IntervalHub.startInterval(this.checkJumpCollision, 1000 / 60);
     }
 
     setWorld() {
@@ -73,25 +73,29 @@ export class World {
 
     // für jeden Gegner wird (oben im Interval) geprüft, ob der Gegner kollidiert
     checkEnemyCollisions() {
-        this.level.enemies.forEach((enemy) => {
-            if (
-                this.character.isColliding(enemy) &&
-                !enemy.isDead() &&
-                !this.character.isHurt()
-            ) {
-                // wenn Kollision:
-                this.character.hit(5); // hit mit damage-Parameter übergeben, um entsprechend viel Schaden abzuziehen
-                this.healthBar.setPercentage(
-                    // healthbar wird aktualisiert, indem die aktuelle Energie (nachdem damage abgezogen wurde) u. die Bilder der Bar übergben werden
-                    this.character.energy,
-                    this.healthBar.imgPath,
-                );
-            }
-        });
+        if (this.checkJumpCollision()) {
+            return;
+        } else {
+            this.level.enemies.forEach((enemy) => {
+                if (
+                    this.character.isColliding(enemy) &&
+                    !enemy.isDead() &&
+                    !this.character.isHurt()
+                ) {
+                    // wenn Kollision:
+                    this.character.hit(5); // hit mit damage-Parameter übergeben, um entsprechend viel Schaden abzuziehen
+                    this.healthBar.setPercentage(
+                        // healthbar wird aktualisiert, indem die aktuelle Energie (nachdem damage abgezogen wurde) u. die Bilder der Bar übergben werden
+                        this.character.energy,
+                        this.healthBar.imgPath,
+                    );
+                }
+            });
+        }
     }
 
     // Charakter springt auf Gegner, um ihm Schaden zuzufügen, ohne dabei selbst zu erleiden -> dabei springt er ab
-    checkJumpDamage = () => {
+    checkJumpCollision = () => {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isCollidingFromAbove(enemy)) {
                 this.character.jumpOnMovObj(enemy); // hier wir dem Char neuer y-wert zugewiesen, siehe movableObj
