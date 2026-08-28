@@ -28,7 +28,7 @@ export class Character extends MovableObject {
         IntervalHub.startInterval(this.applyGravity, 1000 / 25);
         IntervalHub.startInterval(this.moveCharacter, 1000 / 60);
         IntervalHub.startInterval(this.animateCharacter, 1000 / 20);
-        IntervalHub.startInterval(this.playSounds, 1000 / 60);
+        // IntervalHub.startInterval(this.characterSound, 1000 / 60);
         this.getRealFrame();
     }
 
@@ -50,22 +50,18 @@ export class Character extends MovableObject {
         this.world.camera_x = -this.x + 100; //Map wird gegenteilig zum Character verschoben
     };
 
-    playSounds = () => {
+    // Char-Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
+    characterSound = () => {
         const audio = this.audioPath;
-        this.toggleSound(
+        this.playSound(
             audio.walk,
-            this.world.keyboard.LEFT || this.world.keyboard.RIGHT,
+            (this.world.keyboard.LEFT || this.world.keyboard.RIGHT) &&
+                !this.isAboveGround(),
         );
-        this.toggleSound(audio.jump, this.isAboveGround());
+        this.playSound(audio.jump, this.isAboveGround());
+        this.playSound(audio.damage, this.isHurt());
+        this.playSound(audio.dead, this.isDead());
     };
-
-    toggleSound(sound, playing) {
-        if (playing) {
-            AudioHub.playOne(sound);
-        } else {
-            AudioHub.stopOne(sound);
-        }
-    }
 
     animateCharacter = () => {
         if (this.isDead()) {

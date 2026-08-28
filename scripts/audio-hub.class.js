@@ -1,7 +1,7 @@
 class Sound {
     file;
     isLoaded;
-    isPlaying = false;
+    isPlaying;
 
     constructor(_file) {
         this.file = new Audio(_file);
@@ -18,8 +18,8 @@ export class AudioHub {
     };
 
     static ENEMIES = {
-        deadChicken: new Sound("./assets/sounds/chicken/chickenDead.mp3"),
-        deadBabyChicken: new Sound("./assets/sounds/chicken/chickenDead2.mp3"),
+        deadChicken: new Sound("./assets/sounds/chicken/chickenDead2.mp3"),
+        deadBabyChicken: new Sound("./assets/sounds/chicken/chickenDead.mp3"),
         deadEndBoss: new Sound("./assets/sounds/endboss/endbossApproach.wav"),
     };
 
@@ -28,7 +28,7 @@ export class AudioHub {
             "./assets/sounds/collectibles/bottleCollectSound.wav",
         ),
         coin: new Sound("./assets/sounds/collectibles/collectSound.wav"),
-        throwBottle: new Sound("./assets/sounds/throwable/bottleBreak.mp3"),
+        splash: new Sound("./assets/sounds/throwable/bottleBreak.mp3"),
     };
 
     static GAME = {

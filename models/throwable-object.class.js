@@ -1,3 +1,4 @@
+import { AudioHub } from "../scripts/audio-hub.class.js";
 import { ImageHub } from "../scripts/img-hub.class.js";
 import { IntervalHub } from "../scripts/intervall-hub.class.js";
 import { MovableObject } from "./movable-object.class.js";
@@ -7,6 +8,7 @@ export class ThrowableObject extends MovableObject {
     keepFalling = true;
     showFrame = true;
     isSplashing = false;
+    audioPath = AudioHub.ITEMS;
     offset = {
         top: 10,
         right: 15,
@@ -30,6 +32,7 @@ export class ThrowableObject extends MovableObject {
         IntervalHub.startInterval(this.applyGravity, 1000 / 25);
         IntervalHub.startInterval(this.flyingBottle, 1000 / 40);
         IntervalHub.startInterval(this.animateThrowObj, 1000 / 10);
+        // IntervalHub.startInterval(this.itemSound, 1000 / 60);
         this.getRealFrame();
     }
 
@@ -50,6 +53,12 @@ export class ThrowableObject extends MovableObject {
             this.removeBottle = true; // Flasche soll nach Animation entfernt werden
         }, 1000 / 1.5);
     }
+
+    // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
+    itemSound = () => {
+        const audio = this.audioPath;
+        this.playSound(audio.splash, this.isSplashing);
+    };
 
     animateThrowObj = () => {
         if (this.isSplashing) {

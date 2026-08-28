@@ -1,3 +1,4 @@
+import { AudioHub } from "../scripts/audio-hub.class.js";
 import { ImageHub } from "../scripts/img-hub.class.js";
 import { IntervalHub } from "../scripts/intervall-hub.class.js";
 import { MovableObject } from "./movable-object.class.js";
@@ -7,6 +8,7 @@ export class Chicken extends MovableObject {
     width = 80;
     height = 60;
     imgPath = ImageHub.CHICKEN;
+    audioPath = AudioHub.ENEMIES.deadChicken;
     showFrame = true;
     offset = {
         top: 10,
@@ -24,11 +26,18 @@ export class Chicken extends MovableObject {
         this.speed = 0.15 + Math.random() * 0.5;
         IntervalHub.startInterval(this.moveChicken, 1000 / 60);
         IntervalHub.startInterval(this.animateChicken, 1000 / 5);
+        // IntervalHub.startInterval(this.chickenSound, 1000 / 60);
         this.getRealFrame();
     }
 
     moveChicken = () => {
         // this.moveLeft();
+    };
+
+    // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
+    chickenSound = () => {
+        const audio = this.audioPath;
+        this.playSound(audio, this.isDead());
     };
 
     animateChicken = () => {

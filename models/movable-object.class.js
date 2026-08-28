@@ -1,3 +1,4 @@
+import { AudioHub } from "../scripts/audio-hub.class.js";
 import { DrawableObject } from "./drawable-object.class.js";
 
 export class MovableObject extends DrawableObject {
@@ -79,6 +80,15 @@ export class MovableObject extends DrawableObject {
         let path = images[i]; // i = 0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 0 usw....
         this.img = this.imageCache[path];
         this.currentImage++;
+    }
+
+    // wenn Bedingung erfüllt, wird über path sound abgespielt, sonst stoppt Sound
+    playSound(sound, playing) {
+        if (playing) {
+            AudioHub.playOne(sound);
+        } else {
+            AudioHub.stopOne(sound);
+        }
     }
 
     moveRight() {
