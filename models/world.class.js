@@ -34,7 +34,8 @@ export class World {
         IntervalHub.startInterval(this.run, 1000 / 5);
         IntervalHub.startInterval(this.checkBottleDamage, 1000 / 10);
         IntervalHub.startInterval(this.checkCoinCollision, 1000 / 60);
-        IntervalHub.startInterval(this.checkBootleCollision, 1000 / 60);
+        IntervalHub.startInterval(this.checkBottleCollision, 1000 / 60);
+        IntervalHub.startInterval(this.checkJumpDamage, 1000 / 60);
     }
 
     setWorld() {
@@ -73,7 +74,11 @@ export class World {
     // für jeden Gegner wird (oben im Interval) geprüft, ob der Gegner kollidiert
     checkEnemyCollisions() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy)) {
+            if (
+                this.character.isColliding(enemy) &&
+                !enemy.isDead() &&
+                !this.character.isHurt()
+            ) {
                 // wenn Kollision:
                 this.character.hit(5); // hit mit damage-Parameter übergeben, um entsprechend viel Schaden abzuziehen
                 this.healthBar.setPercentage(
@@ -84,6 +89,16 @@ export class World {
             }
         });
     }
+
+    // Charakter springt auf Gegner, um ihm Schaden zuzufügen, ohne dabei selbst zu erleiden -> dabei springt er ab
+    checkJumpDamage = () => {
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isCollidingFromAbove(enemy)) {
+                this.character.jumpOnMovObj(enemy); // hier wir dem Char neuer y-wert zugewiesen, siehe movableObj
+                enemy.hit(50);
+            }
+        });
+    };
 
     // im Interval wird geprüft, ob für jede Flasche für jeden Gegner eine Kollision erfolgt
     checkBottleDamage = () => {
@@ -116,7 +131,7 @@ export class World {
     };
 
     // Prüfung Koll. CHar + Bottle
-    checkBootleCollision = () => {
+    checkBottleCollision = () => {
         this.level.bottles = this.level.bottles.filter((bottle) => {
             if (this.character.isColliding(bottle)) {
                 //availBott +1, bar-count +1

@@ -53,6 +53,22 @@ export class MovableObject extends DrawableObject {
         );
     }
 
+    // nutzt isColliding-Methode UND muss über mO liegen (nur, wenn mO nicht tot ist!)
+    isCollidingFromAbove(mO) {
+        return (
+            this.isColliding(mO) &&
+            this.speedY < 0 &&
+            this.isAboveGround() &&
+            !mO.isDead()
+        );
+    }
+
+    // wenn collidingFromAbove bei collision(wolrd.class) true: dann neuer y-Wert zugewiesen + bounce(kurzer Sprung)
+    jumpOnMovObj(mO) {
+        this.y = mO.y + mO.offset.top - this.height;
+        this.bounce();
+    }
+
     // bei Kollision kriegt jedes Movable Obj. einen Treffer, bei dem ein übergebener Schaden von der vordefinierten Energie abgezogen wird
     // also: damage = 50: von energey(100) werden 50 abgezogen, bleiben 50 übrig.
     hit(damage) {
@@ -101,5 +117,10 @@ export class MovableObject extends DrawableObject {
 
     jump() {
         this.speedY = 30;
+    }
+
+    // kurzer Sprung, nachdem Char auf Gegner gesprungen ist
+    bounce() {
+        this.speedY = 20;
     }
 }
