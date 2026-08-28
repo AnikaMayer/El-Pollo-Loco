@@ -6,7 +6,7 @@ export class Endboss extends MovableObject {
     y = 55;
     width = 250;
     height = 400;
-    energy = 300;
+    energy = 200;
     imgPath = ImageHub.BOSS;
 
     constructor() {

@@ -7,6 +7,7 @@ export class BabyChicken extends MovableObject {
     y = 370;
     width = 50;
     height = 50;
+    energy = 50;
     imgPath = ImageHub.BABYCHICKEN;
     audioPath = AudioHub.ENEMIES.deadBabyChicken;
     showFrame = true;

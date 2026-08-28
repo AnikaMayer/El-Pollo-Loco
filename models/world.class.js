@@ -83,7 +83,7 @@ export class World {
                     !this.character.isHurt()
                 ) {
                     // wenn Kollision:
-                    this.character.hit(5); // hit mit damage-Parameter übergeben, um entsprechend viel Schaden abzuziehen
+                    this.character.hit(10); // hit mit damage-Parameter übergeben, um entsprechend viel Schaden abzuziehen
                     this.healthBar.setPercentage(
                         // healthbar wird aktualisiert, indem die aktuelle Energie (nachdem damage abgezogen wurde) u. die Bilder der Bar übergben werden
                         this.character.energy,
