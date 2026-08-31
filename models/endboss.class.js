@@ -8,10 +8,14 @@ export class Endboss extends MovableObject {
     width = 250;
     height = 400;
     // energy = 200;
+    speed = 0.6;
+    baseSpeed = this.speed;
     imgPath = ImageHub.BOSS;
-    ausdioPath = AudioHub.ENEMIES.deadEndBoss;
+    ausdioPath = AudioHub.ENEMIES.EndbossApproach;
     encounter = false;
     showFrame = true;
+    timepassed = new Date().getTime();
+    state = "walk";
     offset = {
         top: 160,
         right: 40,
@@ -21,9 +25,11 @@ export class Endboss extends MovableObject {
 
     constructor() {
         super().loadImage(this.imgPath.alert[0]);
+        this.loadImages(this.imgPath.walk);
         this.loadImages(this.imgPath.alert);
         this.loadImages(this.imgPath.dead);
         this.loadImages(this.imgPath.hurt);
+        this.loadImages(this.imgPath.attack);
         this.x = 2500;
         IntervalHub.startInterval(this.moveEndboss, 1000 / 60);
         IntervalHub.startInterval(this.animate, 1000 / 5);
@@ -40,8 +46,34 @@ export class Endboss extends MovableObject {
     // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
     endbossSound = () => {
         const audio = this.audioPath;
-        this.playSound(audio, this.isDead());
+        this.playSound(audio, (this.state = "alert"));
     };
+
+    getTiming() {
+        if (this.state === "walk") {
+            return 4000;
+        } else if (this.state === "alert") {
+            return 2000;
+        } else {
+            return 3000;
+        }
+    }
+
+    checkTimePassed(newTime, timing) {
+        if (this.encounter === true && newTime - this.timepassed > timing) {
+            if (this.state === "walk") {
+                this.speed = 0;
+                this.state = "alert";
+            } else if (this.state === "alert") {
+                this.speed = 0;
+                this.state = "attack";
+            } else {
+                this.speed = this.baseSpeed;
+                this.state = "walk";
+            }
+            this.timepassed = new Date().getTime();
+        }
+    }
 
     animate = () => {
         if (this.isDead()) {
@@ -50,8 +82,20 @@ export class Endboss extends MovableObject {
         } else if (this.isHurt()) {
             this.playAnimation(this.imgPath.hurt);
         } else {
-            //alert animation
-            this.playAnimation(this.imgPath.alert);
+            this.animateBossMovement();
         }
     };
+
+    animateBossMovement() {
+        const newTime = new Date().getTime();
+        const timing = this.getTiming();
+        if (this.state === "walk") {
+            this.playAnimation(this.imgPath.walk);
+        } else if (this.state === "alert") {
+            this.playAnimation(this.imgPath.alert);
+        } else {
+            this.playAnimation(this.imgPath.attack);
+        }
+        this.checkTimePassed(newTime, timing);
+    }
 }

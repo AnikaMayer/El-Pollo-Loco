@@ -20,7 +20,9 @@ export class AudioHub {
     static ENEMIES = {
         deadChicken: new Sound("./assets/sounds/chicken/chickenDead2.mp3"),
         deadBabyChicken: new Sound("./assets/sounds/chicken/chickenDead.mp3"),
-        deadEndBoss: new Sound("./assets/sounds/endboss/endbossApproach.wav"),
+        EndbossApproach: new Sound(
+            "./assets/sounds/endboss/endbossApproach.wav",
+        ),
     };
 
     static ITEMS = {

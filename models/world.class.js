@@ -127,6 +127,7 @@ export class World {
         );
     };
 
+    // Schaden definieren nach Gegnertyp, für Endboss Statusbar updaten
     causeDamage(enemy, bottle) {
         if (enemy.isColliding(bottle) && !bottle.isSplashing) {
             // wenn Kollision Gegner mit Flasche: über hit Schadenszahl übergeben
