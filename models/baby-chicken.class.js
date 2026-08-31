@@ -32,7 +32,7 @@ export class BabyChicken extends MovableObject {
     }
 
     moveBabyChicken = () => {
-        // this.moveLeft();
+        this.moveLeft();
     };
 
     // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung

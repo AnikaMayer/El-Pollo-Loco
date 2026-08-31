@@ -78,6 +78,9 @@ export class MovableObject extends DrawableObject {
         } else {
             this.lastHit = new Date().getTime();
         }
+        if (this.energy === 0) {
+            this.speed = 0;
+        }
     }
 
     // Animation soll laufen nach Treffer, erst dann kommt der nächste hit()

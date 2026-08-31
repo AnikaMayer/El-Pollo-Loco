@@ -31,7 +31,7 @@ export class Chicken extends MovableObject {
     }
 
     moveChicken = () => {
-        // this.moveLeft();
+        this.moveLeft();
     };
 
     // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
