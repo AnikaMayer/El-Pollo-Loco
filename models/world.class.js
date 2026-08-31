@@ -10,8 +10,8 @@ import { Endboss } from "./endboss.class.js";
 
 export class World {
     character = new Character();
-    endboss;
     level = level1;
+    endboss = this.level.enemies.find((boss) => boss instanceof Endboss);
     canvas;
     ctx;
     keyboard;
@@ -24,7 +24,7 @@ export class World {
     totalCoins = this.level.coins.length;
     collectedCoins = 0;
     totalBottles = this.level.bottles.length;
-    availableBottles = 0;
+    availableBottles = 90;
     bottleError = false;
 
     constructor(_canvas, _keyboard) {
@@ -35,8 +35,8 @@ export class World {
         this.setWorld();
         IntervalHub.startInterval(this.run, 1000 / 5);
         IntervalHub.startInterval(this.checkBottleDamage, 1000 / 10);
-        IntervalHub.startInterval(this.checkCoinCollision, 1000 / 60);
-        IntervalHub.startInterval(this.checkBottleCollision, 1000 / 60);
+        IntervalHub.startInterval(this.collectCoins, 1000 / 60);
+        IntervalHub.startInterval(this.collectBottles, 1000 / 60);
         IntervalHub.startInterval(this.checkJumpCollision, 1000 / 60);
     }
 
@@ -51,9 +51,6 @@ export class World {
     };
 
     checkBossEncounter() {
-        this.endboss = this.level.enemies.find(
-            (boss) => boss instanceof Endboss,
-        );
         if (this.character.x >= 1900) {
             this.endboss.encounter = true;
         }
@@ -122,12 +119,7 @@ export class World {
     checkBottleDamage = () => {
         this.throwableObjects.forEach((bottle) => {
             this.level.enemies.forEach((enemy) => {
-                if (enemy.isColliding(bottle) && !bottle.isSplashing) {
-                    // wenn Kollision Gegner mit Flasche: über hit Schadenszahl übergeben
-                    enemy.hit(50);
-                    bottle.hit(100);
-                    bottle.splash();
-                }
+                this.causeDamage(enemy, bottle);
             });
         });
         this.throwableObjects = this.throwableObjects.filter(
@@ -135,8 +127,25 @@ export class World {
         );
     };
 
+    causeDamage(enemy, bottle) {
+        if (enemy.isColliding(bottle) && !bottle.isSplashing) {
+            // wenn Kollision Gegner mit Flasche: über hit Schadenszahl übergeben
+            if (enemy === this.endboss) {
+                enemy.hit(20);
+                this.endbossBar.setPercentage(
+                    this.endboss.energy,
+                    this.endbossBar.imgPath,
+                );
+            } else {
+                enemy.hit(50);
+            }
+            bottle.hit(100);
+            bottle.splash();
+        }
+    }
+
     // im Intervall prüfen, ob CHaracter mit Münzen kollidiert (für JEDE Münze!)
-    checkCoinCollision = () => {
+    collectCoins = () => {
         this.level.coins = this.level.coins.filter((coin) => {
             if (this.character.isColliding(coin)) {
                 // wenn Kollision: collectedCoins +1, count der coin-bar aktualisieren
@@ -149,7 +158,7 @@ export class World {
     };
 
     // Prüfung Koll. CHar + Bottle
-    checkBottleCollision = () => {
+    collectBottles = () => {
         this.level.bottles = this.level.bottles.filter((bottle) => {
             if (this.character.isColliding(bottle)) {
                 //availBott +1, bar-count +1

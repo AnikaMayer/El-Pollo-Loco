@@ -3,6 +3,7 @@ import { StatusBar } from "./statusbar.class.js";
 
 export class EndbossBar extends StatusBar {
     imgPath = ImageHub.STATUSBAR.endboss;
+    percentage = 200;
 
     constructor() {
         super();

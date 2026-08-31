@@ -7,7 +7,7 @@ export class Endboss extends MovableObject {
     y = 55;
     width = 250;
     height = 400;
-    energy = 200;
+    // energy = 200;
     imgPath = ImageHub.BOSS;
     ausdioPath = AudioHub.ENEMIES.deadEndBoss;
     encounter = false;
