@@ -6,9 +6,11 @@ import { ThrowableObject } from "./throwable-object.class.js";
 import { BottleBar } from "./bottle-bar.class.js";
 import { CoinBar } from "./coin-bar.class.js";
 import { EndbossBar } from "./endboss-bar.class.js";
+import { Endboss } from "./endboss.class.js";
 
 export class World {
     character = new Character();
+    endboss;
     level = level1;
     canvas;
     ctx;
@@ -47,6 +49,18 @@ export class World {
         this.checkEnemyCollisions();
         this.checkThrownObjects();
     };
+
+    checkBossEncounter() {
+        this.endboss = this.level.enemies.find(
+            (boss) => boss instanceof Endboss,
+        );
+        if (this.character.x >= 1900) {
+            this.endboss.encounter = true;
+        }
+        if (this.endboss.encounter === true) {
+            this.addToMap(this.endbossBar);
+        }
+    }
 
     // prüfen, ob genügend throwable Obj. vorhanden sind
     checkThrownObjects() {
@@ -176,7 +190,7 @@ export class World {
         this.addToMap(this.healthBar);
         this.addToMap(this.bottleBar);
         this.addToMap(this.coinBar);
-        this.addToMap(this.endbossBar);
+        this.checkBossEncounter();
         this.drawErrorMsg();
         this.ctx.translate(this.camera_x, 0); // Kameraperspektive wieder positionieren
 

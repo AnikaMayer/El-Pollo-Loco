@@ -8,6 +8,7 @@ export class Endboss extends MovableObject {
     height = 400;
     energy = 200;
     imgPath = ImageHub.BOSS;
+    encounter = false;
 
     constructor() {
         super().loadImage(this.imgPath.alert[0]);
@@ -15,8 +16,15 @@ export class Endboss extends MovableObject {
         this.loadImages(this.imgPath.dead);
         this.loadImages(this.imgPath.hurt);
         this.x = 2500;
+        IntervalHub.startInterval(this.moveEndboss, 1000 / 60);
         IntervalHub.startInterval(this.animate, 1000 / 5);
     }
+
+    moveEndboss = () => {
+        if (this.world.endbossBar) {
+            this.moveLeft();
+        }
+    };
 
     animate = () => {
         if (this.isDead()) {
