@@ -198,4 +198,9 @@ export class ImageHub {
         "./assets/img/8_coin/coin_1.png",
         "./assets/img/8_coin/coin_2.png",
     ];
+
+    static ENDSCREEN = {
+        win: "./assets/img/You won, you lost/You won A.png",
+        lose: "./assets/img/You won, you lost/You lost b.png",
+    };
 }

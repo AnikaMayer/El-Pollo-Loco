@@ -7,11 +7,10 @@ export class Endboss extends MovableObject {
     y = 55;
     width = 250;
     height = 400;
-    // energy = 200;
     speed = 0.6;
     baseSpeed = this.speed;
     imgPath = ImageHub.BOSS;
-    ausdioPath = AudioHub.ENEMIES.EndbossApproach;
+    audioPath = AudioHub.ENEMIES.EndbossApproach;
     encounter = false;
     showFrame = true;
     timepassed = new Date().getTime();
@@ -49,6 +48,33 @@ export class Endboss extends MovableObject {
         this.playSound(audio, (this.state = "alert"));
     };
 
+    // animation für endboss
+    animate = () => {
+        if (this.isDead()) {
+            // wenn isDead() zurückgegeben aus movableObj
+            this.playAnimation(this.imgPath.dead);
+        } else if (this.isHurt()) {
+            this.playAnimation(this.imgPath.hurt);
+        } else {
+            this.animateBossMovement();
+        }
+    };
+
+    // animations-ablauf für walking, alert, attack
+    animateBossMovement() {
+        const newTime = new Date().getTime(); // wird aktualisiert, nachdem Zeit jedes States vergangen
+        const timing = this.getTiming(); // timing wird in Methode definiert
+        if (this.state === "walk") {
+            this.playAnimation(this.imgPath.walk);
+        } else if (this.state === "alert") {
+            this.playAnimation(this.imgPath.alert);
+        } else {
+            this.playAnimation(this.imgPath.attack);
+        }
+        this.checkTimePassed(newTime, timing); // prüfen, wieviel Zeit vergangen, wann Wechsel
+    }
+
+    // definiert, wie lange die einzelnen Animation abgespielt werden
     getTiming() {
         if (this.state === "walk") {
             return 4000;
@@ -59,6 +85,7 @@ export class Endboss extends MovableObject {
         }
     }
 
+    // wenn Zeit abgelaufen: je nach state wird Speed neu oder zurückgesetzt, nächster state wird aufgerufen
     checkTimePassed(newTime, timing) {
         if (this.encounter === true && newTime - this.timepassed > timing) {
             if (this.state === "walk") {
@@ -73,29 +100,5 @@ export class Endboss extends MovableObject {
             }
             this.timepassed = new Date().getTime();
         }
-    }
-
-    animate = () => {
-        if (this.isDead()) {
-            // wenn isDead() zurückgegeben aus movableObj
-            this.playAnimation(this.imgPath.dead);
-        } else if (this.isHurt()) {
-            this.playAnimation(this.imgPath.hurt);
-        } else {
-            this.animateBossMovement();
-        }
-    };
-
-    animateBossMovement() {
-        const newTime = new Date().getTime();
-        const timing = this.getTiming();
-        if (this.state === "walk") {
-            this.playAnimation(this.imgPath.walk);
-        } else if (this.state === "alert") {
-            this.playAnimation(this.imgPath.alert);
-        } else {
-            this.playAnimation(this.imgPath.attack);
-        }
-        this.checkTimePassed(newTime, timing);
     }
 }
