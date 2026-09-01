@@ -7,7 +7,7 @@ export class Character extends MovableObject {
     y = 80;
     height = 250;
     speed = 10;
-    // energy = 1;
+    energy = 100;
     imgPath = ImageHub.PEPE;
     audioPath = AudioHub.CHARACTER;
     world;

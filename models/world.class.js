@@ -29,6 +29,7 @@ export class World {
     availableBottles = 90;
     bottleError = false;
     gameEnd = false;
+    gameEndTriggered = false;
     endscreen = new Endscreen();
 
     constructor(_canvas, _keyboard) {
@@ -70,6 +71,7 @@ export class World {
         }
     }
 
+    // der Ablauf beim Werfen des Objekts
     throwObjects() {
         if (this.keyboard.D && this.canThrow()) {
             const bottle = new ThrowableObject(
@@ -83,6 +85,7 @@ export class World {
         }
     }
 
+    // cooldown zum Werfen, damit nicht mehrere gleichzeitig geworfen werden
     canThrow() {
         let timepassed = new Date().getTime() - this.lastThrow;
         return timepassed > 500;
@@ -250,29 +253,29 @@ export class World {
     // wenn Spiel zu Ende, entsprechenden Bildschirm anzeigen
     drawEndscreen() {
         if (this.gameEnd === true) {
+            IntervalHub.stopAllIntervals();
+            this.ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
             if (this.endscreen.state === "win") {
-                // this.removeMoFromScreen();
                 this.addToMap(this.endscreen);
-                IntervalHub.stopAllIntervals();
             } else if (this.endscreen.state === "lose") {
-                // this.removeMoFromScreen();
                 this.addToMap(this.endscreen);
-                IntervalHub.stopAllIntervals();
-            } else {
-                return;
             }
         }
     }
 
     // prüfen, ob das Spiel zu Ende ist, weil CHarakter oder Boss keine Energie mehr haben
     checkGameEnd() {
-        if (this.gameEnd === false) {
+        //wenn das Ende schon abläuft, soll nicht weiter geprüft werden, da sonst Bug möglich (falscher Endscreen)
+        if (this.gameEndTriggered === false) {
             if (this.endboss.isDead()) {
+                this.gameEndTriggered = true;
                 setTimeout(() => {
                     this.gameEnd = true;
                     this.endscreen.state = "win";
                 }, 1000);
             } else if (this.character.isDead()) {
+                this.gameEndTriggered = true;
                 setTimeout(() => {
                     this.gameEnd = true;
                     this.endscreen.state = "lose";
