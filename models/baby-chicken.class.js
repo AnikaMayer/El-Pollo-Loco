@@ -10,7 +10,7 @@ export class BabyChicken extends MovableObject {
     energy = 50;
     imgPath = ImageHub.BABYCHICKEN;
     audioPath = AudioHub.ENEMIES.deadBabyChicken;
-    showFrame = true;
+    // showFrame = true;
     offset = {
         top: 10,
         right: 10,
@@ -44,9 +44,9 @@ export class BabyChicken extends MovableObject {
     animateBabyChicken = () => {
         if (this.isDead()) {
             // wenn isDead() zurückgegeben aus movableObj
-            this.playAnimation(this.imgPath.dead); // dead-animation
+            this.playAnimation(this.imgPath.dead, 0); // dead-animation
         } else {
-            this.playAnimation(this.imgPath.walk); //walk animation
+            this.playAnimation(this.imgPath.walk, 0); //walk animation
         }
     };
 }

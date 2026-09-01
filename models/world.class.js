@@ -149,6 +149,7 @@ export class World {
             } else {
                 enemy.hit(50);
             }
+            bottle.stopFalling();
             bottle.hit(100);
             bottle.splash();
         }

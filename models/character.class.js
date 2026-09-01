@@ -11,7 +11,9 @@ export class Character extends MovableObject {
     imgPath = ImageHub.PEPE;
     audioPath = AudioHub.CHARACTER;
     world;
-    showFrame = true;
+    deathJump = true;
+    // showFrame = true;
+    idleStart = new Date().getTime();
     offset = {
         top: 120,
         right: 27,
@@ -25,6 +27,8 @@ export class Character extends MovableObject {
         this.loadImages(this.imgPath.jump);
         this.loadImages(this.imgPath.dead);
         this.loadImages(this.imgPath.hurt);
+        this.loadImages(this.imgPath.idle);
+        this.loadImages(this.imgPath.longIdle);
         this.applyGravity();
         IntervalHub.startInterval(this.applyGravity, 1000 / 25);
         IntervalHub.startInterval(this.moveCharacter, 1000 / 60);
@@ -66,19 +70,40 @@ export class Character extends MovableObject {
 
     animateCharacter = () => {
         if (this.isDead()) {
-            this.playAnimation(this.imgPath.dead); //dead animation
+            //dead animation
+            this.playAnimation(this.imgPath.dead, 200);
         } else if (this.isHurt()) {
-            this.playAnimation(this.imgPath.hurt);
+            this.playAnimation(this.imgPath.hurt, 45);
+            this.idleStart = new Date().getTime();
         } else if (this.isAboveGround()) {
-            this.playAnimation(this.imgPath.jump); //jump animation
+            this.playAnimation(this.imgPath.jump, 55); //jump animation
+            this.idleStart = new Date().getTime();
         } else {
             if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                this.playAnimation(this.imgPath.walk); //walk animation
+                this.playAnimation(this.imgPath.walk, 20); //walk animation
+                this.idleStart = new Date().getTime();
+            } else {
+                this.idleAnimation();
             }
         }
     };
 
+    idleAnimation() {
+        if (this.checkTimeForIdle()) {
+            this.playAnimation(this.imgPath.longIdle, 200);
+        } else {
+            this.playAnimation(this.imgPath.idle, 250);
+        }
+    }
+
+    checkTimeForIdle() {
+        let timepassed = new Date().getTime() - this.idleStart;
+        timepassed = timepassed / 1000;
+        return timepassed > 15;
+    }
+
     jump() {
         this.speedY = 30;
+        this.currentImage = 0;
     }
 }

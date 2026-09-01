@@ -8,7 +8,9 @@ export class MovableObject extends DrawableObject {
     otherDirection = false;
     energy = 100;
     lastHit = 0;
+    lastAnimation = 0;
     keepFalling = false;
+    deathJump = false;
     rX;
     rY;
     rW;
@@ -22,7 +24,7 @@ export class MovableObject extends DrawableObject {
     }
 
     applyGravity = () => {
-        if (this.isDead()) {
+        if (this.isDead() && !this.keepFalling) {
             return; // Objekte können nicht mehr fallen, wenn sie zerstört sind
         }
         if (this.isAboveGround() || this.speedY > 0) {
@@ -43,14 +45,16 @@ export class MovableObject extends DrawableObject {
     // z.B.:character.isColliding(chicken);
     // funktioniert, indem wir den offset-Rahmen holen
     isColliding(mO) {
-        this.getRealFrame();
-        mO.getRealFrame();
-        return (
-            this.rX + this.rW > mO.rX &&
-            this.rY + this.rH > mO.rY &&
-            this.rX < mO.rX + mO.rW &&
-            this.rY < mO.rY + mO.rH
-        );
+        if (!this.isDead()) {
+            this.getRealFrame();
+            mO.getRealFrame();
+            return (
+                this.rX + this.rW > mO.rX &&
+                this.rY + this.rH > mO.rY &&
+                this.rX < mO.rX + mO.rW &&
+                this.rY < mO.rY + mO.rH
+            );
+        }
     }
 
     // nutzt isColliding-Methode UND muss über mO liegen (nur, wenn mO nicht tot ist!)
@@ -80,6 +84,10 @@ export class MovableObject extends DrawableObject {
         }
         if (this.energy === 0) {
             this.speed = 0;
+            if (this.deathJump) {
+                this.keepFalling = true;
+                this.speedY = 30;
+            }
         }
     }
 
@@ -94,11 +102,19 @@ export class MovableObject extends DrawableObject {
         return this.energy === 0; // wenn 0, wird "isDead()" zurückgegen, Aufruf dann im Objekt selbst unter animate
     }
 
-    playAnimation(images) {
-        let i = this.currentImage % images.length; //i = 0 % 6 => 0, Rest 0 | 5 % 6 => 0, R 5 | 6 % 6 => 1, R 0 | 7 % 6 => 1, R 1
-        let path = images[i]; // i = 0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 0 usw....
-        this.img = this.imageCache[path];
-        this.currentImage++;
+    playAnimation(images, animationSpeed) {
+        if (this.animateNext(animationSpeed)) {
+            let i = this.currentImage % images.length; //i = 0 % 6 => 0, Rest 0 | 5 % 6 => 0, R 5 | 6 % 6 => 1, R 0 | 7 % 6 => 1, R 1
+            let path = images[i]; // i = 0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 0 usw....
+            this.img = this.imageCache[path];
+            this.currentImage++;
+            this.lastAnimation = new Date().getTime();
+        }
+    }
+
+    animateNext(animationSpeed) {
+        let timepassed = new Date().getTime() - this.lastAnimation;
+        return timepassed > animationSpeed;
     }
 
     // wenn Bedingung erfüllt, wird über path sound abgespielt, sonst stoppt Sound

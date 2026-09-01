@@ -8,7 +8,7 @@ export class Coin extends MovableObject {
     width = 140;
     height = 140;
     imgPath = ImageHub.COIN;
-    showFrame = true;
+    // showFrame = true;
     offset = {
         top: 50,
         right: 50,

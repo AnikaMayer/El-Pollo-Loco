@@ -40,12 +40,19 @@ export class ThrowableObject extends MovableObject {
         if (this.isDead()) {
             return; // Flasche bewegt sich nicht mehr auf x-Achse
         } else if (this.y >= 360) {
+            this.stopFalling();
+            this.y = 360;
             this.keepFalling = false;
             this.hit(100);
             this.splash();
         }
         this.x += 10;
     };
+
+    stopFalling() {
+        this.keepFalling = false;
+        this.speedY = 0;
+    }
 
     splash() {
         this.isSplashing = true; // Energie ist 0, Obj ist dead()
@@ -62,9 +69,9 @@ export class ThrowableObject extends MovableObject {
 
     animateThrowObj = () => {
         if (this.isSplashing) {
-            this.playAnimation(this.imgPath.splash); //splash animation
+            this.playAnimation(this.imgPath.splash, 0); //splash animation
         } else {
-            this.playAnimation(this.imgPath.rotation);
+            this.playAnimation(this.imgPath.rotation, 0);
         } //splash animation, muss am Ende stehen, damit die Flasche sich immer dreht, wenn nichts anderes zutrifft (sonst immer nur rotation)
     };
 }

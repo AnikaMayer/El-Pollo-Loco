@@ -12,7 +12,7 @@ export class Endboss extends MovableObject {
     imgPath = ImageHub.BOSS;
     audioPath = AudioHub.ENEMIES.EndbossApproach;
     encounter = false;
-    showFrame = true;
+    // showFrame = true;
     timepassed = new Date().getTime();
     state = "walk";
     offset = {
@@ -65,11 +65,11 @@ export class Endboss extends MovableObject {
         const newTime = new Date().getTime(); // wird aktualisiert, nachdem Zeit jedes States vergangen
         const timing = this.getTiming(); // timing wird in Methode definiert
         if (this.state === "walk") {
-            this.playAnimation(this.imgPath.walk);
+            this.playAnimation(this.imgPath.walk, 0);
         } else if (this.state === "alert") {
-            this.playAnimation(this.imgPath.alert);
+            this.playAnimation(this.imgPath.alert, 0);
         } else {
-            this.playAnimation(this.imgPath.attack);
+            this.playAnimation(this.imgPath.attack, 0);
         }
         this.checkTimePassed(newTime, timing); // prüfen, wieviel Zeit vergangen, wann Wechsel
     }

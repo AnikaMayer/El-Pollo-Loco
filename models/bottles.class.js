@@ -9,7 +9,7 @@ export class Bottle extends MovableObject {
     imgPath = ImageHub.BOTTLE;
     groundImages = this.imgPath.onGround;
     randomIndex = Math.floor(Math.random() * this.groundImages.length);
-    showFrame = true;
+    // showFrame = true;
     offset = {
         top: 10,
         right: 10,

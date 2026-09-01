@@ -9,7 +9,7 @@ export class Chicken extends MovableObject {
     height = 60;
     imgPath = ImageHub.CHICKEN;
     audioPath = AudioHub.ENEMIES.deadChicken;
-    showFrame = true;
+    // showFrame = true;
     offset = {
         top: 10,
         right: 10,
@@ -43,9 +43,9 @@ export class Chicken extends MovableObject {
     animateChicken = () => {
         if (this.isDead()) {
             // wenn isDead() zurückgegeben aus movableObj
-            this.playAnimation(this.imgPath.dead); // dead-animation
+            this.playAnimation(this.imgPath.dead, 0); // dead-animation
         } else {
-            this.playAnimation(this.imgPath.walk); //walk animation
+            this.playAnimation(this.imgPath.walk, 0); //walk animation
         }
     };
 }
