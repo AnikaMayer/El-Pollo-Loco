@@ -7,6 +7,7 @@ import { BottleBar } from "./bottle-bar.class.js";
 import { CoinBar } from "./coin-bar.class.js";
 import { EndbossBar } from "./endboss-bar.class.js";
 import { Endboss } from "./endboss.class.js";
+import { Endscreen } from "./endscreen.class.js";
 
 export class World {
     character = new Character();
@@ -21,11 +22,14 @@ export class World {
     coinBar = new CoinBar();
     endbossBar = new EndbossBar();
     throwableObjects = [];
+    lastThrow = 0;
     totalCoins = this.level.coins.length;
     collectedCoins = 0;
     totalBottles = this.level.bottles.length;
     availableBottles = 90;
     bottleError = false;
+    gameEnd = false;
+    endscreen = new Endscreen();
 
     constructor(_canvas, _keyboard) {
         this.ctx = _canvas.getContext("2d");
@@ -33,11 +37,9 @@ export class World {
         this.keyboard = _keyboard;
         this.draw();
         this.setWorld();
-        IntervalHub.startInterval(this.run, 1000 / 5);
+        IntervalHub.startInterval(this.checkEnemyCollisions, 1000 / 5);
         IntervalHub.startInterval(this.checkBottleDamage, 1000 / 10);
-        IntervalHub.startInterval(this.collectCoins, 1000 / 60);
-        IntervalHub.startInterval(this.collectBottles, 1000 / 60);
-        IntervalHub.startInterval(this.checkJumpCollision, 1000 / 60);
+        IntervalHub.startInterval(this.run, 1000 / 60);
     }
 
     setWorld() {
@@ -46,32 +48,18 @@ export class World {
 
     // enemyCollisions und thrownObj. werden im selben Intervall wiederholt, etwas langsamer, damit nicht zu viele Treffer auf einmal bzw. nicht zu viele Bottles geworfen werden
     run = () => {
-        this.checkEnemyCollisions();
+        this.collectCoins();
+        this.collectBottles();
+        this.checkJumpCollision();
         this.checkThrownObjects();
+        this.checkGameEnd();
     };
-
-    checkBossEncounter() {
-        if (this.character.x >= 1900) {
-            this.endboss.encounter = true;
-        }
-        if (this.endboss.encounter === true) {
-            this.addToMap(this.endbossBar);
-        }
-    }
 
     // prüfen, ob genügend throwable Obj. vorhanden sind
     checkThrownObjects() {
         if (this.availableBottles > 0) {
             // -> wenn availableBottles > 0, dann kann mit "D" eine Flasche geworfen werden.
-            if (this.keyboard.D) {
-                const bottle = new ThrowableObject(
-                    this.character.x + 100,
-                    this.character.y + 100,
-                );
-                this.throwableObjects.push(bottle);
-                this.availableBottles--; // wenn eine Flasche geworfen wurde, dann wird von available Bottles 1 abgezogen
-                this.bottleBar.setCount(this.availableBottles); // der counter der bottleBar wird entsprechend um 1 nach unten angepasst
-            }
+            this.throwObjects();
         } else if (this.availableBottles === 0 && this.keyboard.D) {
             // -> wenn nicht genügend Flaschen UND D wird gedrückt
             this.bottleError = true; // bottleError wird aktiviert, damit wird die Anzeige "no Bottles" gezeichnet in draw()
@@ -82,8 +70,26 @@ export class World {
         }
     }
 
+    throwObjects() {
+        if (this.keyboard.D && this.canThrow()) {
+            const bottle = new ThrowableObject(
+                this.character.x + 100,
+                this.character.y + 100,
+            );
+            this.throwableObjects.push(bottle);
+            this.availableBottles--; // wenn eine Flasche geworfen wurde, dann wird von available Bottles 1 abgezogen
+            this.bottleBar.setCount(this.availableBottles); // der counter der bottleBar wird entsprechend um 1 nach unten angepasst
+            this.lastThrow = new Date().getTime();
+        }
+    }
+
+    canThrow() {
+        let timepassed = new Date().getTime() - this.lastThrow;
+        return timepassed > 500;
+    }
+
     // für jeden Gegner wird (oben im Interval) geprüft, ob der Gegner kollidiert
-    checkEnemyCollisions() {
+    checkEnemyCollisions = () => {
         if (this.checkJumpCollision()) {
             return;
         } else {
@@ -103,17 +109,17 @@ export class World {
                 }
             });
         }
-    }
+    };
 
     // Charakter springt auf Gegner, um ihm Schaden zuzufügen, ohne dabei selbst zu erleiden -> dabei springt er ab
-    checkJumpCollision = () => {
+    checkJumpCollision() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isCollidingFromAbove(enemy)) {
                 this.character.jumpOnMovObj(enemy); // hier wir dem Char neuer y-wert zugewiesen, siehe movableObj
                 enemy.hit(50);
             }
         });
-    };
+    }
 
     // im Interval wird geprüft, ob für jede Flasche für jeden Gegner eine Kollision erfolgt
     checkBottleDamage = () => {
@@ -146,7 +152,7 @@ export class World {
     }
 
     // im Intervall prüfen, ob CHaracter mit Münzen kollidiert (für JEDE Münze!)
-    collectCoins = () => {
+    collectCoins() {
         this.level.coins = this.level.coins.filter((coin) => {
             if (this.character.isColliding(coin)) {
                 // wenn Kollision: collectedCoins +1, count der coin-bar aktualisieren
@@ -156,10 +162,10 @@ export class World {
             }
             return true; // der filter-Methode sagen "Münze bleibt drin / es passiert nichts"
         });
-    };
+    }
 
     // Prüfung Koll. CHar + Bottle
-    collectBottles = () => {
+    collectBottles() {
         this.level.bottles = this.level.bottles.filter((bottle) => {
             if (this.character.isColliding(bottle)) {
                 //availBott +1, bar-count +1
@@ -169,7 +175,54 @@ export class World {
             }
             return true; // bottle bleibt drin bzw. passiert nichts
         });
-    };
+    }
+
+    // leinwand wird anfangs geleert, dann wird Kamera bewegt und Objekte werden hinzugefügt
+    draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //am Anfang wird canvas immer geleert
+        this.ctx.translate(this.camera_x, 0); //Map wird nach links verschoben
+        this.drawBackground();
+        this.drawCollectibles();
+        this.ctx.translate(-this.camera_x, 0); // Kameraperspektive zurücksetzen
+        // ------ Space for fixed objects ------
+        this.drawHUD();
+        this.ctx.translate(this.camera_x, 0); // Kameraperspektive wieder positionieren
+        this.drawMovableObj();
+        this.ctx.translate(-this.camera_x, 0); //Map wird wieder nach rechts verschoben
+        this.drawEndscreen();
+        requestAnimationFrame(() => this.draw()); // draw() wird immer wieder aufgerufen
+    }
+
+    drawBackground() {
+        this.addObjectsToMap(this.level.backgroundObjects); //Objekte werden eingefügt bzw. "gezeichnet"
+        this.addObjectsToMap(this.level.clouds);
+    }
+
+    drawCollectibles() {
+        if (this.gameEnd === false) {
+            this.addObjectsToMap(this.level.coins);
+            this.addObjectsToMap(this.level.bottles);
+        }
+    }
+
+    drawHUD() {
+        if (this.gameEnd === false) {
+            this.addToMap(this.healthBar);
+            this.addToMap(this.bottleBar);
+            this.addToMap(this.coinBar);
+            this.checkBossEncounter(); //health-bar endboss zur Map
+            this.drawErrorMsg();
+        }
+    }
+
+    checkBossEncounter() {
+        if (this.character.x >= 1900) {
+            this.endboss.encounter = true;
+        }
+        if (this.endboss.encounter === true) {
+            this.addToMap(this.endbossBar);
+        }
+    }
 
     // zeichnen der Mitteilung, dass keine Flaschen zum Werfen vorhanden -- nur zeichnen, wenn true!
     drawErrorMsg() {
@@ -186,32 +239,46 @@ export class World {
         }
     }
 
-    // leinwand wird anfangs geleert, dann wird Kamera bewegt und Objekte werden hinzugefügt
-    draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //am Anfang wird canvas immer geleert
-        this.ctx.translate(this.camera_x, 0); //Map wird nach links verschoben
-        this.addObjectsToMap(this.level.backgroundObjects); //Objekte werden eingefügt bzw. "gezeichnet"
-        this.addObjectsToMap(this.level.clouds);
-        this.addObjectsToMap(this.level.coins);
-        this.addObjectsToMap(this.level.bottles);
+    drawMovableObj() {
+        if (this.gameEnd === false) {
+            this.addToMap(this.character);
+            this.addObjectsToMap(this.level.enemies);
+            this.addObjectsToMap(this.throwableObjects);
+        }
+    }
 
-        this.ctx.translate(-this.camera_x, 0); // Kameraperspektive zurücksetzen
-        // ------ Space for fixed objects ------
-        this.addToMap(this.healthBar);
-        this.addToMap(this.bottleBar);
-        this.addToMap(this.coinBar);
-        this.checkBossEncounter();
-        this.drawErrorMsg();
-        this.ctx.translate(this.camera_x, 0); // Kameraperspektive wieder positionieren
+    // wenn Spiel zu Ende, entsprechenden Bildschirm anzeigen
+    drawEndscreen() {
+        if (this.gameEnd === true) {
+            if (this.endscreen.state === "win") {
+                // this.removeMoFromScreen();
+                this.addToMap(this.endscreen);
+                IntervalHub.stopAllIntervals();
+            } else if (this.endscreen.state === "lose") {
+                // this.removeMoFromScreen();
+                this.addToMap(this.endscreen);
+                IntervalHub.stopAllIntervals();
+            } else {
+                return;
+            }
+        }
+    }
 
-        this.addToMap(this.character);
-        this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.throwableObjects);
-
-        this.ctx.translate(-this.camera_x, 0); //Map wird wieder nach rechts verschoben
-
-        // draw() wird immer wieder aufgerufen
-        requestAnimationFrame(() => this.draw());
+    // prüfen, ob das Spiel zu Ende ist, weil CHarakter oder Boss keine Energie mehr haben
+    checkGameEnd() {
+        if (this.gameEnd === false) {
+            if (this.endboss.isDead()) {
+                setTimeout(() => {
+                    this.gameEnd = true;
+                    this.endscreen.state = "win";
+                }, 1000);
+            } else if (this.character.isDead()) {
+                setTimeout(() => {
+                    this.gameEnd = true;
+                    this.endscreen.state = "lose";
+                }, 1000);
+            }
+        }
     }
 
     // die entsprechenden Objekte werden hinzugefügt
