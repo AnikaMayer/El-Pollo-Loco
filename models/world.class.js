@@ -60,7 +60,11 @@ export class World {
         if (this.availableBottles > 0) {
             // -> wenn availableBottles > 0, dann kann mit "D" eine Flasche geworfen werden.
             this.throwObjects();
-        } else if (this.availableBottles === 0 && this.keyboard.D) {
+        } else if (
+            this.availableBottles === 0 &&
+            this.keyboard.D &&
+            this.canThrow()
+        ) {
             // -> wenn nicht genügend Flaschen UND D wird gedrückt
             this.bottleError = true; // bottleError wird aktiviert, damit wird die Anzeige "no Bottles" gezeichnet in draw()
             setTimeout(() => {
