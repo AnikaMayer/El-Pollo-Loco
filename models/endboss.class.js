@@ -30,6 +30,7 @@ export class Endboss extends MovableObject {
         this.loadImages(this.imgPath.hurt);
         this.loadImages(this.imgPath.attack);
         this.x = 2500;
+        // this.x = 400;
         IntervalHub.startInterval(this.moveEndboss, 1000 / 60);
         IntervalHub.startInterval(this.animate, 1000 / 5);
         // IntervalHub.startInterval(this.chickenSound, 1000 / 60);
@@ -52,9 +53,9 @@ export class Endboss extends MovableObject {
     animate = () => {
         if (this.isDead()) {
             // wenn isDead() zurückgegeben aus movableObj
-            this.playAnimation(this.imgPath.dead);
+            this.playAnimation(this.imgPath.dead, 0);
         } else if (this.isHurt()) {
-            this.playAnimation(this.imgPath.hurt);
+            this.playAnimation(this.imgPath.hurt, 0);
         } else {
             this.animateBossMovement();
         }

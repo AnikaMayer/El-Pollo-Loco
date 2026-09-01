@@ -15,14 +15,14 @@ export class Endscreen extends DrawableObject {
     constructor() {
         super().loadImage(this.imgPath.win);
         this.loadImage(this.imgPath.lose);
-        IntervalHub.startInterval(this.animate, 1000 / 60);
     }
 
-    animate = () => {
-        if (this.state === "win") {
+    setState(value) {
+        this.state = value;
+        if (value === "win") {
             this.loadImage(this.imgPath.win);
-        } else if (this.state === "lose") {
+        } else if (value === "lose") {
             this.loadImage(this.imgPath.lose);
         }
-    };
+    }
 }

@@ -26,10 +26,9 @@ export class World {
     totalCoins = this.level.coins.length;
     collectedCoins = 0;
     totalBottles = this.level.bottles.length;
-    availableBottles = 90;
+    availableBottles = 0;
     bottleError = false;
     gameEnd = false;
-    gameEndTriggered = false;
     endscreen = new Endscreen();
 
     constructor(_canvas, _keyboard) {
@@ -253,13 +252,16 @@ export class World {
 
     // wenn Spiel zu Ende, entsprechenden Bildschirm anzeigen
     drawEndscreen() {
+        console.log(this.endscreen.state);
+
         if (this.gameEnd === true) {
             IntervalHub.stopAllIntervals();
             this.ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-            if (this.endscreen.state === "win") {
-                this.addToMap(this.endscreen);
-            } else if (this.endscreen.state === "lose") {
+            if (
+                this.endscreen.state === "win" ||
+                this.endscreen.state === "lose"
+            ) {
                 this.addToMap(this.endscreen);
             }
         }
@@ -267,19 +269,17 @@ export class World {
 
     // prüfen, ob das Spiel zu Ende ist, weil CHarakter oder Boss keine Energie mehr haben
     checkGameEnd() {
-        //wenn das Ende schon abläuft, soll nicht weiter geprüft werden, da sonst Bug möglich (falscher Endscreen)
-        if (this.gameEndTriggered === false) {
+        //wenn das Ende schon abläuft, soll nicht weiter geprüft werden
+        if (this.gameEnd === false) {
             if (this.endboss.isDead()) {
-                this.gameEndTriggered = true;
                 setTimeout(() => {
                     this.gameEnd = true;
-                    this.endscreen.state = "win";
+                    this.endscreen.setState("win");
                 }, 1000);
             } else if (this.character.isDead()) {
-                this.gameEndTriggered = true;
                 setTimeout(() => {
                     this.gameEnd = true;
-                    this.endscreen.state = "lose";
+                    this.endscreen.setState("lose");
                 }, 1000);
             }
         }
