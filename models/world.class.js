@@ -80,6 +80,7 @@ export class World {
             const bottle = new ThrowableObject(
                 this.character.x + 100,
                 this.character.y + 100,
+                this.character.otherDirection,
             );
             this.throwableObjects.push(bottle);
             this.availableBottles--; // wenn eine Flasche geworfen wurde, dann wird von available Bottles 1 abgezogen
@@ -223,7 +224,7 @@ export class World {
     }
 
     checkBossEncounter() {
-        if (this.character.x >= 1900) {
+        if (this.character.x >= 2800) {
             this.endboss.encounter = true;
         }
         if (this.endboss.encounter === true) {
@@ -248,16 +249,14 @@ export class World {
 
     drawMovableObj() {
         if (this.gameEnd === false) {
-            this.addToMap(this.character);
             this.addObjectsToMap(this.level.enemies);
+            this.addToMap(this.character);
             this.addObjectsToMap(this.throwableObjects);
         }
     }
 
     // wenn Spiel zu Ende, entsprechenden Bildschirm anzeigen
     drawEndscreen() {
-        console.log(this.endscreen.state);
-
         if (this.gameEnd === true) {
             IntervalHub.stopAllIntervals();
             this.ctx.fillStyle = "rgba(0, 0, 0, 0.3)";

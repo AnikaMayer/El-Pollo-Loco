@@ -57,5 +57,14 @@ export const level1 = new Level(
         new BackgroundObject(ImageHub.BACKGROUND.thirdLayer[1]),
         new BackgroundObject(ImageHub.BACKGROUND.secondLayer[1]),
         new BackgroundObject(ImageHub.BACKGROUND.firstLayer[1]),
+
+        new BackgroundObject(ImageHub.BACKGROUND.air),
+        new BackgroundObject(ImageHub.BACKGROUND.thirdLayer[0]),
+        new BackgroundObject(ImageHub.BACKGROUND.secondLayer[0]),
+        new BackgroundObject(ImageHub.BACKGROUND.firstLayer[0]),
+        new BackgroundObject(ImageHub.BACKGROUND.air),
+        new BackgroundObject(ImageHub.BACKGROUND.thirdLayer[1]),
+        new BackgroundObject(ImageHub.BACKGROUND.secondLayer[1]),
+        new BackgroundObject(ImageHub.BACKGROUND.firstLayer[1]),
     ],
 );
