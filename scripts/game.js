@@ -1,11 +1,20 @@
 import { Keyboard } from "./keyboard.class.js";
 import { World } from "../models/world.class.js";
 
+const controlButton = document.getElementById("control-btn");
+const imprintButton = document.getElementById("imprint-btn");
+const homeButtonCntrl = document.getElementById("home-btn-cntrl");
+const homeButtonImpr = document.getElementById("home-btn-imprint");
+const startScreen = document.getElementById("startScreen");
+const controlPage = document.getElementById("control-page");
+const imprintPage = document.getElementById("imprint-page");
+
 let canvas;
 let world;
 let keyboard = new Keyboard();
 
 function init() {
+    manageClickEvents();
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
 }
@@ -51,5 +60,43 @@ window.addEventListener("keyup", (event) => {
         keyboard.D = false;
     }
 });
+
+function showControls() {
+    startScreen.classList.add("hide-page");
+    controlPage.classList.remove("hide-page");
+}
+
+function showImprint() {
+    startScreen.classList.add("hide-page");
+    imprintPage.classList.remove("hide-page");
+}
+
+function goHome() {
+    controlPage.classList.add("hide-page");
+    imprintPage.classList.add("hide-page");
+    startScreen.classList.remove("hide-page");
+}
+
+function manageNavigation(event) {
+    const clickedBtn = event.target.id;
+
+    if (clickedBtn === "control-btn") {
+        showControls();
+    } else if (clickedBtn === "imprint-btn") {
+        showImprint();
+    } else if (
+        clickedBtn === "home-btn-cntrl" ||
+        clickedBtn === "home-btn-imprint"
+    ) {
+        goHome();
+    }
+}
+
+function manageClickEvents() {
+    controlButton.addEventListener("click", manageNavigation);
+    imprintButton.addEventListener("click", manageNavigation);
+    homeButtonCntrl.addEventListener("click", manageNavigation);
+    homeButtonImpr.addEventListener("click", manageNavigation);
+}
 
 init();

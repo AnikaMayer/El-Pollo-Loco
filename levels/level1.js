@@ -8,6 +8,7 @@ import { ImageHub } from "../scripts/img-hub.class.js";
 import { Level } from "../models/level.class.js";
 import { BabyChicken } from "../models/baby-chicken.class.js";
 
+export let level1;
 const clouds = [];
 const enemies = [];
 const backgroundObjects = [];
@@ -15,33 +16,36 @@ const backgroundObjects = [];
 getClouds();
 getEnemies();
 getBackground();
+initLevel();
 
-export const level1 = new Level(
-    enemies,
-    clouds,
-    [
-        new Bottle(600),
-        new Bottle(850),
-        new Bottle(1000),
-        new Bottle(1200),
-        new Bottle(1600),
-        new Bottle(1900),
-        new Bottle(2200),
-        new Bottle(2450),
-        new Bottle(2670),
-        new Bottle(3000),
-    ],
-    [
-        ...Coin.shortVerticalLinePattern(300, 250),
-        ...Coin.arcPattern(510, 275),
-        ...Coin.horizontalLinePattern(1200, 250),
-        ...Coin.verticalLinePattern(1600, 250),
-        ...Coin.diagonalPattern(1900, 250),
-        ...Coin.horizontalLinePattern(2400, 250),
-        ...Coin.diagonalPattern(2900, 250),
-    ],
-    backgroundObjects,
-);
+function initLevel() {
+    level1 = new Level(
+        enemies,
+        clouds,
+        [
+            new Bottle(600),
+            new Bottle(850),
+            new Bottle(1000),
+            new Bottle(1200),
+            new Bottle(1600),
+            new Bottle(1900),
+            new Bottle(2200),
+            new Bottle(2450),
+            new Bottle(2670),
+            new Bottle(3000),
+        ],
+        [
+            ...Coin.shortVerticalLinePattern(300, 250),
+            ...Coin.arcPattern(510, 275),
+            ...Coin.horizontalLinePattern(1200, 250),
+            ...Coin.verticalLinePattern(1600, 250),
+            ...Coin.diagonalPattern(1900, 250),
+            ...Coin.horizontalLinePattern(2400, 250),
+            ...Coin.diagonalPattern(2900, 250),
+        ],
+        backgroundObjects,
+    );
+}
 
 function getBackground() {
     for (let i = 0; i < 7; i++) {
