@@ -26,17 +26,17 @@ export class Coin extends MovableObject {
     }
 
     animateCoin = () => {
-        this.playAnimation(this.imgPath);
+        this.playAnimation(this.imgPath, 0);
     };
 
     // Vorlage für Münzbogen, Array mit Münzen wird erstellt, Münzen entsprechend unterschieldich angeordnet
     static arcPattern(baseX, baseY) {
         const coins = [];
         const coin1 = new Coin(baseX, baseY);
-        const coin2 = new Coin(baseX + 110, baseY - 75);
-        const coin3 = new Coin(baseX + 220, baseY - 150);
-        const coin4 = new Coin(baseX + 330, baseY - 75);
-        const coin5 = new Coin(baseX + 440, baseY);
+        const coin2 = new Coin(baseX + 60, baseY - 50);
+        const coin3 = new Coin(baseX + 130, baseY - 90);
+        const coin4 = new Coin(baseX + 200, baseY - 50);
+        const coin5 = new Coin(baseX + 260, baseY);
         coins.push(coin1, coin2, coin3, coin4, coin5);
         return coins;
     }
@@ -60,6 +60,15 @@ export class Coin extends MovableObject {
         const coin2 = new Coin(x, baseY - 50);
         const coin3 = new Coin(x, baseY - 100);
         coins.push(coin1, coin2, coin3);
+        return coins;
+    }
+
+    // Münzvorlage für kurze vertikale Linie
+    static shortVerticalLinePattern(x, baseY) {
+        const coins = [];
+        const coin1 = new Coin(x, baseY);
+        const coin2 = new Coin(x, baseY - 50);
+        coins.push(coin1, coin2);
         return coins;
     }
 

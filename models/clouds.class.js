@@ -10,7 +10,7 @@ export class Cloud extends MovableObject {
     constructor() {
         super().loadImage(this.imgPath[0]);
 
-        this.x = Math.random() * 3500; //zufällig generierte Zahl zwischen 0 und 2500
+        this.x = Math.random() * 5000; //zufällig generierte Zahl zwischen 0 und 2500
         this.y = 20 + Math.random() * 20;
         IntervalHub.startInterval(this.moveClouds, 1000 / 60);
     }
