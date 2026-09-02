@@ -1,6 +1,7 @@
 import { Keyboard } from "./keyboard.class.js";
 import { World } from "../models/world.class.js";
 
+const startButton = document.getElementById("start-btn");
 const controlButton = document.getElementById("control-btn");
 const imprintButton = document.getElementById("imprint-btn");
 const homeButtonCntrl = document.getElementById("home-btn-cntrl");
@@ -15,8 +16,6 @@ let keyboard = new Keyboard();
 
 function init() {
     manageClickEvents();
-    canvas = document.getElementById("canvas");
-    world = new World(canvas, keyboard);
 }
 
 window.addEventListener("keydown", (event) => {
@@ -89,6 +88,8 @@ function manageNavigation(event) {
         clickedBtn === "home-btn-imprint"
     ) {
         goHome();
+    } else if (clickedBtn === "start-btn") {
+        renderWorld();
     }
 }
 
@@ -97,6 +98,13 @@ function manageClickEvents() {
     imprintButton.addEventListener("click", manageNavigation);
     homeButtonCntrl.addEventListener("click", manageNavigation);
     homeButtonImpr.addEventListener("click", manageNavigation);
+    startButton.addEventListener("click", manageNavigation);
+}
+
+function renderWorld() {
+    startScreen.classList.add("hide-page");
+    canvas = document.getElementById("canvas");
+    world = new World(canvas, keyboard);
 }
 
 init();
