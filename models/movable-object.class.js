@@ -10,7 +10,9 @@ export class MovableObject extends DrawableObject {
     lastHit = 0;
     lastAnimation = 0;
     keepFalling = false;
+    world;
     deathJump = false;
+    movingLeft;
     rX;
     rY;
     rW;

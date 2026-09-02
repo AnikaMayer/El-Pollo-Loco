@@ -21,8 +21,8 @@ export class Chicken extends MovableObject {
         super().loadImage(this.imgPath.walk[0]);
         this.loadImages(this.imgPath.walk);
         this.loadImages(this.imgPath.dead);
-
-        this.x = 500 + Math.random() * 1750;
+        this.movingLeft = Math.random() >= 0.5 ? true : false;
+        this.x = 370 + Math.random() * 3000;
         this.speed = 0.15 + Math.random() * 0.5;
         IntervalHub.startInterval(this.moveChicken, 1000 / 60);
         IntervalHub.startInterval(this.animateChicken, 1000 / 5);
@@ -30,9 +30,35 @@ export class Chicken extends MovableObject {
         this.getRealFrame();
     }
 
+    // läuft in eine zufällige Richtung mit zufälligem Wechsel, stoppt an der Grenze der Map
     moveChicken = () => {
-        this.moveLeft();
+        this.randomDirection();
+        if (this.movingLeft) {
+            this.moveLeft();
+            this.otherDirection = false;
+        } else {
+            this.moveRight();
+            this.otherDirection = true;
+        }
+        this.stopAtMapEnd();
     };
+
+    //bestimmt zufällig eine neue Richtung
+    randomDirection() {
+        if (Math.random() < 0.0015) {
+            this.movingLeft = !this.movingLeft;
+            this.otherDirection = !this.otherDirection;
+        }
+    }
+
+    //dreht am Ende wieder um
+    stopAtMapEnd() {
+        if (this.x <= 120 && this.movingLeft) {
+            this.movingLeft = false;
+        } else if (this.x >= 3000 && !this.movingLeft) {
+            this.movingLeft = true;
+        }
+    }
 
     // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
     chickenSound = () => {

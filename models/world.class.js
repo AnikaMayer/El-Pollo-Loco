@@ -26,7 +26,7 @@ export class World {
     totalCoins = this.level.coins.length;
     collectedCoins = 0;
     totalBottles = this.level.bottles.length;
-    availableBottles = 80;
+    availableBottles = 0;
     bottleError = false;
     gameEnd = false;
     endscreen = new Endscreen();
@@ -44,6 +44,7 @@ export class World {
 
     setWorld() {
         this.character.world = this;
+        this.endboss.world = this;
     }
 
     // enemyCollisions und thrownObj. werden im selben Intervall wiederholt, etwas langsamer, damit nicht zu viele Treffer auf einmal bzw. nicht zu viele Bottles geworfen werden
@@ -74,6 +75,7 @@ export class World {
         }
     }
 
+    // definiert x-start-wert von Flasche basierend auf blickrichtung charakter
     getBottleX() {
         return this.character.otherDirection
             ? this.character.x - 50
@@ -130,7 +132,15 @@ export class World {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isCollidingFromAbove(enemy)) {
                 this.character.jumpOnMovObj(enemy); // hier wir dem Char neuer y-wert zugewiesen, siehe movableObj
-                enemy.hit(50);
+                if (enemy === this.endboss) {
+                    enemy.hit(20);
+                    this.endbossBar.setPercentage(
+                        this.endboss.energy,
+                        this.endbossBar.imgPath,
+                    );
+                } else {
+                    enemy.hit(50);
+                }
             }
         });
     }

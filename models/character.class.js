@@ -10,7 +10,6 @@ export class Character extends MovableObject {
     energy = 100;
     imgPath = ImageHub.PEPE;
     audioPath = AudioHub.CHARACTER;
-    world;
     deathJump = true;
     // showFrame = true;
     idleStart = new Date().getTime();

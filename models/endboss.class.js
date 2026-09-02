@@ -12,6 +12,7 @@ export class Endboss extends MovableObject {
     imgPath = ImageHub.BOSS;
     audioPath = AudioHub.ENEMIES.EndbossApproach;
     encounter = false;
+    movingLeft = true;
     // showFrame = true;
     timepassed = new Date().getTime();
     state = "walk";
@@ -39,9 +40,34 @@ export class Endboss extends MovableObject {
 
     moveEndboss = () => {
         if (this.encounter === true) {
-            this.moveLeft();
+            this.moveToCHaracter();
+            if (this.movingLeft) {
+                this.moveLeft();
+                this.otherDirection = false;
+            } else {
+                this.moveRight();
+                this.otherDirection = true;
+            }
+            this.stopAtMapEnd();
         }
     };
+
+    moveToCHaracter() {
+        if (this.x > this.world.character.x) {
+            this.movingLeft = true;
+        } else if (this.x < this.world.character.x) {
+            this.movingLeft = false;
+        }
+    }
+
+    //dreht am Ende wieder um
+    stopAtMapEnd() {
+        if (this.x <= 120 && this.movingLeft) {
+            this.movingLeft = false;
+        } else if (this.x >= 3500 && !this.movingLeft) {
+            this.movingLeft = true;
+        }
+    }
 
     // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
     endbossSound = () => {
