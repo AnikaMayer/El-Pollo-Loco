@@ -8,31 +8,17 @@ import { ImageHub } from "../scripts/img-hub.class.js";
 import { Level } from "../models/level.class.js";
 import { BabyChicken } from "../models/baby-chicken.class.js";
 
+const clouds = [];
+const enemies = [];
+const backgroundObjects = [];
+
+getClouds();
+getEnemies();
+getBackground();
+
 export const level1 = new Level(
-    [
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new BabyChicken(),
-        new BabyChicken(),
-        new BabyChicken(),
-        new BabyChicken(),
-        new BabyChicken(),
-        new BabyChicken(),
-        new Endboss(),
-    ],
-    [
-        new Cloud(),
-        new Cloud(),
-        new Cloud(),
-        new Cloud(),
-        new Cloud(),
-        new Cloud(),
-    ],
+    enemies,
+    clouds,
     [
         new Bottle(600),
         new Bottle(850),
@@ -54,37 +40,39 @@ export const level1 = new Level(
         ...Coin.horizontalLinePattern(2400, 250),
         ...Coin.diagonalPattern(2900, 250),
     ],
-    [
-        new BackgroundObject(ImageHub.BACKGROUND.air),
-        new BackgroundObject(ImageHub.BACKGROUND.thirdLayer[1]),
-        new BackgroundObject(ImageHub.BACKGROUND.secondLayer[1]),
-        new BackgroundObject(ImageHub.BACKGROUND.firstLayer[1]),
-
-        new BackgroundObject(ImageHub.BACKGROUND.air),
-        new BackgroundObject(ImageHub.BACKGROUND.thirdLayer[0]),
-        new BackgroundObject(ImageHub.BACKGROUND.secondLayer[0]),
-        new BackgroundObject(ImageHub.BACKGROUND.firstLayer[0]),
-        new BackgroundObject(ImageHub.BACKGROUND.air),
-        new BackgroundObject(ImageHub.BACKGROUND.thirdLayer[1]),
-        new BackgroundObject(ImageHub.BACKGROUND.secondLayer[1]),
-        new BackgroundObject(ImageHub.BACKGROUND.firstLayer[1]),
-
-        new BackgroundObject(ImageHub.BACKGROUND.air),
-        new BackgroundObject(ImageHub.BACKGROUND.thirdLayer[0]),
-        new BackgroundObject(ImageHub.BACKGROUND.secondLayer[0]),
-        new BackgroundObject(ImageHub.BACKGROUND.firstLayer[0]),
-        new BackgroundObject(ImageHub.BACKGROUND.air),
-        new BackgroundObject(ImageHub.BACKGROUND.thirdLayer[1]),
-        new BackgroundObject(ImageHub.BACKGROUND.secondLayer[1]),
-        new BackgroundObject(ImageHub.BACKGROUND.firstLayer[1]),
-
-        new BackgroundObject(ImageHub.BACKGROUND.air),
-        new BackgroundObject(ImageHub.BACKGROUND.thirdLayer[0]),
-        new BackgroundObject(ImageHub.BACKGROUND.secondLayer[0]),
-        new BackgroundObject(ImageHub.BACKGROUND.firstLayer[0]),
-        new BackgroundObject(ImageHub.BACKGROUND.air),
-        new BackgroundObject(ImageHub.BACKGROUND.thirdLayer[1]),
-        new BackgroundObject(ImageHub.BACKGROUND.secondLayer[1]),
-        new BackgroundObject(ImageHub.BACKGROUND.firstLayer[1]),
-    ],
+    backgroundObjects,
 );
+
+function getBackground() {
+    for (let i = 0; i < 7; i++) {
+        const layerIndex = 1 - (i % 2);
+        backgroundObjects.push(new BackgroundObject(ImageHub.BACKGROUND.air));
+        backgroundObjects.push(
+            new BackgroundObject(ImageHub.BACKGROUND.thirdLayer[layerIndex]),
+        );
+        backgroundObjects.push(
+            new BackgroundObject(ImageHub.BACKGROUND.secondLayer[layerIndex]),
+        );
+        backgroundObjects.push(
+            new BackgroundObject(ImageHub.BACKGROUND.firstLayer[layerIndex]),
+        );
+    }
+}
+
+function getClouds() {
+    for (let i = 0; i < 6; i++) {
+        clouds.push(new Cloud());
+    }
+}
+
+function getEnemies() {
+    getNormalEnemies(BabyChicken, 6);
+    getNormalEnemies(Chicken, 7);
+    enemies.push(new Endboss());
+}
+
+function getNormalEnemies(enemyType, quantity) {
+    for (let i = 0; i < quantity; i++) {
+        enemies.push(new enemyType());
+    }
+}

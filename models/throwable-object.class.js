@@ -8,6 +8,7 @@ export class ThrowableObject extends MovableObject {
     keepFalling = true;
     // showFrame = true;
     isSplashing = false;
+    removeBottle = false;
     audioPath = AudioHub.ITEMS;
     offset = {
         top: 10,
@@ -61,6 +62,7 @@ export class ThrowableObject extends MovableObject {
 
     splash() {
         this.isSplashing = true; // Energie ist 0, Obj ist dead()
+        this.currentImage = 0;
         setTimeout(() => {
             this.removeBottle = true; // Flasche soll nach Animation entfernt werden
         }, 1000 / 1.5);
@@ -73,9 +75,12 @@ export class ThrowableObject extends MovableObject {
     };
 
     animateThrowObj = () => {
-        if (this.isSplashing) {
+        if (
+            this.isSplashing &&
+            this.currentImage < this.imgPath.splash.length
+        ) {
             this.playAnimation(this.imgPath.splash, 0); //splash animation
-        } else {
+        } else if (!this.isSplashing) {
             this.playAnimation(this.imgPath.rotation, 0);
         } //splash animation, muss am Ende stehen, damit die Flasche sich immer dreht, wenn nichts anderes zutrifft (sonst immer nur rotation)
     };
