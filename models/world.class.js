@@ -59,8 +59,7 @@ export class World {
     // prüfen, ob genügend throwable Obj. vorhanden sind
     checkThrownObjects() {
         if (this.availableBottles > 0) {
-            // -> wenn availableBottles > 0, dann kann mit "D" eine Flasche geworfen werden.
-            this.throwObjects();
+            this.throwObjects(); // -> wenn availableBottles > 0, dann kann mit "D" eine Flasche geworfen werden.
         } else if (
             this.availableBottles === 0 &&
             this.keyboard.D &&
@@ -69,8 +68,7 @@ export class World {
             // -> wenn nicht genügend Flaschen UND D wird gedrückt
             this.bottleError = true; // bottleError wird aktiviert, damit wird die Anzeige "no Bottles" gezeichnet in draw()
             setTimeout(() => {
-                // mit einem Timeout wird Error wieder auf false gesetzt, damit der Text wieder verschwindet (wird nur gezeichnet bei true)
-                this.bottleError = false;
+                this.bottleError = false; // mit einem Timeout wird Error wieder auf false gesetzt, damit der Text wieder verschwindet (wird nur gezeichnet bei true)
             }, 1200);
         }
     }
@@ -110,39 +108,49 @@ export class World {
             return;
         } else {
             this.level.enemies.forEach((enemy) => {
-                if (
-                    this.character.isColliding(enemy) &&
-                    !enemy.isDead() &&
-                    !this.character.isHurt()
-                ) {
-                    // wenn Kollision:
-                    this.character.hit(10); // hit mit damage-Parameter übergeben, um entsprechend viel Schaden abzuziehen
-                    this.healthBar.setPercentage(
-                        // healthbar wird aktualisiert, indem die aktuelle Energie (nachdem damage abgezogen wurde) u. die Bilder der Bar übergben werden
-                        this.character.energy,
-                        this.healthBar.imgPath,
-                    );
-                }
+                this.damageCharacter(enemy);
             });
         }
     };
+
+    // wenn Kollision, dann nimmt CHarakter Schaden
+    damageCharacter(enemy) {
+        if (
+            this.character.isColliding(enemy) &&
+            !enemy.isDead() &&
+            !this.character.isHurt()
+        ) {
+            // wenn Kollision:
+            this.character.hit(10); // hit mit damage-Parameter übergeben, um entsprechend viel Schaden abzuziehen
+            this.healthBar.setPercentage(
+                // healthbar wird aktualisiert, indem die aktuelle Energie (nachdem damage abgezogen wurde) u. die Bilder der Bar übergben werden
+                this.character.energy,
+                this.healthBar.imgPath,
+            );
+        }
+    }
 
     // Charakter springt auf Gegner, um ihm Schaden zuzufügen, ohne dabei selbst zu erleiden -> dabei springt er ab
     checkJumpCollision() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isCollidingFromAbove(enemy)) {
                 this.character.jumpOnMovObj(enemy); // hier wir dem Char neuer y-wert zugewiesen, siehe movableObj
-                if (enemy === this.endboss) {
-                    enemy.hit(20);
-                    this.endbossBar.setPercentage(
-                        this.endboss.energy,
-                        this.endbossBar.imgPath,
-                    );
-                } else {
-                    enemy.hit(50);
-                }
+                this.checkEnemyType(enemy);
             }
         });
+    }
+
+    // Gegner erhalten unterschiedlich viel Schaden
+    checkEnemyType(enemy) {
+        if (enemy === this.endboss) {
+            enemy.hit(20);
+            this.endbossBar.setPercentage(
+                this.endboss.energy,
+                this.endbossBar.imgPath,
+            );
+        } else {
+            enemy.hit(50);
+        }
     }
 
     // im Interval wird geprüft, ob für jede Flasche für jeden Gegner eine Kollision erfolgt
@@ -161,15 +169,7 @@ export class World {
     causeDamage(enemy, bottle) {
         if (enemy.isColliding(bottle) && !bottle.isSplashing) {
             // wenn Kollision Gegner mit Flasche: über hit Schadenszahl übergeben
-            if (enemy === this.endboss) {
-                enemy.hit(20);
-                this.endbossBar.setPercentage(
-                    this.endboss.energy,
-                    this.endbossBar.imgPath,
-                );
-            } else {
-                enemy.hit(50);
-            }
+            this.checkEnemyType(enemy);
             bottle.stopFalling();
             bottle.hit(100);
             bottle.splash();

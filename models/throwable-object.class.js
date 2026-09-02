@@ -48,12 +48,17 @@ export class ThrowableObject extends MovableObject {
             this.hit(100);
             this.splash();
         }
+        this.flyingDirection();
+    };
+
+    //prüft Richtung, die als Parameter im Constructor -> fliegt nach links oder rechts
+    flyingDirection() {
         if (this.otherDirection === false) {
             this.x += 10;
         } else if (this.otherDirection === true) {
             this.x -= 10;
         }
-    };
+    }
 
     stopFalling() {
         this.keepFalling = false;

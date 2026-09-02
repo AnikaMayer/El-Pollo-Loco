@@ -69,21 +69,18 @@ export class Character extends MovableObject {
 
     animateCharacter = () => {
         if (this.isDead()) {
-            //dead animation
-            this.playAnimation(this.imgPath.dead, 200);
+            this.playAnimation(this.imgPath.dead, 200); //dead animation
         } else if (this.isHurt()) {
             this.playAnimation(this.imgPath.hurt, 45);
             this.idleStart = new Date().getTime();
         } else if (this.isAboveGround()) {
             this.playAnimation(this.imgPath.jump, 55); //jump animation
             this.idleStart = new Date().getTime();
+        } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+            this.playAnimation(this.imgPath.walk, 20); //walk animation
+            this.idleStart = new Date().getTime();
         } else {
-            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                this.playAnimation(this.imgPath.walk, 20); //walk animation
-                this.idleStart = new Date().getTime();
-            } else {
-                this.idleAnimation();
-            }
+            this.idleAnimation();
         }
     };
 

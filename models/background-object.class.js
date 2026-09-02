@@ -14,7 +14,6 @@ export class BackgroundObject extends MovableObject {
             BackgroundObject.xPos += 719;
             BackgroundObject.turn = 0;
         }
-
         super().loadImage(imagePath);
         this.x = BackgroundObject.xPos;
         BackgroundObject.turn++;

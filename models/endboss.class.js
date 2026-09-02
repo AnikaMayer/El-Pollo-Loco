@@ -38,9 +38,10 @@ export class Endboss extends MovableObject {
         this.getRealFrame();
     }
 
+    // sobald Begegnung ausgelöst, bewegt sich Boss nach links/ rechts, aber nicht außerhalb der Map
     moveEndboss = () => {
         if (this.encounter === true) {
-            this.moveToCHaracter();
+            this.moveToCharacter();
             if (this.movingLeft) {
                 this.moveLeft();
                 this.otherDirection = false;
@@ -52,7 +53,8 @@ export class Endboss extends MovableObject {
         }
     };
 
-    moveToCHaracter() {
+    // Endboss bewegt sich immer auf CHarakter zu
+    moveToCharacter() {
         if (this.x > this.world.character.x) {
             this.movingLeft = true;
         } else if (this.x < this.world.character.x) {
