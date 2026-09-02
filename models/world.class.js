@@ -26,7 +26,7 @@ export class World {
     totalCoins = this.level.coins.length;
     collectedCoins = 0;
     totalBottles = this.level.bottles.length;
-    availableBottles = 0;
+    availableBottles = 80;
     bottleError = false;
     gameEnd = false;
     endscreen = new Endscreen();
@@ -74,11 +74,18 @@ export class World {
         }
     }
 
+    getBottleX() {
+        return this.character.otherDirection
+            ? this.character.x - 50
+            : this.character.x + 100;
+    }
+
     // der Ablauf beim Werfen des Objekts
     throwObjects() {
         if (this.keyboard.D && this.canThrow()) {
+            const bottleX = this.getBottleX();
             const bottle = new ThrowableObject(
-                this.character.x + 100,
+                bottleX,
                 this.character.y + 100,
                 this.character.otherDirection,
             );

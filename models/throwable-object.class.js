@@ -6,7 +6,7 @@ import { MovableObject } from "./movable-object.class.js";
 export class ThrowableObject extends MovableObject {
     imgPath = ImageHub.BOTTLE;
     keepFalling = true;
-    showFrame = true;
+    // showFrame = true;
     isSplashing = false;
     audioPath = AudioHub.ITEMS;
     offset = {
@@ -16,15 +16,17 @@ export class ThrowableObject extends MovableObject {
         left: 15,
     };
 
-    constructor(x, y) {
+    constructor(x, y, _otherDirection) {
         super().loadImage(this.imgPath.rotation[0]);
         this.loadImages(this.imgPath.rotation);
         this.loadImages(this.imgPath.splash);
         this.x = x;
         this.y = y;
+        this.otherDirection = _otherDirection;
         this.width = 50;
         this.height = 60;
         this.throw();
+        this.getRealFrame();
     }
 
     throw() {
@@ -33,7 +35,6 @@ export class ThrowableObject extends MovableObject {
         IntervalHub.startInterval(this.flyingBottle, 1000 / 40);
         IntervalHub.startInterval(this.animateThrowObj, 1000 / 10);
         // IntervalHub.startInterval(this.itemSound, 1000 / 60);
-        this.getRealFrame();
     }
 
     flyingBottle = () => {
@@ -46,7 +47,11 @@ export class ThrowableObject extends MovableObject {
             this.hit(100);
             this.splash();
         }
-        this.x += 10;
+        if (this.otherDirection === false) {
+            this.x += 10;
+        } else if (this.otherDirection === true) {
+            this.x -= 10;
+        }
     };
 
     stopFalling() {
