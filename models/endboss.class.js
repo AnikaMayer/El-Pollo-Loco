@@ -55,7 +55,7 @@ export class Endboss extends MovableObject {
 
     // Endboss bewegt sich immer auf CHarakter zu
     moveToCharacter() {
-        if (this.x > this.world.character.x) {
+        if (this.x >= this.world.character.x) {
             this.movingLeft = true;
         } else if (this.x < this.world.character.x) {
             this.movingLeft = false;
