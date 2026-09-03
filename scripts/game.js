@@ -1,11 +1,20 @@
 import { Keyboard } from "./keyboard.class.js";
 import { World } from "../models/world.class.js";
+import { IntervalHub } from "./intervall-hub.class.js";
+import { AudioHub } from "./audio-hub.class.js";
 
 const startButton = document.getElementById("start-btn");
 const controlButton = document.getElementById("control-btn");
 const imprintButton = document.getElementById("imprint-btn");
 const homeButtonCntrl = document.getElementById("home-btn-cntrl");
 const homeButtonImpr = document.getElementById("home-btn-imprint");
+
+const homeButton = document.getElementById("home-btn");
+const muteButton = document.getElementById("mute-btn");
+const unmuteButton = document.getElementById("unmute-btn");
+const fullscreenBtn = document.getElementById("fullscrn-btn");
+const normScreenBtn = document.getElementById("normscrn-btn");
+
 const startScreen = document.getElementById("startScreen");
 const controlPage = document.getElementById("control-page");
 const imprintPage = document.getElementById("imprint-page");
@@ -17,6 +26,22 @@ let keyboard = new Keyboard();
 function init() {
     manageClickEvents();
 }
+
+function manageClickEvents() {
+    controlButton.addEventListener("click", manageNavigation);
+    imprintButton.addEventListener("click", manageNavigation);
+    homeButtonCntrl.addEventListener("click", manageNavigation);
+    homeButtonImpr.addEventListener("click", manageNavigation);
+    startButton.addEventListener("click", manageNavigation);
+
+    homeButton.addEventListener("click", manageInterface);
+    muteButton.addEventListener("click", manageInterface);
+    unmuteButton.addEventListener("click", manageInterface);
+    fullscreenBtn.addEventListener("click", manageInterface);
+    normScreenBtn.addEventListener("click", manageInterface);
+}
+
+//#region keyboard
 
 window.addEventListener("keydown", (event) => {
     if (event.key === "ArrowRight") {
@@ -60,6 +85,26 @@ window.addEventListener("keyup", (event) => {
     }
 });
 
+//#endregion
+
+//#region homeNavigation
+
+function manageNavigation(event) {
+    const clickedBtn = event.currentTarget.id;
+    if (clickedBtn === "control-btn") {
+        showControls();
+    } else if (clickedBtn === "imprint-btn") {
+        showImprint();
+    } else if (
+        clickedBtn === "home-btn-cntrl" ||
+        clickedBtn === "home-btn-imprint"
+    ) {
+        goBack();
+    } else if (clickedBtn === "start-btn") {
+        renderWorld();
+    }
+}
+
 function showControls() {
     startScreen.classList.add("hide-page");
     controlPage.classList.remove("hide-page");
@@ -70,41 +115,65 @@ function showImprint() {
     imprintPage.classList.remove("hide-page");
 }
 
-function goHome() {
+function goBack() {
     controlPage.classList.add("hide-page");
     imprintPage.classList.add("hide-page");
     startScreen.classList.remove("hide-page");
 }
 
-function manageNavigation(event) {
-    const clickedBtn = event.target.id;
-
-    if (clickedBtn === "control-btn") {
-        showControls();
-    } else if (clickedBtn === "imprint-btn") {
-        showImprint();
-    } else if (
-        clickedBtn === "home-btn-cntrl" ||
-        clickedBtn === "home-btn-imprint"
-    ) {
-        goHome();
-    } else if (clickedBtn === "start-btn") {
-        renderWorld();
-    }
-}
-
-function manageClickEvents() {
-    controlButton.addEventListener("click", manageNavigation);
-    imprintButton.addEventListener("click", manageNavigation);
-    homeButtonCntrl.addEventListener("click", manageNavigation);
-    homeButtonImpr.addEventListener("click", manageNavigation);
-    startButton.addEventListener("click", manageNavigation);
-}
-
 function renderWorld() {
     startScreen.classList.add("hide-page");
+    homeButton.classList.remove("hide-btn");
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
 }
+
+//#endregion
+
+//#region interface
+
+function manageInterface(event) {
+    const clickedBtn = event.currentTarget.id;
+    if (clickedBtn === "home-btn") {
+        goHome();
+    } else if (clickedBtn === "mute-btn") {
+        muteAudio();
+    } else if (clickedBtn === "unmute-btn") {
+        unmuteAudio();
+    } else if (clickedBtn === "fullscrn-btn") {
+        showFullscreen();
+    } else if (clickedBtn === "normscrn-btn") {
+        exitFullscreen();
+    }
+}
+
+function goHome() {
+    startScreen.classList.remove("hide-page");
+    homeButton.classList.add("hide-btn");
+    IntervalHub.stopAllIntervals();
+}
+
+function muteAudio() {
+    muteButton.classList.add("hide-btn");
+    unmuteButton.classList.remove("hide-btn");
+    AudioHub.stopAll();
+}
+
+function unmuteAudio() {
+    muteButton.classList.remove("hide-btn");
+    unmuteButton.classList.add("hide-btn");
+}
+
+function showFullscreen() {
+    fullscreenBtn.classList.add("hide-btn");
+    normScreenBtn.classList.remove("hide-btn");
+}
+
+function exitFullscreen() {
+    fullscreenBtn.classList.remove("hide-btn");
+    normScreenBtn.classList.add("hide-btn");
+}
+
+//#endregion
 
 init();
