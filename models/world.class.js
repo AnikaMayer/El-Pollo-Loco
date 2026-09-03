@@ -34,8 +34,6 @@ export class World {
     onEndScreen;
 
     constructor(_canvas, _keyboard) {
-        console.log("World wird erstellt");
-
         this.ctx = _canvas.getContext("2d");
         this.canvas = _canvas;
         this.keyboard = _keyboard;
@@ -59,6 +57,8 @@ export class World {
         this.checkThrownObjects();
         this.checkGameEnd();
     };
+
+    //#region throwBottle
 
     // prüfen, ob genügend throwable Obj. vorhanden sind
     checkThrownObjects() {
@@ -106,16 +106,32 @@ export class World {
         return timepassed > 500;
     }
 
-    // für jeden Gegner wird (oben im Interval) geprüft, ob der Gegner kollidiert
-    checkEnemyCollisions = () => {
-        if (this.checkJumpCollision()) {
-            return;
-        } else {
+    // im Interval wird geprüft, ob für jede Flasche für jeden Gegner eine Kollision erfolgt
+    checkBottleDamage = () => {
+        this.throwableObjects.forEach((bottle) => {
             this.level.enemies.forEach((enemy) => {
-                this.damageCharacter(enemy);
+                this.causeDamage(enemy, bottle);
             });
-        }
+        });
+        this.throwableObjects = this.throwableObjects.filter(
+            (bottle) => !bottle.removeBottle,
+        );
     };
+
+    //#endregion
+
+    //#region damage
+
+    // Schaden definieren nach Gegnertyp, für Endboss Statusbar updaten
+    causeDamage(enemy, bottle) {
+        if (enemy.isColliding(bottle) && !bottle.isSplashing) {
+            // wenn Kollision Gegner mit Flasche: über hit Schadenszahl übergeben
+            this.checkEnemyType(enemy);
+            bottle.stopFalling();
+            bottle.hit(100);
+            bottle.splash();
+        }
+    }
 
     // wenn Kollision, dann nimmt CHarakter Schaden
     damageCharacter(enemy) {
@@ -134,16 +150,6 @@ export class World {
         }
     }
 
-    // Charakter springt auf Gegner, um ihm Schaden zuzufügen, ohne dabei selbst zu erleiden -> dabei springt er ab
-    checkJumpCollision() {
-        this.level.enemies.forEach((enemy) => {
-            if (this.character.isCollidingFromAbove(enemy)) {
-                this.character.jumpOnMovObj(enemy); // hier wir dem Char neuer y-wert zugewiesen, siehe movableObj
-                this.checkEnemyType(enemy);
-            }
-        });
-    }
-
     // Gegner erhalten unterschiedlich viel Schaden
     checkEnemyType(enemy) {
         if (enemy === this.endboss) {
@@ -157,28 +163,34 @@ export class World {
         }
     }
 
-    // im Interval wird geprüft, ob für jede Flasche für jeden Gegner eine Kollision erfolgt
-    checkBottleDamage = () => {
-        this.throwableObjects.forEach((bottle) => {
+    //#endregion
+
+    //#region collisionCheck
+
+    // für jeden Gegner wird (oben im Interval) geprüft, ob der Gegner kollidiert
+    checkEnemyCollisions = () => {
+        if (this.checkJumpCollision()) {
+            return;
+        } else {
             this.level.enemies.forEach((enemy) => {
-                this.causeDamage(enemy, bottle);
+                this.damageCharacter(enemy);
             });
-        });
-        this.throwableObjects = this.throwableObjects.filter(
-            (bottle) => !bottle.removeBottle,
-        );
+        }
     };
 
-    // Schaden definieren nach Gegnertyp, für Endboss Statusbar updaten
-    causeDamage(enemy, bottle) {
-        if (enemy.isColliding(bottle) && !bottle.isSplashing) {
-            // wenn Kollision Gegner mit Flasche: über hit Schadenszahl übergeben
-            this.checkEnemyType(enemy);
-            bottle.stopFalling();
-            bottle.hit(100);
-            bottle.splash();
-        }
+    // Charakter springt auf Gegner, um ihm Schaden zuzufügen, ohne dabei selbst zu erleiden -> dabei springt er ab
+    checkJumpCollision() {
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isCollidingFromAbove(enemy)) {
+                this.character.jumpOnMovObj(enemy); // hier wir dem Char neuer y-wert zugewiesen, siehe movableObj
+                this.checkEnemyType(enemy);
+            }
+        });
     }
+
+    //#endregion
+
+    //#region collectItems
 
     // im Intervall prüfen, ob CHaracter mit Münzen kollidiert (für JEDE Münze!)
     collectCoins() {
@@ -205,6 +217,10 @@ export class World {
             return true; // bottle bleibt drin bzw. passiert nichts
         });
     }
+
+    //#endregion
+
+    //#region draw
 
     // leinwand wird anfangs geleert, dann wird Kamera bewegt und Objekte werden hinzugefügt
     draw() {
@@ -350,4 +366,6 @@ export class World {
         mO.x = mO.x * -1;
         this.ctx.restore();
     }
+
+    //#endregion
 }
