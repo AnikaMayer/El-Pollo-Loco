@@ -6,8 +6,8 @@ import { AudioHub } from "./audio-hub.class.js";
 const startButton = document.getElementById("start-btn");
 const controlButton = document.getElementById("control-btn");
 const imprintButton = document.getElementById("imprint-btn");
-const homeButtonCntrl = document.getElementById("home-btn-cntrl");
-const homeButtonImpr = document.getElementById("home-btn-imprint");
+const closeButtonCntrl = document.getElementById("close-btn-cntrl");
+const closeButtonImpr = document.getElementById("close-btn-imprint");
 
 const homeButton = document.getElementById("home-btn");
 const muteButton = document.getElementById("mute-btn");
@@ -30,8 +30,8 @@ function init() {
 function manageClickEvents() {
     controlButton.addEventListener("click", manageNavigation);
     imprintButton.addEventListener("click", manageNavigation);
-    homeButtonCntrl.addEventListener("click", manageNavigation);
-    homeButtonImpr.addEventListener("click", manageNavigation);
+    closeButtonCntrl.addEventListener("click", manageNavigation);
+    closeButtonImpr.addEventListener("click", manageNavigation);
     startButton.addEventListener("click", manageNavigation);
 
     homeButton.addEventListener("click", manageInterface);
@@ -96,8 +96,8 @@ function manageNavigation(event) {
     } else if (clickedBtn === "imprint-btn") {
         showImprint();
     } else if (
-        clickedBtn === "home-btn-cntrl" ||
-        clickedBtn === "home-btn-imprint"
+        clickedBtn === "close-btn-cntrl" ||
+        clickedBtn === "close-btn-imprint"
     ) {
         goBack();
     } else if (clickedBtn === "start-btn") {
