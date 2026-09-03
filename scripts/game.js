@@ -2,6 +2,7 @@ import { Keyboard } from "./keyboard.class.js";
 import { World } from "../models/world.class.js";
 import { IntervalHub } from "./intervall-hub.class.js";
 import { AudioHub } from "./audio-hub.class.js";
+import { initLevel } from "../levels/level1.js";
 
 const startButton = document.getElementById("start-btn");
 const controlButton = document.getElementById("control-btn");
@@ -125,6 +126,7 @@ function renderWorld() {
     startScreen.classList.add("hide-page");
     homeButton.classList.remove("hide-btn");
     canvas = document.getElementById("canvas");
+    initLevel();
     world = new World(canvas, keyboard);
 }
 
@@ -151,6 +153,7 @@ function goHome() {
     startScreen.classList.remove("hide-page");
     homeButton.classList.add("hide-btn");
     IntervalHub.stopAllIntervals();
+    cancelAnimationFrame(world.drawID);
 }
 
 function muteAudio() {

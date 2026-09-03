@@ -30,8 +30,11 @@ export class World {
     bottleError = false;
     gameEnd = false;
     endscreen = new Endscreen();
+    drawID;
 
     constructor(_canvas, _keyboard) {
+        console.log("World wird erstellt");
+
         this.ctx = _canvas.getContext("2d");
         this.canvas = _canvas;
         this.keyboard = _keyboard;
@@ -215,7 +218,7 @@ export class World {
         this.drawMovableObj();
         this.ctx.translate(-this.camera_x, 0); //Map wird wieder nach rechts verschoben
         this.drawEndscreen();
-        requestAnimationFrame(() => this.draw()); // draw() wird immer wieder aufgerufen
+        this.drawID = requestAnimationFrame(() => this.draw()); // draw() wird immer wieder aufgerufen
     }
 
     drawBackground() {

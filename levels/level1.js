@@ -9,16 +9,17 @@ import { Level } from "../models/level.class.js";
 import { BabyChicken } from "../models/baby-chicken.class.js";
 
 export let level1;
-const clouds = [];
-const enemies = [];
+let clouds = [];
+let enemies = [];
 const backgroundObjects = [];
 
-getClouds();
-getEnemies();
 getBackground();
-initLevel();
 
-function initLevel() {
+export function initLevel() {
+    clouds = [];
+    enemies = [];
+    getClouds();
+    getEnemies();
     level1 = new Level(
         enemies,
         clouds,
