@@ -15,6 +15,7 @@ const muteButton = document.getElementById("mute-btn");
 const unmuteButton = document.getElementById("unmute-btn");
 const fullscreenBtn = document.getElementById("fullscrn-btn");
 const normScreenBtn = document.getElementById("normscrn-btn");
+const restartBtn = document.getElementById("restart-btn");
 
 const startScreen = document.getElementById("startScreen");
 const controlPage = document.getElementById("control-page");
@@ -40,6 +41,7 @@ function manageClickEvents() {
     unmuteButton.addEventListener("click", manageInterface);
     fullscreenBtn.addEventListener("click", manageInterface);
     normScreenBtn.addEventListener("click", manageInterface);
+    restartBtn.addEventListener("click", manageNavigation);
 }
 
 //#region keyboard
@@ -101,7 +103,7 @@ function manageNavigation(event) {
         clickedBtn === "close-btn-imprint"
     ) {
         goBack();
-    } else if (clickedBtn === "start-btn") {
+    } else if (clickedBtn === "start-btn" || clickedBtn === "restart-btn") {
         renderWorld();
     }
 }
@@ -125,9 +127,19 @@ function goBack() {
 function renderWorld() {
     startScreen.classList.add("hide-page");
     homeButton.classList.remove("hide-btn");
+    restartBtn.classList.add("hide-btn");
     canvas = document.getElementById("canvas");
+    if (world) {
+        cancelAnimationFrame(world.drawID);
+    }
     initLevel();
     world = new World(canvas, keyboard);
+    world.onEndScreen = toggleRestartBtn;
+    toggleRestartBtn();
+}
+
+function toggleRestartBtn() {
+    restartBtn.classList.toggle("hide-btn", world.gameEnd === false);
 }
 
 //#endregion

@@ -31,6 +31,7 @@ export class World {
     gameEnd = false;
     endscreen = new Endscreen();
     drawID;
+    onEndScreen;
 
     constructor(_canvas, _keyboard) {
         console.log("World wird erstellt");
@@ -296,16 +297,22 @@ export class World {
         if (this.gameEnd === false) {
             if (this.endboss.isDead()) {
                 setTimeout(() => {
-                    this.gameEnd = true;
-                    this.endscreen.setState("win");
+                    this.endGame("win");
                 }, 1000);
             } else if (this.character.isDead()) {
                 setTimeout(() => {
-                    this.gameEnd = true;
-                    this.endscreen.setState("lose");
+                    this.endGame("lose");
                 }, 1000);
             }
         }
+    }
+
+    endGame(state) {
+        if (this.onEndScreen) {
+            this.onEndScreen();
+        }
+        this.gameEnd = true;
+        this.endscreen.setState(state);
     }
 
     // die entsprechenden Objekte werden hinzugefügt

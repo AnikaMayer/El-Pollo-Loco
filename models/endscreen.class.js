@@ -4,12 +4,12 @@ import { IntervalHub } from "../scripts/intervall-hub.class.js";
 import { DrawableObject } from "./drawable-object.class.js";
 
 export class Endscreen extends DrawableObject {
-    x = 120;
-    y = 80;
-    width = 500;
-    height = 300;
+    x = 160;
+    y = 100;
+    width = 400;
+    height = 240;
     imgPath = ImageHub.ENDSCREEN;
-    state = "default";
+    state = "win";
     // audioPath = AudioHub.;
 
     constructor() {
