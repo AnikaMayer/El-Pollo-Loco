@@ -4,7 +4,7 @@ import { IntervalHub } from "../scripts/intervall-hub.class.js";
 import { MovableObject } from "./movable-object.class.js";
 
 export class Character extends MovableObject {
-    y = 80;
+    y = 180;
     height = 250;
     speed = 10;
     energy = 100;
@@ -21,7 +21,7 @@ export class Character extends MovableObject {
     };
 
     constructor() {
-        super().loadImage(this.imgPath.walk[0]);
+        super().loadImage(this.imgPath.idle[0]);
         this.loadImages(this.imgPath.walk);
         this.loadImages(this.imgPath.jump);
         this.loadImages(this.imgPath.dead);
