@@ -173,12 +173,13 @@ function goHome() {
 function muteAudio() {
     muteButton.classList.add("hide-btn");
     unmuteButton.classList.remove("hide-btn");
-    AudioHub.stopAll();
+    AudioHub.muteAll();
 }
 
 function unmuteAudio() {
     muteButton.classList.remove("hide-btn");
     unmuteButton.classList.add("hide-btn");
+    AudioHub.unmuteAll();
 }
 
 function showFullscreen() {

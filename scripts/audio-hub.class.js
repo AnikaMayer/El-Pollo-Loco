@@ -2,6 +2,7 @@ class Sound {
     file;
     isLoaded;
     isPlaying = false;
+    muted = false;
 
     // loop: sound läuft endlos (snoring), playOnce: sound wird immer wieder neu gestartet(sammeln von coins zb), normal abspielen: soundPlayed-property in movableObject
     constructor(_file, _loop = false, _playOnce = false) {
@@ -59,7 +60,7 @@ export class AudioHub {
         if (sound.isPlaying && !sound.playOnce) {
             return;
         }
-        sound.file.volume = 0.2;
+        sound.file.volume = sound.muted ? 0 : 0.2;
         if (sound.file.readyState === 4 || sound.isLoaded) {
             sound.isLoaded = true;
             sound.isPlaying = true;
@@ -69,6 +70,24 @@ export class AudioHub {
                 sound.isPlaying = false;
             };
         }
+    }
+
+    static muteAll() {
+        AudioHub.allSounds.forEach((array) => {
+            Object.values(array).forEach((sound) => {
+                sound.muted = true;
+                sound.file.volume = 0;
+            });
+        });
+    }
+
+    static unmuteAll() {
+        AudioHub.allSounds.forEach((array) => {
+            Object.values(array).forEach((sound) => {
+                sound.muted = false;
+                sound.file.volume = 0.2;
+            });
+        });
     }
 
     static stopAll() {
