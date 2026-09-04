@@ -1,15 +1,15 @@
 body {
     min-height: 100dvh;
     margin: 0;
-    display: grid;
+    /* display: grid;
     grid-template-columns: auto;
     align-content: center;
-    place-items: start center;
+    place-items: start center; */
     /* position: relative; */
-    /* display: flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; */
+    justify-content: center;
     background-image: url("./assets/img/1_startscreen/mostafaelturkey36-desert-background.png");
     background-position: center;
     background-repeat: no-repeat;
@@ -34,6 +34,13 @@ h1 {
     font-size: 2.75rem;
     color: rgb(58, 13, 3);
     text-shadow: 2px 2px 1px rgb(201, 106, 18);
+}
+
+.game_container {
+    display: grid;
+    grid-template-columns: auto;
+    align-content: center;
+    place-items: start center;
 }
 
 .game-wrapper {

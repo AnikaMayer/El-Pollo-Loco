@@ -21,6 +21,7 @@ const startScreen = document.getElementById("startScreen");
 const controlPage = document.getElementById("control-page");
 const imprintPage = document.getElementById("imprint-page");
 const hudPanel = document.getElementById("hud");
+const fullscreen = document.getElementById("fullscreen");
 
 let canvas;
 let world;
@@ -188,11 +189,56 @@ function unmuteAudio() {
 function showFullscreen() {
     fullscreenBtn.classList.add("hide-btn");
     normScreenBtn.classList.remove("hide-btn");
+    toggleFullscreen(fullscreen);
 }
 
 function exitFullscreen() {
     fullscreenBtn.classList.remove("hide-btn");
     normScreenBtn.classList.add("hide-btn");
+    toggleFullscreen(fullscreen);
+}
+
+function enterFullscreen(element) {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+    } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+    }
+}
+
+function unshowFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    }
+}
+
+function toggleFullscreen(element) {
+    if (!document.fullscreenElement) {
+        element.requestFullscreen?.() ||
+            element.msRequestFullscreen?.() ||
+            element.webkitRequestFullscreen?.();
+    } else {
+        document.exitFullscreen();
+    }
+    if (canvas) {
+        canvas.focus();
+    }
+}
+
+function toggleFullscreenTest() {
+    const container = document.querySelector(".game_container");
+    if (!document.fullscreenElement) {
+        container.requestFullscreen?.();
+    } else {
+        document.exitFullscreen();
+    }
+    if (canvas) canvas.focus();
 }
 
 //#endregion
