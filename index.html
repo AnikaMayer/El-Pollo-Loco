@@ -12,6 +12,68 @@
     <body>
         <h1>El pollo loco</h1>
         <div class="game-wrapper">
+            <div id="hud" class="hud-wrapper">
+                <div class="panel">
+                    <button id="btnLeft">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-caret-left-fill"
+                            viewBox="0 0 16 16"
+                        >
+                            <path
+                                d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"
+                            />
+                        </svg>
+                    </button>
+                    <button id="btnRight">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-caret-right-fill"
+                            viewBox="0 0 16 16"
+                        >
+                            <path
+                                d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"
+                            />
+                        </svg>
+                    </button>
+                </div>
+                <div class="panel">
+                    <button id="btnJump">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-caret-up-fill"
+                            viewBox="0 0 16 16"
+                        >
+                            <path
+                                d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"
+                            />
+                        </svg>
+                    </button>
+                    <button id="btnThrow">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-reply-fill svgThrow"
+                            viewBox="0 0 16 16"
+                        >
+                            <path
+                                d="M5.921 11.9 1.353 8.62a.72.72 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"
+                            />
+                        </svg>
+                    </button>
+                </div>
+            </div>
             <div class="button-wrapper">
                 <button id="home-btn" class="hide-btn">
                     <svg

@@ -12,6 +12,8 @@ body {
     justify-content: center; */
     background-image: url("./assets/img/1_startscreen/mostafaelturkey36-desert-background.png");
     background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     font-family: "Alfa Slab One", Arial, Helvetica, sans-serif;
 }
 
@@ -38,6 +40,42 @@ h1 {
     grid-row: 2;
     grid-column: 1;
     position: relative;
+
+    .hud-wrapper {
+        z-index: 1;
+        width: 100%;
+        display: flex;
+        /* justify-content: space-between; */
+        gap: 10px;
+        justify-content: space-between;
+        position: absolute;
+        bottom: 20px;
+        padding-inline: 40px;
+
+        .panel {
+            display: flex;
+            gap: 40px;
+
+            button {
+                width: 50px;
+                height: 50px;
+                background-color: rgba(255, 255, 255, 0.233);
+                border: 1px solid rgba(228, 228, 228, 0.925);
+                border-radius: 50%;
+                color: white;
+
+                .svgThrow {
+                    transform: scaleX(-1);
+                    width: 25px;
+                    height: 25px;
+                }
+            }
+
+            button:active {
+                background-color: rgba(255, 255, 255, 0.555);
+            }
+        }
+    }
 
     .button-wrapper {
         z-index: 1;
@@ -81,6 +119,7 @@ h1 {
     }
 
     canvas {
+        display: block;
         background-color: black;
         box-shadow:
             0 4px 8px 0 rgba(88, 25, 2, 0.347),
@@ -217,4 +256,21 @@ h1 {
 .hide-page,
 .hide-btn {
     display: none;
+}
+
+/* Smartphones ---------------- */
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+    h1 {
+        display: none;
+    }
+}
+
+/* Smartphones ---------------- */
+@media only screen and (max-height: 480px) {
+    canvas {
+        height: 100vh;
+    }
 }
