@@ -20,6 +20,7 @@ const restartBtn = document.getElementById("restart-btn");
 const startScreen = document.getElementById("startScreen");
 const controlPage = document.getElementById("control-page");
 const imprintPage = document.getElementById("imprint-page");
+const hudPanel = document.getElementById("hud");
 
 let canvas;
 let world;
@@ -137,6 +138,7 @@ function renderWorld() {
     world.onEndScreen = toggleRestartBtn;
     toggleRestartBtn();
     AudioHub.playOne(AudioHub.GAME.start);
+    hudPanel.classList.remove("hide-cntrl");
 }
 
 function toggleRestartBtn() {
@@ -168,6 +170,7 @@ function goHome() {
     toggleRestartBtn();
     IntervalHub.stopAllIntervals();
     cancelAnimationFrame(world.drawID);
+    hudPanel.classList.add("hide-cntrl");
 }
 
 function muteAudio() {
