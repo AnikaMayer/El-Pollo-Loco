@@ -34,7 +34,7 @@ export class Endboss extends MovableObject {
         // this.x = 400;
         IntervalHub.startInterval(this.moveEndboss, 1000 / 60);
         IntervalHub.startInterval(this.animate, 1000 / 5);
-        // IntervalHub.startInterval(this.chickenSound, 1000 / 60);
+        IntervalHub.startInterval(this.endbossSound, 1000 / 60);
         this.getRealFrame();
     }
 
@@ -74,7 +74,7 @@ export class Endboss extends MovableObject {
     // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
     endbossSound = () => {
         const audio = this.audioPath;
-        this.playSound(audio, (this.state = "alert"));
+        this.playSound(audio, this.state === "alert" && !this.isDead());
     };
 
     // animation für endboss
