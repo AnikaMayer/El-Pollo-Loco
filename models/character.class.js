@@ -54,6 +54,17 @@ export class Character extends MovableObject {
         this.world.camera_x = -this.x + 100; //Map wird gegenteilig zum Character verschoben
     };
 
+    playDamageSound() {
+        if (
+            this.isHurt() &&
+            this.lastHit !== this.lastHitSoundPlayed &&
+            !this.isDead()
+        ) {
+            this.lastHitSoundPlayed = this.lastHit;
+            AudioHub.playOne(this.audioPath.damage);
+        }
+    }
+
     // Char-Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
     characterSound = () => {
         const audio = this.audioPath;
@@ -63,7 +74,7 @@ export class Character extends MovableObject {
                 !this.isAboveGround(),
         );
         this.playSound(audio.jump, this.world.keyboard.SPACE);
-        this.playSound(audio.damage, this.isHurt());
+        this.playDamageSound();
         this.playSound(audio.dead, this.isDead());
         this.playSound(audio.snoring, this.checkTimeForIdle());
     };
