@@ -8,6 +8,7 @@ import { CoinBar } from "./coin-bar.class.js";
 import { EndbossBar } from "./endboss-bar.class.js";
 import { Endboss } from "./endboss.class.js";
 import { Endscreen } from "./endscreen.class.js";
+import { AudioHub } from "../scripts/audio-hub.class.js";
 
 export class World {
     character = new Character();
@@ -199,6 +200,7 @@ export class World {
                 // wenn Kollision: collectedCoins +1, count der coin-bar aktualisieren
                 this.collectedCoins++;
                 this.coinBar.setCount(this.collectedCoins);
+                AudioHub.playOne(AudioHub.ITEMS.coin);
                 return false; // der filter-methode sagen "Münze ist jetzt raus"
             }
             return true; // der filter-Methode sagen "Münze bleibt drin / es passiert nichts"
@@ -212,6 +214,7 @@ export class World {
                 //availBott +1, bar-count +1
                 this.availableBottles++;
                 this.bottleBar.setCount(this.availableBottles);
+                AudioHub.playOne(AudioHub.ITEMS.bottle);
                 return false; // bottle raus
             }
             return true; // bottle bleibt drin bzw. passiert nichts

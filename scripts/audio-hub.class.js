@@ -3,9 +3,11 @@ class Sound {
     isLoaded;
     isPlaying = false;
 
-    constructor(_file, _loop = false) {
+    // loop: sound läuft endlos (snoring), playOnce: sound wird immer wieder neu gestartet(sammeln von coins zb), normal abspielen: soundPlayed-property in movableObject
+    constructor(_file, _loop = false, _playOnce = false) {
         this.file = new Audio(_file);
         this.file.loop = _loop;
+        this.playOnce = _playOnce;
     }
 }
 
@@ -30,8 +32,16 @@ export class AudioHub {
         bottle: new Sound(
             "./assets/sounds/collectibles/bottleCollectSound.wav",
         ),
-        coin: new Sound("./assets/sounds/collectibles/collectSound.wav"),
-        splash: new Sound("./assets/sounds/throwable/bottleBreak.mp3"),
+        coin: new Sound(
+            "./assets/sounds/collectibles/collectSound.wav",
+            false,
+            true,
+        ),
+        splash: new Sound(
+            "./assets/sounds/throwable/bottleBreak.mp3",
+            false,
+            true,
+        ),
     };
 
     static GAME = {
@@ -46,17 +56,15 @@ export class AudioHub {
     ];
 
     static playOne(sound) {
-        if (sound.isPlaying) {
+        if (sound.isPlaying && !sound.playOnce) {
             return;
         }
         sound.file.volume = 0.2;
-
         if (sound.file.readyState === 4 || sound.isLoaded) {
             sound.isLoaded = true;
             sound.isPlaying = true;
-            sound.file.currentTime = 0;
+            sound.file.currentTime = 0; // setzt audio-Datei wieder auf Anfang
             sound.file.play();
-            console.log("play() called");
             sound.file.onended = () => {
                 sound.isPlaying = false;
             };
@@ -66,6 +74,7 @@ export class AudioHub {
     static stopAll() {
         AudioHub.allSounds.forEach((sound) => {
             sound.file.pause();
+            sound.isPlaying = false;
         });
     }
 
@@ -75,6 +84,6 @@ export class AudioHub {
         }
         sound.isPlaying = false;
         sound.file.pause();
-        sound.file.currentTime = 0;
+        // sound.file.currentTime = 0;
     }
 }
