@@ -164,6 +164,7 @@ function manageInterface(event) {
 function goHome() {
     startScreen.classList.remove("hide-page");
     homeButton.classList.add("hide-btn");
+    toggleRestartBtn();
     IntervalHub.stopAllIntervals();
     cancelAnimationFrame(world.drawID);
 }

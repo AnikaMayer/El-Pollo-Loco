@@ -32,7 +32,7 @@ export class Character extends MovableObject {
         IntervalHub.startInterval(this.applyGravity, 1000 / 25);
         IntervalHub.startInterval(this.moveCharacter, 1000 / 60);
         IntervalHub.startInterval(this.animateCharacter, 1000 / 20);
-        // IntervalHub.startInterval(this.characterSound, 1000 / 60);
+        IntervalHub.startInterval(this.characterSound, 1000 / 60);
         this.getRealFrame();
     }
 
@@ -62,9 +62,10 @@ export class Character extends MovableObject {
             (this.world.keyboard.LEFT || this.world.keyboard.RIGHT) &&
                 !this.isAboveGround(),
         );
-        this.playSound(audio.jump, this.isAboveGround());
+        this.playSound(audio.jump, this.world.keyboard.SPACE);
         this.playSound(audio.damage, this.isHurt());
         this.playSound(audio.dead, this.isDead());
+        this.playSound(audio.snoring, this.checkTimeForIdle());
     };
 
     animateCharacter = () => {

@@ -13,6 +13,7 @@ export class MovableObject extends DrawableObject {
     world;
     deathJump = false;
     movingLeft;
+    soundPlayed = false;
     rX;
     rY;
     rW;

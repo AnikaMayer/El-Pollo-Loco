@@ -1,17 +1,18 @@
 class Sound {
     file;
     isLoaded;
-    isPlaying;
+    isPlaying = false;
 
-    constructor(_file) {
+    constructor(_file, _loop = false) {
         this.file = new Audio(_file);
+        this.file.loop = _loop;
     }
 }
 
 export class AudioHub {
     static CHARACTER = {
         walk: new Sound("./assets/sounds/character/characterRun.mp3"),
-        jump: new Sound("./assets/sounds/character/characterJump.wav"),
+        jump: new Sound("./assets/sounds/character/characterJump.wav", true),
         damage: new Sound("./assets/sounds/character/characterDamage.mp3"),
         dead: new Sound("./assets/sounds/character/characterDead.wav"),
         snoring: new Sound("./assets/sounds/character/characterSnoring.mp3"),
@@ -45,27 +46,35 @@ export class AudioHub {
     ];
 
     static playOne(sound) {
+        if (sound.isPlaying) {
+            return;
+        }
         sound.file.volume = 0.2;
 
-        if (sound.isPlaying === true) {
-            return;
-        } else if (sound.file.readyState === 4 || sound.isLoaded) {
-            sound.file.currentTime = 0;
+        if (sound.file.readyState === 4 || sound.isLoaded) {
             sound.isLoaded = true;
-            sound.file.play();
             sound.isPlaying = true;
+            sound.file.currentTime = 0;
+            sound.file.play();
+            console.log("play() called");
+            sound.file.onended = () => {
+                sound.isPlaying = false;
+            };
         }
     }
 
     static stopAll() {
         AudioHub.allSounds.forEach((sound) => {
             sound.file.pause();
-            sound.isPlaying = false;
         });
     }
 
     static stopOne(sound) {
-        sound.file.pause();
+        if (!sound.isPlaying) {
+            return;
+        }
         sound.isPlaying = false;
+        sound.file.pause();
+        sound.file.currentTime = 0;
     }
 }

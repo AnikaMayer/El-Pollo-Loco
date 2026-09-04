@@ -26,7 +26,7 @@ export class Chicken extends MovableObject {
         this.speed = 0.15 + Math.random() * 0.5;
         IntervalHub.startInterval(this.moveChicken, 1000 / 60);
         IntervalHub.startInterval(this.animateChicken, 1000 / 5);
-        // IntervalHub.startInterval(this.chickenSound, 1000 / 60);
+        IntervalHub.startInterval(this.chickenSound, 1000 / 60);
         this.getRealFrame();
     }
 
@@ -63,7 +63,10 @@ export class Chicken extends MovableObject {
     // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
     chickenSound = () => {
         const audio = this.audioPath;
-        this.playSound(audio, this.isDead());
+        if (this.isDead() && !this.soundPlayed) {
+            this.soundPlayed = true;
+            this.playSound(audio, this.isDead());
+        }
     };
 
     animateChicken = () => {
