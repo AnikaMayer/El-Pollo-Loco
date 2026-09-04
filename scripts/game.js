@@ -136,6 +136,7 @@ function renderWorld() {
     world = new World(canvas, keyboard);
     world.onEndScreen = toggleRestartBtn;
     toggleRestartBtn();
+    AudioHub.playOne(AudioHub.GAME.start);
 }
 
 function toggleRestartBtn() {

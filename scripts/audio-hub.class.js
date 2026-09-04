@@ -45,7 +45,7 @@ export class AudioHub {
     };
 
     static GAME = {
-        start: new Sound("./assets/sounds/game/gameStart.mp3"),
+        start: new Sound("./assets/sounds/game/gameStart.mp3", false, true),
     };
 
     static allSounds = [
