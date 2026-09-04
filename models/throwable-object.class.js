@@ -35,7 +35,7 @@ export class ThrowableObject extends MovableObject {
         IntervalHub.startInterval(this.applyGravity, 1000 / 25);
         IntervalHub.startInterval(this.flyingBottle, 1000 / 40);
         IntervalHub.startInterval(this.animateThrowObj, 1000 / 10);
-        // IntervalHub.startInterval(this.itemSound, 1000 / 60);
+        IntervalHub.startInterval(this.itemSound, 1000 / 60);
     }
 
     flyingBottle = () => {
@@ -76,7 +76,10 @@ export class ThrowableObject extends MovableObject {
     // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
     itemSound = () => {
         const audio = this.audioPath;
-        this.playSound(audio.splash, this.isSplashing);
+        if (this.isSplashing && !this.soundPlayed) {
+            this.soundPlayed = true;
+            this.playSound(audio.splash, this.isSplashing);
+        }
     };
 
     animateThrowObj = () => {
