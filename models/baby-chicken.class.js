@@ -27,7 +27,7 @@ export class BabyChicken extends MovableObject {
         this.speed = 0.15 + Math.random() * 0.5;
         IntervalHub.startInterval(this.moveBabyChicken, 1000 / 60);
         IntervalHub.startInterval(this.animateBabyChicken, 1000 / 5);
-        // IntervalHub.startInterval(this.babyChickenSound, 1000 / 60);
+        IntervalHub.startInterval(this.babyChickenSound, 1000 / 60);
         this.getRealFrame();
     }
 
@@ -64,7 +64,10 @@ export class BabyChicken extends MovableObject {
     // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
     babyChickenSound = () => {
         const audio = this.audioPath;
-        this.playSound(audio, this.isDead());
+        if (this.isDead() && !this.soundPlayed) {
+            this.soundPlayed = true;
+            this.playSound(audio, this.isDead());
+        }
     };
 
     animateBabyChicken = () => {
