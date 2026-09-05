@@ -139,19 +139,25 @@ h1 {
         }
     }
 
-    .restart_btn {
-        z-index: 1;
-        width: 100px;
-        height: 50px;
-        position: absolute;
-        top: 75%;
-        right: 43%;
-        border: 2px solid rgb(114, 40, 6);
-        border-radius: 10px;
-        background-color: rgb(235, 161, 50);
-        font-size: 18px;
-        font-family: "Alfa Slab One", Arial, Helvetica, sans-serif;
-        color: rgb(114, 40, 6);
+    .restart-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .restart_btn {
+            z-index: 1;
+            width: 100px;
+            height: 50px;
+            position: absolute;
+            top: 75%;
+            border: 2px solid rgb(114, 40, 6);
+            border-radius: 10px;
+            background-color: rgb(235, 161, 50);
+            font-size: 18px;
+            font-family: "Alfa Slab One", Arial, Helvetica, sans-serif;
+            color: rgb(114, 40, 6);
+        }
     }
 
     canvas {

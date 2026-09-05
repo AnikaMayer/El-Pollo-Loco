@@ -168,7 +168,7 @@ function manageInterface(event) {
 function goHome() {
     startScreen.classList.remove("hide-page");
     homeButton.classList.add("hide-btn");
-    toggleRestartBtn();
+    restartBtn.classList.add("hide-btn");
     IntervalHub.stopAllIntervals();
     cancelAnimationFrame(world.drawID);
     hudPanel.classList.add("hide-cntrl");
