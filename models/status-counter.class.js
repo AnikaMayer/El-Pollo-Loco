@@ -9,6 +9,7 @@ export class StatusCounter extends DrawableObject {
         super();
         this.width = 60;
         this.height = 60;
+        this.y = 50;
     }
 
     // count = Anzahl der Flaschen/ Münzen, wird hier aktualisiert

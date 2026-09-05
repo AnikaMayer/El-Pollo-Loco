@@ -8,6 +8,5 @@ export class CoinBar extends StatusCounter {
         super();
         this.loadImage(this.imgPath);
         this.x = 35;
-        this.y = 50;
     }
 }
