@@ -9,7 +9,6 @@ const controlButton = document.getElementById("control-btn");
 const imprintButton = document.getElementById("imprint-btn");
 const closeButtonCntrl = document.getElementById("close-btn-cntrl");
 const closeButtonImpr = document.getElementById("close-btn-imprint");
-
 const homeButton = document.getElementById("home-btn");
 const muteButton = document.getElementById("mute-btn");
 const unmuteButton = document.getElementById("unmute-btn");
