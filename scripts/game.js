@@ -25,9 +25,11 @@ const fullscreen = document.getElementById("fullscreen");
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let isMuted = localStorage.getItem("mutedKey") === "true";
 
 function init() {
     manageClickEvents();
+    applyMuteState();
 }
 
 function manageClickEvents() {
@@ -174,12 +176,16 @@ function goHome() {
 }
 
 function muteAudio() {
+    isMuted = true;
+    localStorage.setItem("mutedKey", true);
     muteButton.classList.add("hide-btn");
     unmuteButton.classList.remove("hide-btn");
     AudioHub.muteAll();
 }
 
 function unmuteAudio() {
+    isMuted = false;
+    localStorage.setItem("mutedKey", false);
     muteButton.classList.remove("hide-btn");
     unmuteButton.classList.add("hide-btn");
     AudioHub.unmuteAll();
@@ -197,26 +203,6 @@ function exitFullscreen() {
     toggleFullscreen(fullscreen);
 }
 
-function enterFullscreen(element) {
-    if (element.requestFullscreen) {
-        element.requestFullscreen();
-    } else if (element.msRequestFullscreen) {
-        element.msRequestFullscreen();
-    } else if (element.webkitRequestFullscreen) {
-        element.webkitRequestFullscreen();
-    }
-}
-
-function unshowFullscreen() {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-    }
-}
-
 function toggleFullscreen(element) {
     if (!document.fullscreenElement) {
         element.requestFullscreen?.() ||
@@ -230,14 +216,12 @@ function toggleFullscreen(element) {
     }
 }
 
-function toggleFullscreenTest() {
-    const container = document.querySelector(".game_container");
-    if (!document.fullscreenElement) {
-        container.requestFullscreen?.();
-    } else {
-        document.exitFullscreen();
+function applyMuteState() {
+    if (isMuted) {
+        muteButton.classList.add("hide-btn");
+        unmuteButton.classList.remove("hide-btn");
+        AudioHub.muteAll();
     }
-    if (canvas) canvas.focus();
 }
 
 //#endregion
