@@ -53,13 +53,12 @@ h1 {
 }
 
 .game_container {
-    display: grid;
-    grid-template-columns: auto;
     align-content: center;
     place-items: start center;
     position: relative;
-    width: 720px;
-    height: 480px;
+    width: min(720px, 100dvw);
+    aspect-ratio: 3 / 2;
+    max-height: 100dvh;
 }
 
 .game-wrapper,
@@ -322,6 +321,12 @@ h1 {
 @media only screen and (max-height: 480px) {
     canvas {
         height: 100vh;
+    }
+}
+
+@media only screen and (max-height: 675px) {
+    h1 {
+        display: none;
     }
 }
 
