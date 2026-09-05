@@ -94,10 +94,6 @@ h1 {
         }
     }
 
-    .hide-cntrl {
-        display: none;
-    }
-
     .menu-wrapper {
         z-index: 1;
         width: 100%;
@@ -292,6 +288,10 @@ h1 {
     display: none;
 }
 
+.game-wrapper .hud-wrapper {
+    display: none;
+}
+
 /* Smartphones ---------------- */
 @media only screen and (max-width: 720px) {
     canvas {
@@ -312,4 +312,14 @@ h1 {
 :fullscreen.game_container {
     width: 100vw;
     height: 100dvh;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .game-wrapper .hud-wrapper {
+        display: flex;
+    }
+
+    .game-wrapper .hide-cntrl {
+        display: none;
+    }
 }
