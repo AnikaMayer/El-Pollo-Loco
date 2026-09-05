@@ -41,13 +41,23 @@ h1 {
     grid-template-columns: auto;
     align-content: center;
     place-items: start center;
+    position: relative;
+    width: 720px;
+    height: 480px;
+}
+
+.game-wrapper,
+.start-wrapper,
+.controls,
+.imprint {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .game-wrapper {
-    grid-row: 2;
-    grid-column: 1;
-    position: relative;
-
     .hud-wrapper {
         z-index: 1;
         width: 100%;
@@ -146,6 +156,8 @@ h1 {
 
     canvas {
         display: block;
+        width: 100%;
+        height: 100%;
         background-color: black;
         box-shadow:
             0 4px 8px 0 rgba(88, 25, 2, 0.347),
@@ -154,12 +166,7 @@ h1 {
 }
 
 .start-wrapper {
-    width: 720px;
-    height: 480px;
-    grid-row: 2;
-    grid-column: 1;
     /* z-index: 1; */
-    position: relative;
     display: flex;
     justify-content: center;
 
@@ -201,14 +208,9 @@ h1 {
 
 .controls,
 .imprint {
-    width: 720px;
-    height: 480px;
     color: rgb(233, 172, 102);
     background-color: rgb(68, 49, 38);
-    grid-row: 2;
-    grid-column: 1;
     z-index: 1;
-    position: relative;
     display: flex;
     flex-direction: column;
     /* justify-content: center; */
@@ -299,4 +301,9 @@ h1 {
     canvas {
         height: 100vh;
     }
+}
+
+:fullscreen.game_container {
+    width: 100vw;
+    height: 100dvh;
 }
