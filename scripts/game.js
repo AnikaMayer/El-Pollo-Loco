@@ -77,7 +77,7 @@ function startMusic() {
     document.addEventListener(
         "click",
         (event) => {
-            if (event.target !== startButton && event.target !== restartBtn) {
+            if (event.target !== startButton) {
                 AudioHub.playOne(AudioHub.GAME.main);
             }
         },
