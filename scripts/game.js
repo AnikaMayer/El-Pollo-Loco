@@ -30,48 +30,59 @@ let world;
 let keyboard = new Keyboard();
 let isMuted = localStorage.getItem("mutedKey") === "true";
 
+//beim Laden der Webiste ausgeführt
 function init() {
     manageClickEvents();
     applyMuteState();
     startMusic();
 }
 
+// click-events für Buttons im Menü & Dialog
 function manageClickEvents() {
-    controlButton.addEventListener("click", manageNavigation);
-    imprintButton.addEventListener("click", manageNavigation);
-    closeButtonCntrl.addEventListener("click", manageNavigation);
-    closeButtonImpr.addEventListener("click", manageNavigation);
-    startButton.addEventListener("click", manageNavigation);
+    interfaceEvents();
+    navEvents();
+    dialogEvents();
+}
 
+// InterfaceButtons
+function interfaceEvents() {
     homeButton.addEventListener("click", manageInterface);
     muteButton.addEventListener("click", manageInterface);
     unmuteButton.addEventListener("click", manageInterface);
     fullscreenBtn.addEventListener("click", manageInterface);
     normScreenBtn.addEventListener("click", manageInterface);
-    restartBtn.addEventListener("click", manageNavigation);
+}
 
-    screen.orientation.addEventListener("change", closeDialog);
+// Navigation-Buttons
+function navEvents() {
+    controlButton.addEventListener("click", manageNavigation);
+    imprintButton.addEventListener("click", manageNavigation);
+    closeButtonCntrl.addEventListener("click", manageNavigation);
+    closeButtonImpr.addEventListener("click", manageNavigation);
+    startButton.addEventListener("click", manageNavigation);
+    restartBtn.addEventListener("click", manageNavigation);
+}
+
+// Dialog schließen & bubblinProtection
+function dialogEvents() {
     imprintDialog.addEventListener("click", closeDialog);
     controlsDialog.addEventListener("click", closeDialog);
     controlPage.addEventListener("click", bubblingProtection);
     imprintPage.addEventListener("click", bubblingProtection);
+    screen.orientation.addEventListener("change", closeDialog);
 }
 
 // mit erstem Klick auf der Seite wird der Sound abgespielt
 function startMusic() {
-    if (clickedBtn === "start-btn") {
-        return;
-    } else {
-        document.addEventListener(
-            "click",
-            () => {
-                if (startScreen.style.display !== "none") {
-                    AudioHub.playOne(AudioHub.GAME.main);
-                }
-            },
-            { once: true }, // sorgt dafür, dass event listener nur einmal benötigt wird pro session
-        );
-    }
+    document.addEventListener(
+        "click",
+        (event) => {
+            if (event.target !== startButton && event.target !== restartBtn) {
+                AudioHub.playOne(AudioHub.GAME.main);
+            }
+        },
+        { once: true }, // sorgt dafür, dass event listener nur einmal benötigt wird pro session
+    );
 }
 
 //#region keyboard
@@ -172,6 +183,8 @@ function renderWorld() {
     world.onEndScreen = toggleRestartBtn;
     toggleRestartBtn();
     AudioHub.stopOne(AudioHub.GAME.main);
+    AudioHub.stopOne(AudioHub.GAME.win);
+    AudioHub.stopOne(AudioHub.GAME.gameOver);
     AudioHub.playOne(AudioHub.GAME.start);
     AudioHub.playOne(AudioHub.GAME.bgm);
     hudPanel.classList.remove("hide-cntrl");
