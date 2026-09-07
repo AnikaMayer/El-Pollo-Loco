@@ -7,7 +7,7 @@ export class Endboss extends MovableObject {
     y = 55;
     width = 250;
     height = 400;
-    speed = 0.6;
+    speed = 1.6;
     baseSpeed = this.speed;
     imgPath = ImageHub.BOSS;
     audioPath = AudioHub.ENEMIES.EndbossApproach;
