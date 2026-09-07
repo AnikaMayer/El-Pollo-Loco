@@ -16,6 +16,11 @@ export class AudioHub {
     static CHARACTER = {
         walk: new Sound("./assets/sounds/character/characterRun.mp3"),
         jump: new Sound("./assets/sounds/character/characterJump.wav", true),
+        bounce: new Sound(
+            "./assets/sounds/character/characterBounce.mp3",
+            false,
+            true,
+        ),
         damage: new Sound("./assets/sounds/character/characterDamage.mp3"),
         dead: new Sound("./assets/sounds/character/characterDead.wav"),
         snoring: new Sound("./assets/sounds/character/characterSnoring.mp3"),

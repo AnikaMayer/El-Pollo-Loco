@@ -187,6 +187,7 @@ export class World {
             }
             if (this.character.isCollidingFromAbove(enemy)) {
                 this.character.jumpOnMovObj(enemy); // hier wir dem Char neuer y-wert zugewiesen, siehe movableObj
+                AudioHub.playOne(AudioHub.CHARACTER.bounce);
                 this.checkEnemyType(enemy);
             }
         });
