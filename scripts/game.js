@@ -143,6 +143,8 @@ function renderWorld() {
     startScreen.classList.add("hide-page");
     homeButton.classList.remove("hide-btn");
     restartBtn.classList.add("hide-btn");
+    controlButton.classList.add("hide-btn");
+    imprintButton.classList.add("hide-btn");
     canvas = document.getElementById("canvas");
     if (world) {
         cancelAnimationFrame(world.drawID);
@@ -182,6 +184,8 @@ function goHome() {
     startScreen.classList.remove("hide-page");
     homeButton.classList.add("hide-btn");
     restartBtn.classList.add("hide-btn");
+    controlButton.classList.remove("hide-btn");
+    imprintButton.classList.remove("hide-btn");
     IntervalHub.stopAllIntervals();
     cancelAnimationFrame(world.drawID);
     hudPanel.classList.add("hide-cntrl");
