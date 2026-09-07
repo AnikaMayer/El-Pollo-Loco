@@ -22,6 +22,9 @@ const imprintPage = document.getElementById("imprint-page");
 const hudPanel = document.getElementById("hud");
 const fullscreen = document.getElementById("fullscreen");
 
+const imprintDialog = document.getElementById("imprint_dialog");
+const controlsDialog = document.getElementById("controls_dialog");
+
 let canvas;
 let world;
 let keyboard = new Keyboard();
@@ -45,6 +48,12 @@ function manageClickEvents() {
     fullscreenBtn.addEventListener("click", manageInterface);
     normScreenBtn.addEventListener("click", manageInterface);
     restartBtn.addEventListener("click", manageNavigation);
+
+    screen.orientation.addEventListener("change", closeDialog);
+    imprintDialog.addEventListener("click", closeDialog);
+    controlsDialog.addEventListener("click", closeDialog);
+    controlPage.addEventListener("click", bubblingProtection);
+    imprintPage.addEventListener("click", bubblingProtection);
 }
 
 //#region keyboard
@@ -98,33 +107,36 @@ window.addEventListener("keyup", (event) => {
 function manageNavigation(event) {
     const clickedBtn = event.currentTarget.id;
     if (clickedBtn === "control-btn") {
-        showControls();
+        // showControls();
+        openControlsDialog();
     } else if (clickedBtn === "imprint-btn") {
-        showImprint();
+        // showImprint();
+        openImprintDialog();
     } else if (
         clickedBtn === "close-btn-cntrl" ||
         clickedBtn === "close-btn-imprint"
     ) {
-        goBack();
+        // goBack();
+        closeDialog();
     } else if (clickedBtn === "start-btn" || clickedBtn === "restart-btn") {
         renderWorld();
     }
 }
 
 function showControls() {
-    startScreen.classList.add("hide-page");
+    // startScreen.classList.add("hide-page");
     controlPage.classList.remove("hide-page");
 }
 
 function showImprint() {
-    startScreen.classList.add("hide-page");
+    // startScreen.classList.add("hide-page");
     imprintPage.classList.remove("hide-page");
 }
 
 function goBack() {
     controlPage.classList.add("hide-page");
     imprintPage.classList.add("hide-page");
-    startScreen.classList.remove("hide-page");
+    // startScreen.classList.remove("hide-page");
 }
 
 function renderWorld() {
@@ -222,6 +234,34 @@ function applyMuteState() {
         unmuteButton.classList.remove("hide-btn");
         AudioHub.muteAll();
     }
+}
+
+//#endregion
+
+//#region dialog
+
+function openImprintDialog() {
+    document.body.classList.add("overscroll_stop");
+    imprintDialog.showModal();
+    imprintDialog.classList.add("opened");
+}
+
+function openControlsDialog() {
+    document.body.classList.add("overscroll_stop");
+    controlsDialog.showModal();
+    controlsDialog.classList.add("opened");
+}
+
+function closeDialog() {
+    document.body.classList.remove("overscroll_stop");
+    imprintDialog.close();
+    imprintDialog.classList.remove("opened");
+    controlsDialog.close();
+    controlsDialog.classList.remove("opened");
+}
+
+function bubblingProtection(event) {
+    event.stopPropagation();
 }
 
 //#endregion

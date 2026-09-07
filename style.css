@@ -61,7 +61,7 @@ dialog.opened::backdrop {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 2;
+    z-index: 5;
 
     img {
         width: 100%;
@@ -77,6 +77,19 @@ dialog.opened::backdrop {
     width: min(720px, 100dvw);
     aspect-ratio: 3 / 2;
     max-height: 100dvh;
+}
+
+dialog {
+    background: none;
+    border: none;
+    position: fixed;
+    inset: 0;
+    width: min(720px, 100dvw);
+    aspect-ratio: 3 / 2;
+    max-height: 100dvh;
+    margin: auto;
+    transform: translateY(60px);
+    z-index: -1;
 }
 
 .game-wrapper,
@@ -363,8 +376,13 @@ dialog.opened::backdrop {
     canvas {
         width: 100%;
     }
+
     h1 {
         display: none;
+    }
+
+    dialog {
+        transform: translateY(0);
     }
 }
 
@@ -378,6 +396,10 @@ dialog.opened::backdrop {
 @media only screen and (max-height: 675px) {
     h1 {
         display: none;
+    }
+
+    dialog {
+        transform: translateY(0);
     }
 }
 
