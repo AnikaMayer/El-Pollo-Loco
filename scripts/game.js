@@ -33,6 +33,7 @@ let isMuted = localStorage.getItem("mutedKey") === "true";
 function init() {
     manageClickEvents();
     applyMuteState();
+    startMusic();
 }
 
 function manageClickEvents() {
@@ -54,17 +55,23 @@ function manageClickEvents() {
     controlsDialog.addEventListener("click", closeDialog);
     controlPage.addEventListener("click", bubblingProtection);
     imprintPage.addEventListener("click", bubblingProtection);
+}
 
-    // mit erstem Klick auf der Seite wird der Sound abgespielt
-    document.addEventListener(
-        "click",
-        () => {
-            if (startScreen.style.display !== "none") {
-                AudioHub.playOne(AudioHub.GAME.main);
-            }
-        },
-        { once: true }, // sorgt dafür, dass event listener nur einmal benötigt wird pro session
-    );
+// mit erstem Klick auf der Seite wird der Sound abgespielt
+function startMusic() {
+    if (clickedBtn === "start-btn") {
+        return;
+    } else {
+        document.addEventListener(
+            "click",
+            () => {
+                if (startScreen.style.display !== "none") {
+                    AudioHub.playOne(AudioHub.GAME.main);
+                }
+            },
+            { once: true }, // sorgt dafür, dass event listener nur einmal benötigt wird pro session
+        );
+    }
 }
 
 //#region keyboard
