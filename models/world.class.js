@@ -182,6 +182,9 @@ export class World {
     // Charakter springt auf Gegner, um ihm Schaden zuzufügen, ohne dabei selbst zu erleiden -> dabei springt er ab
     checkJumpCollision() {
         this.level.enemies.forEach((enemy) => {
+            if (enemy === this.endboss) {
+                return;
+            }
             if (this.character.isCollidingFromAbove(enemy)) {
                 this.character.jumpOnMovObj(enemy); // hier wir dem Char neuer y-wert zugewiesen, siehe movableObj
                 this.checkEnemyType(enemy);

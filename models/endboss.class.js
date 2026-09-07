@@ -17,10 +17,10 @@ export class Endboss extends MovableObject {
     timepassed = new Date().getTime();
     state = "walk";
     offset = {
-        top: 160,
+        top: 80,
         right: 40,
-        bottom: 25,
-        left: 50,
+        bottom: 80,
+        left: 40,
     };
 
     constructor() {
@@ -31,7 +31,6 @@ export class Endboss extends MovableObject {
         this.loadImages(this.imgPath.hurt);
         this.loadImages(this.imgPath.attack);
         this.x = 3490;
-        // this.x = 400;
         IntervalHub.startInterval(this.moveEndboss, 1000 / 60);
         IntervalHub.startInterval(this.animate, 1000 / 5);
         IntervalHub.startInterval(this.endbossSound, 1000 / 60);
