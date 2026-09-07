@@ -242,10 +242,10 @@ dialog {
             height: 50px;
             font-size: 24px;
             font-family: "Alfa Slab One", Arial, Helvetica, sans-serif;
-            color: rgba(12, 12, 12, 0.582);
+            color: rgb(153, 49, 23);
             text-shadow: 1px 1px 1px white;
             letter-spacing: 1px;
-            background-color: rgba(255, 254, 253, 0.582);
+            background-color: rgba(218, 136, 136, 0.61);
             border-radius: 15px;
             border: none;
             box-shadow: 1px 2px 4px 2px rgba(0, 0, 0, 0.877);
@@ -253,8 +253,8 @@ dialog {
 
         button:hover {
             font-size: 26px;
-            color: rgba(254, 255, 255, 0.877);
-            background-color: rgba(15, 15, 15, 0.87);
+            color: rgba(218, 136, 136, 0.61);
+            background-color: rgb(153, 49, 23);
             box-shadow: 1px 2px 4px 2px rgba(239, 241, 241, 0.781);
         }
     }
@@ -265,7 +265,7 @@ dialog {
     border-radius: 40px;
     border: 2px solid white;
     color: rgb(255, 255, 255);
-    background-color: rgba(97, 97, 97, 0.925);
+    background-color: rgba(85, 63, 49, 0.925);
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     /* z-index: 1; */
     align-items: center;
@@ -348,12 +348,12 @@ dialog {
         overflow-y: auto;
 
         a {
-            color: rgb(218, 218, 218);
+            color: rgb(216, 178, 127);
             font-weight: bold;
         }
 
         a:hover {
-            color: white;
+            color: rgb(250, 230, 203);
         }
 
         p {
