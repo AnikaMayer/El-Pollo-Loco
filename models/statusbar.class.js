@@ -7,8 +7,8 @@ export class StatusBar extends DrawableObject {
 
     constructor() {
         super();
-        this.x = 40;
-        this.y = 0;
+        this.x = 5;
+        this.y = 40;
         this.width = 200;
         this.height = 60;
     }

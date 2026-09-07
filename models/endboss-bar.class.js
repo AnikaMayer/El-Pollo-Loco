@@ -8,8 +8,8 @@ export class EndbossBar extends StatusBar {
     constructor() {
         super();
         this.loadImages(this.imgPath);
-        this.x = 460;
-        this.y = 9;
+        this.x = 500;
+        this.y = 49;
         this.setPercentage(100, this.imgPath);
     }
 }

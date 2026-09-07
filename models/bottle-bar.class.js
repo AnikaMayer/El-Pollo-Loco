@@ -7,6 +7,6 @@ export class BottleBar extends StatusCounter {
     constructor() {
         super();
         this.loadImage(this.imgPath);
-        this.x = 125;
+        this.x = 95;
     }
 }
