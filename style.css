@@ -242,10 +242,10 @@ dialog {
             height: 50px;
             font-size: 24px;
             font-family: "Alfa Slab One", Arial, Helvetica, sans-serif;
-            color: rgba(0, 195, 255, 0.582);
+            color: rgba(12, 12, 12, 0.582);
             text-shadow: 1px 1px 1px white;
             letter-spacing: 1px;
-            background-color: rgba(43, 12, 0, 0.664);
+            background-color: rgba(255, 254, 253, 0.582);
             border-radius: 15px;
             border: none;
             box-shadow: 1px 2px 4px 2px rgba(0, 0, 0, 0.877);
@@ -254,7 +254,7 @@ dialog {
         button:hover {
             font-size: 26px;
             color: rgba(254, 255, 255, 0.877);
-            background-color: rgba(43, 12, 0, 0.87);
+            background-color: rgba(15, 15, 15, 0.87);
             box-shadow: 1px 2px 4px 2px rgba(239, 241, 241, 0.781);
         }
     }
