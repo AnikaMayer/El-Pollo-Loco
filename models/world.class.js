@@ -321,10 +321,14 @@ export class World {
             if (this.endboss.isDead()) {
                 setTimeout(() => {
                     this.endGame("win");
+                    AudioHub.stopOne(AudioHub.GAME.bgm);
+                    AudioHub.playOne(AudioHub.GAME.win);
                 }, 1000);
             } else if (this.character.isDead()) {
                 setTimeout(() => {
                     this.endGame("lose");
+                    AudioHub.stopOne(AudioHub.GAME.bgm);
+                    AudioHub.playOne(AudioHub.GAME.gameOver);
                 }, 1000);
             }
         }

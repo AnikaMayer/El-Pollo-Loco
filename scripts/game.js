@@ -54,6 +54,17 @@ function manageClickEvents() {
     controlsDialog.addEventListener("click", closeDialog);
     controlPage.addEventListener("click", bubblingProtection);
     imprintPage.addEventListener("click", bubblingProtection);
+
+    // mit erstem Klick auf der Seite wird der Sound abgespielt
+    document.addEventListener(
+        "click",
+        () => {
+            if (startScreen.style.display !== "none") {
+                AudioHub.playOne(AudioHub.GAME.main);
+            }
+        },
+        { once: true }, // sorgt dafür, dass event listener nur einmal benötigt wird pro session
+    );
 }
 
 //#region keyboard
@@ -153,7 +164,9 @@ function renderWorld() {
     world = new World(canvas, keyboard);
     world.onEndScreen = toggleRestartBtn;
     toggleRestartBtn();
+    AudioHub.stopOne(AudioHub.GAME.main);
     AudioHub.playOne(AudioHub.GAME.start);
+    AudioHub.playOne(AudioHub.GAME.bgm);
     hudPanel.classList.remove("hide-cntrl");
 }
 
@@ -188,6 +201,10 @@ function goHome() {
     imprintButton.classList.remove("hide-btn");
     IntervalHub.stopAllIntervals();
     cancelAnimationFrame(world.drawID);
+    AudioHub.stopOne(AudioHub.GAME.bgm);
+    AudioHub.stopOne(AudioHub.GAME.win);
+    AudioHub.stopOne(AudioHub.GAME.gameOver);
+    AudioHub.playOne(AudioHub.GAME.main);
     hudPanel.classList.add("hide-cntrl");
 }
 
