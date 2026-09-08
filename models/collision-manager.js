@@ -13,6 +13,7 @@ export class CollisionManager {
     constructor(world) {
         this.world = world;
         IntervalHub.startInterval(this.checkEnemyCollisions, 1000 / 5);
+        IntervalHub.startInterval(this.checkJumpCollision, 1000 / 60);
     }
 
     //#region damage
@@ -79,20 +80,16 @@ export class CollisionManager {
      * @type {Function}
      */
     checkEnemyCollisions = () => {
-        if (this.checkJumpCollision()) {
-            return;
-        } else {
-            this.world.level.enemies.forEach((enemy) => {
-                this.damageCharacter(enemy);
-            });
-        }
+        this.world.level.enemies.forEach((enemy) => {
+            this.damageCharacter(enemy);
+        });
     };
 
     /**
      * Checks whether the character is jumping onto an enemy from above.
      * Triggers a bounce and deals damage on landing. The endboss is excluded.
      */
-    checkJumpCollision() {
+    checkJumpCollision = () => {
         this.world.level.enemies.forEach((enemy) => {
             if (enemy === this.world.endboss) {
                 return;
@@ -103,7 +100,7 @@ export class CollisionManager {
                 this.checkEnemyType(enemy);
             }
         });
-    }
+    };
 
     //#endregion
 }

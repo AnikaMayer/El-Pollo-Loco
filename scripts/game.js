@@ -111,7 +111,7 @@ function startMusic() {
                 AudioHub.playOne(AudioHub.GAME.main);
             }
         },
-        { once: true }, // sorgt dafür, dass event listener nur einmal benötigt wird pro session
+        { once: true },
     );
 }
 
