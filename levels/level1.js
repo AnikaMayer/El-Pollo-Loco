@@ -5,7 +5,7 @@ import { Cloud } from "../models/background/clouds.class.js";
 import { Coin } from "../models/items/coins.class.js";
 import { Endboss } from "../models/enemies/endboss.class.js";
 import { ImageHub } from "../scripts/img-hub.class.js";
-import { Level } from "../models/level.class.js";
+import { Level } from "../models/world-builder/level.class.js";
 import { BabyChicken } from "../models/enemies/baby-chicken.class.js";
 
 /**
