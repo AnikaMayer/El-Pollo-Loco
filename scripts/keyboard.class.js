@@ -18,7 +18,7 @@ export class Keyboard {
     D = false;
     /**
      * Maps touch button element IDs to their corresponding keyboard state keys.
-     * @type {{ id: string, key: string }[]}
+     * @type {Array<{id: string, key, string}>}
      */
     touchBtns = [
         { id: "btnLeft", key: "LEFT" },

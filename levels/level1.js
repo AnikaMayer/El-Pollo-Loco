@@ -112,7 +112,7 @@ function getEnemies() {
 
 /**
  * Creates multiple enemies of a given type and pushes them to {@link enemies}.
- * @param {typeof BabyChicken | typeof Chicken} enemyType - The enemy constructor.
+ * @param {Function} enemyType - The enemy constructor.
  * @param {number} quantity - The number of enemies to create.
  * @returns {void}
  */

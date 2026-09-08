@@ -1,5 +1,5 @@
 import { Keyboard } from "./keyboard.class.js";
-import { World } from "../models/world.class.js";
+import { World } from "../models/world-builder/world.class.js";
 import { IntervalHub } from "./intervall-hub.class.js";
 import { AudioHub } from "./audio-hub.class.js";
 import { initLevel } from "../levels/level1.js";
