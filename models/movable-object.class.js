@@ -160,7 +160,7 @@ export class MovableObject extends DrawableObject {
      * @returns {boolean} True if energy has reached zero.
      */
     isDead() {
-        return this.energy === 0; // wenn 0, wird "isDead()" zurückgegen, Aufruf dann im Objekt selbst unter animate
+        return this.energy === 0;
     }
 
     /**
@@ -171,8 +171,8 @@ export class MovableObject extends DrawableObject {
      */
     playAnimation(images, animationSpeed) {
         if (this.animateNext(animationSpeed)) {
-            let i = this.currentImage % images.length; //i = 0 % 6 => 0, Rest 0 | 5 % 6 => 0, R 5 | 6 % 6 => 1, R 0 | 7 % 6 => 1, R 1
-            let path = images[i]; // i = 0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 0 usw....
+            let i = this.currentImage % images.length;
+            let path = images[i];
             this.img = this.imageCache[path];
             this.currentImage++;
             this.lastAnimation = new Date().getTime();

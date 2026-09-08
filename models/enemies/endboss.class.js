@@ -130,7 +130,6 @@ export class Endboss extends MovableObject {
      */
     animate = () => {
         if (this.isDead()) {
-            // wenn isDead() zurückgegeben aus movableObj
             this.playAnimation(this.imgPath.dead, 0);
         } else if (this.isHurt()) {
             this.playAnimation(this.imgPath.hurt, 0);

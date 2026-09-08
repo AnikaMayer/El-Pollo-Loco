@@ -3,7 +3,7 @@ import { IntervalHub } from "../../scripts/intervall-hub.class.js";
 import { MovableObject } from "../movable-object.class.js";
 
 /**
- * Represents  a cloud in the game world that moves continuously to the left.
+ * Represents a cloud in the game world that moves continuously to the left.
  * Clouds are placed at a random horizontal and vertical position on creation.
  * @extends MovableObject
  */

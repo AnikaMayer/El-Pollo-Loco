@@ -9,8 +9,6 @@ import { StatusBar } from "./statusbar.class.js";
 export class EndbossBar extends StatusBar {
     /** @type {string[]} The image paths for the endboss health bar sprites, loaded from the ImageHub. */
     imgPath = ImageHub.STATUSBAR.endboss;
-    /** @type {number} The maximum health value of the endboss. */
-    percentage = 200;
 
     /**
      * Creates a new EndbossBar, positions it at x = 500, y = 49

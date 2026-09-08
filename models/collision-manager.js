@@ -76,7 +76,6 @@ export class CollisionManager {
 
     /**
      * Checks all enemies for collision with the character each interval tick.
-     * Skips damage if a jump collision is currently being handled.
      * @type {Function}
      */
     checkEnemyCollisions = () => {

@@ -288,7 +288,6 @@ export class World {
             this.flipImage(mO);
         }
         mO.draw(this.ctx);
-        mO.drawFrame(this.ctx);
         if (mO.otherDirection) {
             this.flipImageBack(mO);
         }

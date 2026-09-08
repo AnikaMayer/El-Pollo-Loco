@@ -8,13 +8,26 @@ import { ImageHub } from "../scripts/img-hub.class.js";
 import { Level } from "../models/level.class.js";
 import { BabyChicken } from "../models/enemies/baby-chicken.class.js";
 
+/**
+ * The current instance of Level 1. Populated by {@link initLevel}.
+ * @type {Level}
+ */
 export let level1;
+/** @type {Cloud[]} */
 let clouds = [];
+/** @type {Array<Chicken|BabyChicken|Endboss>} */
 let enemies = [];
+/** @type {BackgroundObject[]} */
 const backgroundObjects = [];
 
+/** Populates {@link backgroundObjects} once when the module is loaded. */
 getBackground();
 
+/**
+ * Initializes Level 1 and resets all game objects.
+ * Creates a new {@link Level} instance with enemies, clouds, bottles, coins and background objects.
+ * @returns {void}
+ */
 export function initLevel() {
     clouds = [];
     enemies = [];
@@ -56,6 +69,11 @@ export function initLevel() {
     );
 }
 
+/**
+ * Fills {@link backgroundObjects} with four alternating parallax layers per segment.
+ * Called once on module load.
+ * @returns {void}
+ */
 function getBackground() {
     for (let i = 0; i < 9; i++) {
         const layerIndex = 1 - (i % 2);
@@ -72,18 +90,32 @@ function getBackground() {
     }
 }
 
+/**
+ * Creates 8 cloud objects and adds them to {@link clouds}.
+ * @returns {void}
+ */
 function getClouds() {
     for (let i = 0; i < 8; i++) {
         clouds.push(new Cloud());
     }
 }
 
+/**
+ * Fills {@link enemies} with 6 {@link BabyChicken}, 7 {@link Chicken} and 1 {@link Endboss}.
+ * @returns {void}
+ */
 function getEnemies() {
     getNormalEnemies(BabyChicken, 6);
     getNormalEnemies(Chicken, 7);
     enemies.push(new Endboss());
 }
 
+/**
+ * Creates multiple enemies of a given type and pushes them to {@link enemies}.
+ * @param {typeof BabyChicken | typeof Chicken} enemyType - The enemy constructor.
+ * @param {number} quantity - The number of enemies to create.
+ * @returns {void}
+ */
 function getNormalEnemies(enemyType, quantity) {
     for (let i = 0; i < quantity; i++) {
         enemies.push(new enemyType());

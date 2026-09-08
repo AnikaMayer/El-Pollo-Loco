@@ -1,7 +1,7 @@
 import { MovableObject } from "../movable-object.class.js";
 
 /**
- * Represents  a background object in the game world.
+ * Represents a background object in the game world.
  * Background objects are stacked horizontally to create a scrolling background effect.
  * @extends MovableObject
  */
