@@ -1,0 +1,37 @@
+.overscroll_stop {
+    overflow: hidden;
+}
+
+dialog::backdrop {
+    opacity: 0;
+    background-color: black;
+}
+
+dialog.opened::backdrop {
+    opacity: 0.5;
+    transition: 250ms ease-in;
+}
+
+dialog {
+    background: none;
+    border: none;
+    position: fixed;
+    inset: 0;
+    width: min(720px, 100dvw);
+    aspect-ratio: 3 / 2;
+    max-height: 100dvh;
+    margin: auto;
+    transform: translateY(60px);
+}
+
+:fullscreen dialog {
+    width: 100vw;
+    height: 100dvh;
+    transform: translateY(0);
+
+    .controls {
+        table {
+            margin-top: 5%;
+        }
+    }
+}

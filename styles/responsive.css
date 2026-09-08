@@ -1,0 +1,83 @@
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+
+    h1 {
+        display: none;
+    }
+
+    dialog {
+        transform: translateY(0);
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    canvas {
+        height: 100vh;
+    }
+}
+
+@media only screen and (max-height: 675px) {
+    h1 {
+        display: none;
+    }
+
+    dialog {
+        transform: translateY(0);
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .game-wrapper .hud-wrapper {
+        display: flex;
+    }
+
+    .game-wrapper .hide-cntrl {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 900px) and (orientation: portrait) {
+    .rotate-hint {
+        display: flex;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    :fullscreen.game-container {
+        .game-wrapper {
+            .hud-wrapper {
+                .panel {
+                    gap: clamp(5px, calc(-7.727px + 3.977vw), 40px);
+
+                    button {
+                        width: 15vh;
+                        height: 15vh;
+
+                        svg {
+                            width: 5vh;
+                            height: 5vh;
+                        }
+                    }
+                }
+            }
+            .menu-wrapper {
+                div {
+                    width: 300px;
+                    gap: 10px;
+
+                    button {
+                        width: 60px;
+                        height: 60px;
+
+                        svg {
+                            width: 40px;
+                            height: 40px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
