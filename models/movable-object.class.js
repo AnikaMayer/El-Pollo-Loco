@@ -1,24 +1,49 @@
 import { AudioHub } from "../scripts/audio-hub.class.js";
 import { DrawableObject } from "./drawable-object.class.js";
 
+/**
+ * Base class for all movable game objects.
+ * Extends DrawableObject with physics, collision detection, animation and sound management.
+ * @extends DrawableObject
+ */
 export class MovableObject extends DrawableObject {
+    /** @type {number} The horizontal movement speed in pixels per frame. */
     speed = 0.15;
+    /** @type {number} The vertical speed in pixels per frame. Positive = upward. */
     speedY = 0;
+    /** @type {number} The gravitational acceleration applied each frame. */
     acceleration = 3;
+    /** @type {boolean} Whether the object is mirrored horizontally (facing left). */
     otherDirection = false;
+    /** @type {number} The current health points of the object. */
     energy = 100;
+    /** @type {number} Timestamp of the last hit received in milliseconds. */
     lastHit = 0;
+    /** @type {number} Timestamp of the last animation frame in milliseconds. */
     lastAnimation = 0;
+    /** @type {boolean} Whether the object should keep falling (used for throwable objects). */
     keepFalling = false;
+    /** @type {Object} Reference to the game world, set externally after creation. */
     world;
+    /** @type {boolean} Whether the object performs a death jump when killed. */
     deathJump = false;
+    /** @type {boolean} Whether the object is currently moving left. */
     movingLeft;
+    /** @type {boolean} Whether the death or splash sound has already been played. */
     soundPlayed = false;
+    /** @type {number} The real x-position of the hitbox after applying offsets. */
     rX;
+    /** @type {number} The real y-position of the hitbox after applying offsets. */
     rY;
+    /** @type {number} The real width of the hitbox after applying offsets. */
     rW;
+    /** @type {number} The real height of the hitbox after applying offsets. */
     rH;
 
+    /**
+     * Calculates and stores the real hitbox dimensions based on the object's
+     * position, size and offsets.
+     */
     getRealFrame() {
         this.rX = this.x + this.offset.left;
         this.rY = this.y + this.offset.top;
@@ -26,9 +51,14 @@ export class MovableObject extends DrawableObject {
         this.rH = this.height - this.offset.top - this.offset.bottom;
     }
 
+    /**
+     * Applies gravity each frame by reducing vertical speed and moving the object downward.
+     * Stops if the object is dead and not set to keep falling.
+     * @type {Function}
+     */
     applyGravity = () => {
         if (this.isDead() && !this.keepFalling) {
-            return; // Objekte können nicht mehr fallen, wenn sie zerstört sind
+            return;
         }
         if (this.isAboveGround() || this.speedY > 0) {
             this.y -= this.speedY;
@@ -36,17 +66,25 @@ export class MovableObject extends DrawableObject {
         }
     };
 
+    /**
+     * Checks whether the object is above the ground level (y < 180).
+     * Throwable objects always return true so they keep falling until they hit the ground.
+     * @returns {boolean} True if the object is above ground or is a throwable object.
+     */
     isAboveGround() {
         if (this.keepFalling) {
-            // throwable Object soll immer fallen
             return true;
         } else {
             return this.y < 180;
         }
     }
 
-    // z.B.:character.isColliding(chicken);
-    // funktioniert, indem wir den offset-Rahmen holen
+    /**
+     * Checks whether this object's hitbox overlaps with another movable object's hitbox.
+     * Returns false if this object is dead.
+     * @param {MovableObject} mO - The other movable object to check collision against.
+     * @returns {boolean} True if the two hitboxes overlap.
+     */
     isColliding(mO) {
         if (!this.isDead()) {
             this.getRealFrame();
@@ -60,7 +98,12 @@ export class MovableObject extends DrawableObject {
         }
     }
 
-    // nutzt isColliding-Methode UND muss über mO liegen (nur, wenn mO nicht tot ist!)
+    /**
+     * Checks whether this object is colliding with another object from above.
+     * Requires the object to be falling (speedY < 0), above ground, and the target to be alive.
+     * @param {MovableObject} mO - The object to check against.
+     * @returns {boolean} True if this object is landing on top of the given object.
+     */
     isCollidingFromAbove(mO) {
         return (
             this.isColliding(mO) &&
@@ -70,14 +113,21 @@ export class MovableObject extends DrawableObject {
         );
     }
 
-    // wenn collidingFromAbove bei collision(wolrd.class) true: dann neuer y-Wert zugewiesen + bounce(kurzer Sprung)
+    /**
+     * Repositions this object on top of the given object and triggers a bounce.
+     * Called when the character jumps on an enemy.
+     * @param {MovableObject} mO - The object that was landed on.
+     */
     jumpOnMovObj(mO) {
         this.y = mO.y + mO.offset.top - this.height;
         this.bounce();
     }
 
-    // bei Kollision kriegt jedes Movable Obj. einen Treffer, bei dem ein übergebener Schaden von der vordefinierten Energie abgezogen wird
-    // also: damage = 50: von energey(100) werden 50 abgezogen, bleiben 50 übrig.
+    /**
+     * Reduces the object's energy by the given damage value.
+     * Triggers a death jump if energy reaches zero and deathJump is enabled.
+     * @param {number} damage - The amount of damage to deal.
+     */
     hit(damage) {
         this.energy -= damage;
         if (this.energy < 0) {
@@ -94,33 +144,57 @@ export class MovableObject extends DrawableObject {
         }
     }
 
-    // Animation soll laufen nach Treffer, erst dann kommt der nächste hit()
+    /**
+     * Checks whether the object was hit within the last second.
+     * Used to prevent multiple hits in quick succession and to trigger hurt animations.
+     * @returns {boolean} True if the object was hit less than 1 second ago.
+     */
     isHurt() {
-        let timepassed = new Date().getTime() - this.lastHit; // Difference in ms
-        timepassed = timepassed / 1000; // Difference in s
+        let timepassed = new Date().getTime() - this.lastHit;
+        timepassed = timepassed / 1000;
         return timepassed < 1;
     }
 
+    /**
+     * Checks whether the object is dead.
+     * @returns {boolean} True if energy has reached zero.
+     */
     isDead() {
-        return this.energy === 0; // wenn 0, wird "isDead()" zurückgegen, Aufruf dann im Objekt selbst unter animate
+        return this.energy === 0;
     }
 
+    /**
+     * Advances the animation by one frame if enough time has passed since the last frame.
+     * Loops through the given image array continuously.
+     * @param {string[]} images - The array of image paths for the animation.
+     * @param {number} animationSpeed - Minimum time in milliseconds between frames.
+     */
     playAnimation(images, animationSpeed) {
         if (this.animateNext(animationSpeed)) {
-            let i = this.currentImage % images.length; //i = 0 % 6 => 0, Rest 0 | 5 % 6 => 0, R 5 | 6 % 6 => 1, R 0 | 7 % 6 => 1, R 1
-            let path = images[i]; // i = 0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 0 usw....
+            let i = this.currentImage % images.length;
+            let path = images[i];
             this.img = this.imageCache[path];
             this.currentImage++;
             this.lastAnimation = new Date().getTime();
         }
     }
 
+    /**
+     * Checks whether enough time has passed to advance to the next animation frame.
+     * @param {number} animationSpeed - Minimum time in milliseconds between frames.
+     * @returns {boolean} True if the next frame should be played.
+     */
     animateNext(animationSpeed) {
         let timepassed = new Date().getTime() - this.lastAnimation;
         return timepassed > animationSpeed;
     }
 
-    // wenn Bedingung erfüllt, wird über path sound abgespielt, sonst stoppt Sound
+    /**
+     * Plays or stops a sound depending on a condition.
+     * Delegates to AudioHub's toggle methods.
+     * @param {HTMLAudioElement} sound - The audio element to play or stop.
+     * @param {boolean} playing - Whether the sound should currently be playing.
+     */
     playSound(sound, playing) {
         if (playing) {
             AudioHub.playOne(sound);
@@ -129,19 +203,30 @@ export class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+     * Moves the object to the right by its current speed.
+     */
     moveRight() {
         this.x += this.speed;
     }
 
+    /**
+     * Moves the object to the left by its current speed.
+     */
     moveLeft() {
         this.x -= this.speed;
     }
 
+    /**
+     * Makes the object jump by setting a high upward vertical speed.
+     */
     jump() {
         this.speedY = 30;
     }
 
-    // kurzer Sprung, nachdem Char auf Gegner gesprungen ist
+    /**
+     * Makes the object perform a small bounce, used after landing on an enemy.
+     */
     bounce() {
         this.speedY = 20;
     }

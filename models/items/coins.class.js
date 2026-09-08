@@ -2,13 +2,26 @@ import { ImageHub } from "../../scripts/img-hub.class.js";
 import { IntervalHub } from "../../scripts/intervall-hub.class.js";
 import { MovableObject } from "../movable-object.class.js";
 
+/**
+ * Represents a coin collectible in the game world.
+ * Coins animate continuously and can be arranged in predefined patterns.
+ * @extends MovableObject
+ */
 export class Coin extends MovableObject {
+    /** @type {number} The x-position of the coin in pixels. */
     x;
+    /** @type {number} The y-position of the coin in pixels. */
     y;
+    /** @type {number} The width of the coin in pixels. */
     width = 140;
+    /** @type {number} The height of the coin in pixels. */
     height = 140;
+    /** @type {string[]} The image paths for the coin animation, loaded from the ImageHub. */
     imgPath = ImageHub.COIN;
-    // showFrame = true;
+    /**
+     * Hitbox offsets in pixels to fine-tune collision detection.
+     * @type {{ top: number, right: number, bottom: number, left: number }}
+     */
     offset = {
         top: 50,
         right: 50,
@@ -16,6 +29,11 @@ export class Coin extends MovableObject {
         left: 50,
     };
 
+    /**
+     * Creates a new Coin at the given position and starts its animation interval.
+     * @param {number} _x - The x-position of the coin.
+     * @param {number} _y - The y-position of the coin.
+     */
     constructor(_x, _y) {
         super().loadImage(this.imgPath[0]);
         this.loadImages(this.imgPath);
@@ -25,11 +43,20 @@ export class Coin extends MovableObject {
         this.getRealFrame();
     }
 
+    /**
+     * Plays the coin's spinning animation on each interval tick.
+     * @type {Function}
+     */
     animateCoin = () => {
         this.playAnimation(this.imgPath, 0);
     };
 
-    // Vorlage für Münzbogen, Array mit Münzen wird erstellt, Münzen entsprechend unterschieldich angeordnet
+    /**
+     * Creates an arc-shaped pattern of 5 coins.
+     * @param {number} baseX - The x-position of the leftmost coin.
+     * @param {number} baseY - The y-position of the leftmost coin.
+     * @returns {Coin[]} An array of 5 coins arranged in an arc.
+     */
     static arcPattern(baseX, baseY) {
         const coins = [];
         const coin1 = new Coin(baseX, baseY);
@@ -41,7 +68,12 @@ export class Coin extends MovableObject {
         return coins;
     }
 
-    // Münzvorlage für horizontale Linie
+    /**
+     * Creates a horizontal line pattern of 5 coins spaced 50px apart.
+     * @param {number} baseX - The x-position of the leftmost coin.
+     * @param {number} y - The y-position of all coins.
+     * @returns {Coin[]} An array of 5 coins arranged in a horizontal line.
+     */
     static horizontalLinePattern(baseX, y) {
         const coins = [];
         const coin1 = new Coin(baseX, y);
@@ -53,6 +85,12 @@ export class Coin extends MovableObject {
         return coins;
     }
 
+    /**
+     * Creates a short horizontal line pattern of 3 coins spaced 50px apart.
+     * @param {number} baseX - The x-position of the leftmost coin.
+     * @param {number} y - The y-position of all coins.
+     * @returns {Coin[]} An array of 3 coins arranged in a short horizontal line.
+     */
     static shortHorizontalLinePattern(baseX, y) {
         const coins = [];
         const coin1 = new Coin(baseX, y);
@@ -62,7 +100,12 @@ export class Coin extends MovableObject {
         return coins;
     }
 
-    // Münzvorlage für vertikale Linie
+    /**
+     * Creates a vertical line pattern of 3 coins spaced 50px apart.
+     * @param {number} x - The x-position of all coins.
+     * @param {number} baseY - The y-position of the bottommost coin.
+     * @returns {Coin[]} An array of 3 coins arranged in a vertical line.
+     */
     static verticalLinePattern(x, baseY) {
         const coins = [];
         const coin1 = new Coin(x, baseY);
@@ -72,7 +115,12 @@ export class Coin extends MovableObject {
         return coins;
     }
 
-    // Münzvorlage für kurze vertikale Linie
+    /**
+     * Creates a short vertical line pattern of 2 coins spaced 50px apart.
+     * @param {number} x - The x-position of all coins.
+     * @param {number} baseY - The y-position of the bottommost coin.
+     * @returns {Coin[]} An array of 2 coins arranged in a short vertical line.
+     */
     static shortVerticalLinePattern(x, baseY) {
         const coins = [];
         const coin1 = new Coin(x, baseY);
@@ -81,7 +129,12 @@ export class Coin extends MovableObject {
         return coins;
     }
 
-    // Münzvorlage für Diagonale
+    /**
+     * Creates a diagonal pattern of 5 coins going up to the right, spaced 50px apart.
+     * @param {number} baseX - The x-position of the bottommost coin.
+     * @param {number} baseY - The y-position of the bottommost coin.
+     * @returns {Coin[]} An array of 5 coins arranged diagonally.
+     */
     static diagonalPattern(baseX, baseY) {
         const coins = [];
         const coin1 = new Coin(baseX, baseY);

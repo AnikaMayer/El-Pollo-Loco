@@ -3,14 +3,28 @@ import { ImageHub } from "../../scripts/img-hub.class.js";
 import { IntervalHub } from "../../scripts/intervall-hub.class.js";
 import { MovableObject } from "../movable-object.class.js";
 
+/**
+ * Represents a baby chicken enemy that walks randomly left and right across the map.
+ * Plays a death sound and switches to a dead animation when killed.
+ * @extends MovableObject
+ */
 export class BabyChicken extends MovableObject {
+    /** @type {number} The y-position of the baby chicken in pixels. */
     y = 370;
+    /** @type {number} The width of the baby chicken in pixels. */
     width = 50;
+    /** @type {number} The height of the baby chicken in pixels. */
     height = 50;
+    /** @type {number} The health points of the baby chicken. */
     energy = 50;
+    /** @type {Object} The image paths for all animations, loaded from the ImageHub. */
     imgPath = ImageHub.BABYCHICKEN;
+    /** @type {HTMLAudioElement} The audio path for the death sound, loaded from the AudioHub. */
     audioPath = AudioHub.ENEMIES.deadBabyChicken;
-    // showFrame = true;
+    /**
+     * Hitbox offsets in pixels to fine-tune collision detection.
+     * @type {{ top: number, right: number, bottom: number, left: number }}
+     */
     offset = {
         top: 10,
         right: 10,
@@ -18,6 +32,10 @@ export class BabyChicken extends MovableObject {
         left: 10,
     };
 
+    /**
+     * Creates a new BabyChicken at a random position with a random speed and direction,
+     * and starts its movement, animation and sound intervals.
+     */
     constructor() {
         super().loadImage(this.imgPath.walk[0]);
         this.loadImages(this.imgPath.walk);
@@ -31,7 +49,11 @@ export class BabyChicken extends MovableObject {
         this.getRealFrame();
     }
 
-    // läuft in eine zufällige Richtung mit zufälligem Wechsel, stoppt an der Grenze der Map
+    /**
+     * Moves the baby chicken each frame.
+     * Chooses a random direction, moves accordingly and prevents leaving the map boundaries.
+     * @type {Function}
+     */
     moveBabyChicken = () => {
         this.randomDirection();
         if (this.movingLeft) {
@@ -44,7 +66,10 @@ export class BabyChicken extends MovableObject {
         this.stopAtMapEnd();
     };
 
-    //bestimmt zufällig eine neue Richtung
+    /**
+     * Randomly reverses the baby chicken's movement direction.
+     * Has a small chance (0.15%) of toggling direction on each call.
+     */
     randomDirection() {
         if (Math.random() < 0.0015) {
             this.movingLeft = !this.movingLeft;
@@ -52,7 +77,10 @@ export class BabyChicken extends MovableObject {
         }
     }
 
-    //dreht am Ende wieder um
+    /**
+     * Prevents the baby chicken from leaving the map boundaries.
+     * Reverses direction when reaching the left (x ≤ 120) or right (x ≥ 4300) edge.
+     */
     stopAtMapEnd() {
         if (this.x <= 120 && this.movingLeft) {
             this.movingLeft = false;
@@ -61,7 +89,11 @@ export class BabyChicken extends MovableObject {
         }
     }
 
-    // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
+    /**
+     * Plays the death sound once when the baby chicken dies.
+     * Uses the toggle method in MovableObject to manage audio playback.
+     * @type {Function}
+     */
     babyChickenSound = () => {
         const audio = this.audioPath;
         if (this.isDead() && !this.soundPlayed) {
@@ -70,12 +102,15 @@ export class BabyChicken extends MovableObject {
         }
     };
 
+    /**
+     * Plays the walk or dead animation depending on the baby chicken's current state.
+     * @type {Function}
+     */
     animateBabyChicken = () => {
         if (this.isDead()) {
-            // wenn isDead() zurückgegeben aus movableObj
-            this.playAnimation(this.imgPath.dead, 0); // dead-animation
+            this.playAnimation(this.imgPath.dead, 0);
         } else {
-            this.playAnimation(this.imgPath.walk, 0); //walk animation
+            this.playAnimation(this.imgPath.walk, 0);
         }
     };
 }
