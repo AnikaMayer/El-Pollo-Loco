@@ -1,5 +1,5 @@
-import { ImageHub } from "../scripts/img-hub.class.js";
-import { MovableObject } from "./movable-object.class.js";
+import { ImageHub } from "../../scripts/img-hub.class.js";
+import { MovableObject } from "../movable-object.class.js";
 
 export class Bottle extends MovableObject {
     x;

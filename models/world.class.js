@@ -2,7 +2,7 @@ import { level1 } from "../levels/level1.js";
 import { Character } from "./character.class.js";
 import { IntervalHub } from "../scripts/intervall-hub.class.js";
 import { HealthBar } from "./statusbars/health-bar.class.js";
-import { ThrowableObject } from "./throwable-object.class.js";
+import { ThrowableObject } from "./items/throwable-object.class.js";
 import { BottleBar } from "./statusbars/bottle-bar.class.js";
 import { CoinBar } from "./statusbars/coin-bar.class.js";
 import { EndbossBar } from "./statusbars/endboss-bar.class.js";

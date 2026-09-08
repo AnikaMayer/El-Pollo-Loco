@@ -1,8 +1,8 @@
 import { BackgroundObject } from "../models/background/background-object.class.js";
-import { Bottle } from "../models/bottles.class.js";
+import { Bottle } from "../models/items/bottles.class.js";
 import { Chicken } from "../models/enemies/chicken.class.js";
 import { Cloud } from "../models/background/clouds.class.js";
-import { Coin } from "../models/coins.class.js";
+import { Coin } from "../models/items/coins.class.js";
 import { Endboss } from "../models/enemies/endboss.class.js";
 import { ImageHub } from "../scripts/img-hub.class.js";
 import { Level } from "../models/level.class.js";

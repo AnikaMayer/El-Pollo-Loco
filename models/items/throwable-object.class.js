@@ -1,7 +1,7 @@
-import { AudioHub } from "../scripts/audio-hub.class.js";
-import { ImageHub } from "../scripts/img-hub.class.js";
-import { IntervalHub } from "../scripts/intervall-hub.class.js";
-import { MovableObject } from "./movable-object.class.js";
+import { AudioHub } from "../../scripts/audio-hub.class.js";
+import { ImageHub } from "../../scripts/img-hub.class.js";
+import { IntervalHub } from "../../scripts/intervall-hub.class.js";
+import { MovableObject } from "../movable-object.class.js";
 
 export class ThrowableObject extends MovableObject {
     imgPath = ImageHub.BOTTLE;
