@@ -3,19 +3,42 @@ import { ImageHub } from "../../scripts/img-hub.class.js";
 import { IntervalHub } from "../../scripts/intervall-hub.class.js";
 import { MovableObject } from "../movable-object.class.js";
 
+/**
+ * Represents the endboss of the game.
+ * Cycles through walk, alert and attack states, always moves toward the character,
+ * and plays corresponding animations and sounds.
+ * @extends MovableObject
+ */
 export class Endboss extends MovableObject {
+    /** @type {number} The y-position of the endboss in pixels. */
     y = 55;
+    /** @type {number} The width of the endboss in pixels. */
     width = 250;
+    /** @type {number} The height of the endboss in pixels. */
     height = 400;
+    /** @type {number} The current movement speed of the endboss. */
     speed = 2;
+    /** @type {number} The base movement speed, used to reset speed after the attack state. */
     baseSpeed = this.speed;
+    /** @type {Object} The image paths for all animations, loaded from the ImageHub. */
     imgPath = ImageHub.BOSS;
+    /** @type {Object} The audio paths for all sounds, loaded from the AudioHub. */
     audioPath = AudioHub.ENEMIES;
+    /** @type {boolean} Whether the player has triggered the endboss encounter. */
     encounter = false;
+    /** @type {boolean} Whether the endboss is currently moving left. */
     movingLeft = true;
-    // showFrame = true;
+    /** @type {number} Timestamp of the last state change, used for state timing. */
     timepassed = new Date().getTime();
+    /**
+     * The current animation/behavior state of the endboss.
+     * @type {'walk' | 'alert' | 'attack'}
+     */
     state = "walk";
+    /**
+     * Hitbox offsets in pixels to fine-tune collision detection.
+     * @type {{ top: number, right: number, bottom: number, left: number }}
+     */
     offset = {
         top: 80,
         right: 40,
@@ -23,6 +46,10 @@ export class Endboss extends MovableObject {
         left: 40,
     };
 
+    /**
+     * Creates a new Endboss at x-position 5000, loads all animation images
+     * and starts its movement, animation and sound intervals.
+     */
     constructor() {
         super().loadImage(this.imgPath.alert[0]);
         this.loadImages(this.imgPath.walk);
@@ -37,7 +64,11 @@ export class Endboss extends MovableObject {
         this.getRealFrame();
     }
 
-    // sobald Begegnung ausgelöst, bewegt sich Boss nach links/ rechts, aber nicht außerhalb der Map
+    /**
+     * Moves the endboss each frame once the encounter has been triggered.
+     * Always moves toward the character and stays within map boundaries.
+     * @type {Function}
+     */
     moveEndboss = () => {
         if (this.encounter === true) {
             this.moveToCharacter();
@@ -52,7 +83,9 @@ export class Endboss extends MovableObject {
         }
     };
 
-    // Endboss bewegt sich immer auf CHarakter zu
+    /**
+     * Updates the movement direction so the endboss always faces and moves toward the character.
+     */
     moveToCharacter() {
         if (this.x >= this.world.character.x) {
             this.movingLeft = true;
@@ -61,7 +94,10 @@ export class Endboss extends MovableObject {
         }
     }
 
-    //dreht am Ende wieder um
+    /**
+     * Prevents the endboss from leaving the map boundaries.
+     * Reverses direction when reaching the left (x ≤ 120) or right (x ≥ 3500) edge.
+     */
     stopAtMapEnd() {
         if (this.x <= 120 && this.movingLeft) {
             this.movingLeft = false;
@@ -70,7 +106,11 @@ export class Endboss extends MovableObject {
         }
     }
 
-    // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
+    /**
+     * Manages endboss sounds based on the current state.
+     * Plays the approach sound during the alert state and the death sound once when killed.
+     * @type {Function}
+     */
     endbossSound = () => {
         const audio = this.audioPath;
         this.playSound(
@@ -83,7 +123,11 @@ export class Endboss extends MovableObject {
         }
     };
 
-    // animation für endboss
+    /**
+     * Plays the appropriate animation based on the endboss's current state.
+     * Prioritizes dead and hurt animations over movement animations.
+     * @type {Function}
+     */
     animate = () => {
         if (this.isDead()) {
             // wenn isDead() zurückgegeben aus movableObj
@@ -95,10 +139,13 @@ export class Endboss extends MovableObject {
         }
     };
 
-    // animations-ablauf für walking, alert, attack
+    /**
+     * Plays the animation for the current movement state (walk, alert or attack)
+     * and checks whether it is time to transition to the next state.
+     */
     animateBossMovement() {
-        const newTime = new Date().getTime(); // wird aktualisiert, nachdem Zeit jedes States vergangen
-        const timing = this.getTiming(); // timing wird in Methode definiert
+        const newTime = new Date().getTime();
+        const timing = this.getTiming();
         if (this.state === "walk") {
             this.playAnimation(this.imgPath.walk, 0);
         } else if (this.state === "alert") {
@@ -106,10 +153,13 @@ export class Endboss extends MovableObject {
         } else {
             this.playAnimation(this.imgPath.attack, 0);
         }
-        this.checkTimePassed(newTime, timing); // prüfen, wieviel Zeit vergangen, wann Wechsel
+        this.checkTimePassed(newTime, timing);
     }
 
-    // definiert, wie lange die einzelnen Animation abgespielt werden
+    /**
+     * Returns how long the current state should last before transitioning to the next one.
+     * @returns {number} Duration in milliseconds — 4000 for walk, 2000 for alert, 3000 for attack.
+     */
     getTiming() {
         if (this.state === "walk") {
             return 4000;
@@ -120,7 +170,12 @@ export class Endboss extends MovableObject {
         }
     }
 
-    // wenn Zeit abgelaufen: je nach state wird Speed neu oder zurückgesetzt, nächster state wird aufgerufen
+    /**
+     * Checks whether the current state's duration has elapsed and transitions to the next state.
+     * Adjusts speed accordingly: zero during alert and attack, restored to base speed on walk.
+     * @param {number} newTime - The current timestamp in milliseconds.
+     * @param {number} timing - The duration the current state should last in milliseconds.
+     */
     checkTimePassed(newTime, timing) {
         if (this.encounter === true && newTime - this.timepassed > timing) {
             if (this.state === "walk") {

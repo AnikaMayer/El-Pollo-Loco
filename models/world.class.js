@@ -10,30 +10,63 @@ import { Endboss } from "./enemies/endboss.class.js";
 import { Endscreen } from "./endscreen.class.js";
 import { AudioHub } from "../scripts/audio-hub.class.js";
 
+/**
+ * Represents the game world and acts as the central controller.
+ * Manages the game loop, all game objects, collisions, item collection,
+ * HUD rendering and game end logic.
+ */
 export class World {
+    /** @type {Character} The player character. */
     character = new Character();
+    /** @type {Level} The current level instance. */
     level = level1;
+    /** @type {Endboss} Reference to the endboss found in the level's enemies array. */
     endboss = this.level.enemies.find((boss) => boss instanceof Endboss);
+    /** @type {HTMLCanvasElement} The canvas element used for rendering. */
     canvas;
+    /** @type {CanvasRenderingContext2D} The 2D rendering context of the canvas. */
     ctx;
+    /** @type {Object} The keyboard input state. */
     keyboard;
+    /** @type {number} The current camera offset on the x-axis. */
     camera_x = 0;
+    /** @type {HealthBar} The player's health bar HUD element. */
     healthBar = new HealthBar();
+    /** @type {BottleBar} The bottle count HUD element. */
     bottleBar = new BottleBar();
+    /** @type {CoinBar} The coin count HUD element. */
     coinBar = new CoinBar();
+    /** @type {EndbossBar} The endboss health bar HUD element. */
     endbossBar = new EndbossBar();
+    /** @type {ThrowableObject[]} All currently active throwable bottle objects. */
     throwableObjects = [];
+    /** @type {number} Timestamp of the last thrown bottle, used for throw cooldown. */
     lastThrow = 0;
+    /** @type {number} The total number of coins in the level. */
     totalCoins = this.level.coins.length;
+    /** @type {number} The number of coins collected by the player so far. */
     collectedCoins = 0;
+    /** @type {number} The total number of bottles in the level. */
     totalBottles = this.level.bottles.length;
+    /** @type {number} The number of bottles currently available to throw. */
     availableBottles = 0;
+    /** @type {boolean} Whether to show the "no bottles" error message. */
     bottleError = false;
+    /** @type {boolean} Whether the game has ended. */
     gameEnd = false;
+    /** @type {Endscreen} The end screen overlay shown on win or lose. */
     endscreen = new Endscreen();
+    /** @type {number} The ID returned by requestAnimationFrame for the draw loop. */
     drawID;
+    /** @type {Function|undefined} Optional callback invoked when the game ends. */
     onEndScreen;
 
+    /**
+     * Creates a new World, sets up the canvas context, starts the draw loop
+     * and registers all game intervals.
+     * @param {HTMLCanvasElement} _canvas - The canvas element to render on.
+     * @param {Object} _keyboard - The keyboard input state object.
+     */
     constructor(_canvas, _keyboard) {
         this.ctx = _canvas.getContext("2d");
         this.canvas = _canvas;
@@ -45,12 +78,20 @@ export class World {
         IntervalHub.startInterval(this.run, 1000 / 60);
     }
 
+    /**
+     * Assigns the world reference to the character and endboss
+     * so they can access world state.
+     */
     setWorld() {
         this.character.world = this;
         this.endboss.world = this;
     }
 
-    // enemyCollisions und thrownObj. werden im selben Intervall wiederholt, etwas langsamer, damit nicht zu viele Treffer auf einmal bzw. nicht zu viele Bottles geworfen werden
+    /**
+     * The main game logic loop. Runs at 60fps and handles
+     * item collection, collisions, thrown objects and game end checks.
+     * @type {Function}
+     */
     run = () => {
         this.collectCoins();
         this.collectBottles();
@@ -61,31 +102,39 @@ export class World {
 
     //#region throwBottle
 
-    // prüfen, ob genügend throwable Obj. vorhanden sind
+    /**
+     * Checks whether the player can throw a bottle.
+     * Shows an error message if D is pressed but no bottles are available.
+     */
     checkThrownObjects() {
         if (this.availableBottles > 0) {
-            this.throwObjects(); // -> wenn availableBottles > 0, dann kann mit "D" eine Flasche geworfen werden.
+            this.throwObjects();
         } else if (
             this.availableBottles === 0 &&
             this.keyboard.D &&
             this.canThrow()
         ) {
-            // -> wenn nicht genügend Flaschen UND D wird gedrückt
-            this.bottleError = true; // bottleError wird aktiviert, damit wird die Anzeige "no Bottles" gezeichnet in draw()
+            this.bottleError = true;
             setTimeout(() => {
-                this.bottleError = false; // mit einem Timeout wird Error wieder auf false gesetzt, damit der Text wieder verschwindet (wird nur gezeichnet bei true)
+                this.bottleError = false;
             }, 1200);
         }
     }
 
-    // definiert x-start-wert von Flasche basierend auf blickrichtung charakter
+    /**
+     * Returns the starting x-position of a thrown bottle based on the character's facing direction.
+     * @returns {number} The x-position for the new throwable object.
+     */
     getBottleX() {
         return this.character.otherDirection
             ? this.character.x - 50
             : this.character.x + 100;
     }
 
-    // der Ablauf beim Werfen des Objekts
+    /**
+     * Creates and throws a bottle when D is pressed and the throw cooldown has elapsed.
+     * Decrements the available bottle count and updates the HUD.
+     */
     throwObjects() {
         if (this.keyboard.D && this.canThrow()) {
             const bottleX = this.getBottleX();
@@ -95,19 +144,26 @@ export class World {
                 this.character.otherDirection,
             );
             this.throwableObjects.push(bottle);
-            this.availableBottles--; // wenn eine Flasche geworfen wurde, dann wird von available Bottles 1 abgezogen
-            this.bottleBar.setCount(this.availableBottles); // der counter der bottleBar wird entsprechend um 1 nach unten angepasst
+            this.availableBottles--;
+            this.bottleBar.setCount(this.availableBottles);
             this.lastThrow = new Date().getTime();
         }
     }
 
-    // cooldown zum Werfen, damit nicht mehrere gleichzeitig geworfen werden
+    /**
+     * Checks whether enough time has passed since the last throw (cooldown: 500ms).
+     * @returns {boolean} True if the player is allowed to throw.
+     */
     canThrow() {
         let timepassed = new Date().getTime() - this.lastThrow;
         return timepassed > 500;
     }
 
-    // im Interval wird geprüft, ob für jede Flasche für jeden Gegner eine Kollision erfolgt
+    /**
+     * Checks each thrown bottle against each enemy for collision and applies damage.
+     * Removes bottles marked for removal after splashing.
+     * @type {Function}
+     */
     checkBottleDamage = () => {
         this.throwableObjects.forEach((bottle) => {
             this.level.enemies.forEach((enemy) => {
@@ -123,10 +179,14 @@ export class World {
 
     //#region damage
 
-    // Schaden definieren nach Gegnertyp, für Endboss Statusbar updaten
+    /**
+     * Applies damage to an enemy when hit by a bottle that has not yet splashed.
+     * Stops the bottle, triggers the splash and deals damage based on enemy type.
+     * @param {MovableObject} enemy - The enemy to check collision against.
+     * @param {ThrowableObject} bottle - The thrown bottle to check.
+     */
     causeDamage(enemy, bottle) {
         if (enemy.isColliding(bottle) && !bottle.isSplashing) {
-            // wenn Kollision Gegner mit Flasche: über hit Schadenszahl übergeben
             this.checkEnemyType(enemy);
             bottle.stopFalling();
             bottle.hit(100);
@@ -134,24 +194,31 @@ export class World {
         }
     }
 
-    // wenn Kollision, dann nimmt CHarakter Schaden
+    /**
+     * Deals 10 damage to the character when colliding with a living enemy,
+     * provided the character is not currently in a hurt state.
+     * Updates the health bar accordingly.
+     * @param {MovableObject} enemy - The enemy to check collision against.
+     */
     damageCharacter(enemy) {
         if (
             this.character.isColliding(enemy) &&
             !enemy.isDead() &&
             !this.character.isHurt()
         ) {
-            // wenn Kollision:
-            this.character.hit(10); // hit mit damage-Parameter übergeben, um entsprechend viel Schaden abzuziehen
+            this.character.hit(10);
             this.healthBar.setPercentage(
-                // healthbar wird aktualisiert, indem die aktuelle Energie (nachdem damage abgezogen wurde) u. die Bilder der Bar übergben werden
                 this.character.energy,
                 this.healthBar.imgPath,
             );
         }
     }
 
-    // Gegner erhalten unterschiedlich viel Schaden
+    /**
+     * Deals damage to an enemy based on its type.
+     * The endboss takes 20 damage and updates the endboss bar; other enemies take 50.
+     * @param {MovableObject} enemy - The enemy to damage.
+     */
     checkEnemyType(enemy) {
         if (enemy === this.endboss) {
             enemy.hit(20);
@@ -168,7 +235,11 @@ export class World {
 
     //#region collisionCheck
 
-    // für jeden Gegner wird (oben im Interval) geprüft, ob der Gegner kollidiert
+    /**
+     * Checks all enemies for collision with the character each interval tick.
+     * Skips damage if a jump collision is currently being handled.
+     * @type {Function}
+     */
     checkEnemyCollisions = () => {
         if (this.checkJumpCollision()) {
             return;
@@ -179,14 +250,17 @@ export class World {
         }
     };
 
-    // Charakter springt auf Gegner, um ihm Schaden zuzufügen, ohne dabei selbst zu erleiden -> dabei springt er ab
+    /**
+     * Checks whether the character is jumping onto an enemy from above.
+     * Triggers a bounce and deals damage on landing. The endboss is excluded.
+     */
     checkJumpCollision() {
         this.level.enemies.forEach((enemy) => {
             if (enemy === this.endboss) {
                 return;
             }
             if (this.character.isCollidingFromAbove(enemy)) {
-                this.character.jumpOnMovObj(enemy); // hier wir dem Char neuer y-wert zugewiesen, siehe movableObj
+                this.character.jumpOnMovObj(enemy);
                 AudioHub.playOne(AudioHub.CHARACTER.bounce);
                 this.checkEnemyType(enemy);
             }
@@ -197,31 +271,35 @@ export class World {
 
     //#region collectItems
 
-    // im Intervall prüfen, ob CHaracter mit Münzen kollidiert (für JEDE Münze!)
+    /**
+     * Checks whether the character is colliding with any coin.
+     * Collected coins are removed from the level and the coin counter is updated.
+     */
     collectCoins() {
         this.level.coins = this.level.coins.filter((coin) => {
             if (this.character.isColliding(coin)) {
-                // wenn Kollision: collectedCoins +1, count der coin-bar aktualisieren
                 this.collectedCoins++;
                 this.coinBar.setCount(this.collectedCoins);
                 AudioHub.playOne(AudioHub.ITEMS.coin);
-                return false; // der filter-methode sagen "Münze ist jetzt raus"
+                return false;
             }
-            return true; // der filter-Methode sagen "Münze bleibt drin / es passiert nichts"
+            return true;
         });
     }
 
-    // Prüfung Koll. CHar + Bottle
+    /**
+     * Checks whether the character is colliding with any bottle on the ground.
+     * Collected bottles are removed from the level and the bottle counter is updated.
+     */
     collectBottles() {
         this.level.bottles = this.level.bottles.filter((bottle) => {
             if (this.character.isColliding(bottle)) {
-                //availBott +1, bar-count +1
                 this.availableBottles++;
                 this.bottleBar.setCount(this.availableBottles);
                 AudioHub.playOne(AudioHub.ITEMS.bottle);
-                return false; // bottle raus
+                return false;
             }
-            return true; // bottle bleibt drin bzw. passiert nichts
+            return true;
         });
     }
 
@@ -229,27 +307,36 @@ export class World {
 
     //#region draw
 
-    // leinwand wird anfangs geleert, dann wird Kamera bewegt und Objekte werden hinzugefügt
+    /**
+     * The main render loop. Clears the canvas, applies camera translation
+     * and draws all game objects in the correct layer order.
+     * Calls itself recursively via requestAnimationFrame.
+     */
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //am Anfang wird canvas immer geleert
-        this.ctx.translate(this.camera_x, 0); //Map wird nach links verschoben
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.translate(this.camera_x, 0);
         this.drawBackground();
         this.drawCollectibles();
-        this.ctx.translate(-this.camera_x, 0); // Kameraperspektive zurücksetzen
-        // ------ Space for fixed objects ------
+        this.ctx.translate(-this.camera_x, 0);
         this.drawHUD();
-        this.ctx.translate(this.camera_x, 0); // Kameraperspektive wieder positionieren
+        this.ctx.translate(this.camera_x, 0);
         this.drawMovableObj();
-        this.ctx.translate(-this.camera_x, 0); //Map wird wieder nach rechts verschoben
+        this.ctx.translate(-this.camera_x, 0);
         this.drawEndscreen();
-        this.drawID = requestAnimationFrame(() => this.draw()); // draw() wird immer wieder aufgerufen
+        this.drawID = requestAnimationFrame(() => this.draw());
     }
 
+    /**
+     * Draws all background objects and clouds onto the canvas.
+     */
     drawBackground() {
-        this.addObjectsToMap(this.level.backgroundObjects); //Objekte werden eingefügt bzw. "gezeichnet"
+        this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.level.clouds);
     }
 
+    /**
+     * Draws all collectible coins and bottles while the game is still running.
+     */
     drawCollectibles() {
         if (this.gameEnd === false) {
             this.addObjectsToMap(this.level.coins);
@@ -257,16 +344,24 @@ export class World {
         }
     }
 
+    /**
+     * Draws all HUD elements (health, bottles, coins, endboss bar, error message)
+     * while the game is still running.
+     */
     drawHUD() {
         if (this.gameEnd === false) {
             this.addToMap(this.healthBar);
             this.addToMap(this.bottleBar);
             this.addToMap(this.coinBar);
-            this.checkBossEncounter(); //health-bar endboss zur Map
+            this.checkBossEncounter();
             this.drawErrorMsg();
         }
     }
 
+    /**
+     * Triggers the endboss encounter when the character reaches x ≥ 4400,
+     * and adds the endboss health bar to the HUD.
+     */
     checkBossEncounter() {
         if (this.character.x >= 4400) {
             this.endboss.encounter = true;
@@ -276,21 +371,27 @@ export class World {
         }
     }
 
-    // zeichnen der Mitteilung, dass keine Flaschen zum Werfen vorhanden -- nur zeichnen, wenn true!
+    /**
+     * Draws a "no Bottles" error message on the canvas when the player
+     * tries to throw without any bottles available.
+     */
     drawErrorMsg() {
-        // x/y werden festgelegt, font, farbe stylt den Text
         if (this.bottleError === true) {
             const x = 290;
             const y = 200;
             this.ctx.font = "24px Alfa Slab One";
             this.ctx.fillStyle = "rgba(130, 35, 0, 1)";
-            this.ctx.fillText("no Bottles", x, y); // mit x,y sagen, wo text stehen soll
-            this.ctx.strokeStyle = "rgb(255, 255, 255)"; // für Umrandung extra methode definieren
+            this.ctx.fillText("no Bottles", x, y);
+            this.ctx.strokeStyle = "rgb(255, 255, 255)";
             this.ctx.lineWidth = 1;
             this.ctx.strokeText("no Bottles...", x, y);
         }
     }
 
+    /**
+     * Draws all enemies, the character and all throwable objects
+     * while the game is still running.
+     */
     drawMovableObj() {
         if (this.gameEnd === false) {
             this.addObjectsToMap(this.level.enemies);
@@ -299,7 +400,10 @@ export class World {
         }
     }
 
-    // wenn Spiel zu Ende, entsprechenden Bildschirm anzeigen
+    /**
+     * Draws the end screen overlay when the game has ended.
+     * Stops all intervals and dims the background before showing the win or lose screen.
+     */
     drawEndscreen() {
         if (this.gameEnd === true) {
             IntervalHub.stopAllIntervals();
@@ -314,9 +418,11 @@ export class World {
         }
     }
 
-    // prüfen, ob das Spiel zu Ende ist, weil CHarakter oder Boss keine Energie mehr haben
+    /**
+     * Checks whether the game should end because the endboss or character has died.
+     * Triggers the win or lose state accordingly with a 1 second delay.
+     */
     checkGameEnd() {
-        //wenn das Ende schon abläuft, soll nicht weiter geprüft werden
         if (this.gameEnd === false) {
             if (this.endboss.isDead()) {
                 this.setWinState();
@@ -326,6 +432,10 @@ export class World {
         }
     }
 
+    /**
+     * Triggers the win sequence after a 1 second delay:
+     * ends the game, stops background music and plays the win sound.
+     */
     setWinState() {
         setTimeout(() => {
             this.endGame("win");
@@ -334,6 +444,10 @@ export class World {
         }, 1000);
     }
 
+    /**
+     * Triggers the lose sequence after a 1 second delay:
+     * ends the game, stops background music and plays the game over sound.
+     */
     setLoseState() {
         setTimeout(() => {
             this.endGame("lose");
@@ -342,6 +456,11 @@ export class World {
         }, 1000);
     }
 
+    /**
+     * Finalizes the game by setting the game end flag, updating the end screen state
+     * and invoking the optional onEndScreen callback.
+     * @param {'win' | 'lose'} state - The outcome state to display.
+     */
     endGame(state) {
         if (this.onEndScreen) {
             this.onEndScreen();
@@ -350,14 +469,21 @@ export class World {
         this.endscreen.setState(state);
     }
 
-    // die entsprechenden Objekte werden hinzugefügt
+    /**
+     * Draws an array of objects onto the canvas by calling addToMap for each.
+     * @param {DrawableObject[]} objects - The array of objects to draw.
+     */
     addObjectsToMap(objects) {
         objects.forEach((_object) => {
             this.addToMap(_object);
         });
     }
 
-    //mO = movable Object -> Objekt wird mit entsprechender Höhe, Weite u. Koordinaten gezeichnet
+    /**
+     * Draws a single object onto the canvas, handling horizontal flipping
+     * and optional hitbox and count rendering.
+     * @param {DrawableObject} mO - The object to draw.
+     */
     addToMap(mO) {
         if (mO.otherDirection) {
             this.flipImage(mO);
@@ -372,7 +498,10 @@ export class World {
         }
     }
 
-    // Bild wird gespiegelt, wenn sich chara in andere Richtung bewegt
+    /**
+     * Flips the canvas context horizontally to mirror an object facing left.
+     * @param {DrawableObject} mO - The object to flip.
+     */
     flipImage(mO) {
         this.ctx.save();
         this.ctx.translate(mO.width, 0);
@@ -380,7 +509,10 @@ export class World {
         mO.x = mO.x * -1;
     }
 
-    // Bild wieder zurückdrehen
+    /**
+     * Restores the canvas context after flipping an object back to its original orientation.
+     * @param {DrawableObject} mO - The object to restore.
+     */
     flipImageBack(mO) {
         mO.x = mO.x * -1;
         this.ctx.restore();

@@ -3,13 +3,26 @@ import { ImageHub } from "../../scripts/img-hub.class.js";
 import { IntervalHub } from "../../scripts/intervall-hub.class.js";
 import { MovableObject } from "../movable-object.class.js";
 
+/**
+ * Represents a chicken enemy that walks randomly left and right across the map.
+ * Plays a death sound and switches to a dead animation when killed.
+ * @extends MovableObject
+ */
 export class Chicken extends MovableObject {
+    /** @type {number} The y-position of the chicken in pixels. */
     y = 360;
+    /** @type {number} The width of the chicken in pixels. */
     width = 80;
+    /** @type {number} The height of the chicken in pixels. */
     height = 60;
+    /** @type {Object} The image paths for all animations, loaded from the ImageHub. */
     imgPath = ImageHub.CHICKEN;
+    /** @type {HTMLAudioElement} The audio path for the death sound, loaded from the AudioHub. */
     audioPath = AudioHub.ENEMIES.deadChicken;
-    // showFrame = true;
+    /**
+     * Hitbox offsets in pixels to fine-tune collision detection.
+     * @type {{ top: number, right: number, bottom: number, left: number }}
+     */
     offset = {
         top: 10,
         right: 10,
@@ -17,6 +30,10 @@ export class Chicken extends MovableObject {
         left: 10,
     };
 
+    /**
+     * Creates a new Chicken at a random position with a random speed and direction,
+     * and starts its movement, animation and sound intervals.
+     */
     constructor() {
         super().loadImage(this.imgPath.walk[0]);
         this.loadImages(this.imgPath.walk);
@@ -30,7 +47,11 @@ export class Chicken extends MovableObject {
         this.getRealFrame();
     }
 
-    // läuft in eine zufällige Richtung mit zufälligem Wechsel, stoppt an der Grenze der Map
+    /**
+     * Moves the chicken each frame.
+     * Chooses a random direction, moves accordingly and prevents leaving the map boundaries.
+     * @type {Function}
+     */
     moveChicken = () => {
         this.randomDirection();
         if (this.movingLeft) {
@@ -43,7 +64,10 @@ export class Chicken extends MovableObject {
         this.stopAtMapEnd();
     };
 
-    //bestimmt zufällig eine neue Richtung
+    /**
+     * Randomly reverses the chicken's movement direction.
+     * Has a small chance (0.15%) of toggling direction on each call.
+     */
     randomDirection() {
         if (Math.random() < 0.0015) {
             this.movingLeft = !this.movingLeft;
@@ -51,7 +75,10 @@ export class Chicken extends MovableObject {
         }
     }
 
-    //dreht am Ende wieder um
+    /**
+     * Prevents the chicken from leaving the map boundaries.
+     * Reverses direction when reaching the left (x ≤ 120) or right (x ≥ 4400) edge.
+     */
     stopAtMapEnd() {
         if (this.x <= 120 && this.movingLeft) {
             this.movingLeft = false;
@@ -60,7 +87,11 @@ export class Chicken extends MovableObject {
         }
     }
 
-    // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
+    /**
+     * Plays the death sound once when the chicken dies.
+     * Uses the toggle method in MovableObject to manage audio playback.
+     * @type {Function}
+     */
     chickenSound = () => {
         const audio = this.audioPath;
         if (this.isDead() && !this.soundPlayed) {
@@ -69,12 +100,15 @@ export class Chicken extends MovableObject {
         }
     };
 
+    /**
+     * Plays the walk or dead animation depending on the chicken's current state.
+     * @type {Function}
+     */
     animateChicken = () => {
         if (this.isDead()) {
-            // wenn isDead() zurückgegeben aus movableObj
-            this.playAnimation(this.imgPath.dead, 0); // dead-animation
+            this.playAnimation(this.imgPath.dead, 0);
         } else {
-            this.playAnimation(this.imgPath.walk, 0); //walk animation
+            this.playAnimation(this.imgPath.walk, 0);
         }
     };
 }

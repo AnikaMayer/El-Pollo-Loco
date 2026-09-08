@@ -1,4 +1,13 @@
+/**
+ * Central static registry for all image paths used in the game.
+ * Organized by game object category, each property holds arrays of file paths
+ * that are passed to loadImage or loadImages in DrawableObject.
+ */
 export class ImageHub {
+    /**
+     * Animation frames for the player character Pepe.
+     * @type {{ walk: string[], jump: string[], hurt: string[], dead: string[], idle: string[], longIdle: string[] }}
+     */
     static PEPE = {
         walk: [
             "./assets/img/2_character_pepe/2_walk/W-21.png",
@@ -59,6 +68,10 @@ export class ImageHub {
         ],
     };
 
+    /**
+     * Animation frames for the normal chicken enemy.
+     * @type {{ walk: string[], dead: string[] }}
+     */
     static CHICKEN = {
         walk: [
             "./assets/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
@@ -68,6 +81,10 @@ export class ImageHub {
         dead: ["./assets/img/3_enemies_chicken/chicken_normal/2_dead/dead.png"],
     };
 
+    /**
+     * Animation frames for the baby chicken enemy.
+     * @type {{ walk: string[], dead: string[] }}
+     */
     static BABYCHICKEN = {
         walk: [
             "./assets/img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
@@ -77,6 +94,10 @@ export class ImageHub {
         dead: ["./assets/img/3_enemies_chicken/chicken_small/2_dead/dead.png"],
     };
 
+    /**
+     * Animation frames for the endboss chicken.
+     * @type {{ walk: string[], alert: string[], attack: string[], hurt: string[], dead: string[] }}
+     */
     static BOSS = {
         walk: [
             "./assets/img/4_enemie_boss_chicken/1_walk/G1.png",
@@ -116,6 +137,10 @@ export class ImageHub {
         ],
     };
 
+    /**
+     * Image paths for background layers and clouds.
+     * @type {{ clouds: string[], firstLayer: string[], secondLayer: string[], thirdLayer: string[], air: string[] }}
+     */
     static BACKGROUND = {
         clouds: [
             "./assets/img/5_background/layers/4_clouds/1.png",
@@ -136,6 +161,11 @@ export class ImageHub {
         air: ["./assets/img/5_background/layers/air.png"],
     };
 
+    /**
+     * Image paths for all HUD status bars and icons.
+     * Each bar has 6 states (0%, 20%, 40%, 60%, 80%, 100%).
+     * @type {{ health: string[], coin: string[], bottle: string[], endboss: string[], iconCoin: string[], iconBottle: string[] }}
+     */
     static STATUSBAR = {
         health: [
             "./assets/img/7_statusbars/1_statusbar/2_statusbar_health/green/0.png",
@@ -173,6 +203,10 @@ export class ImageHub {
         iconBottle: ["./assets/img/7_statusbars/3_icons/icon_salsa_bottle.png"],
     };
 
+    /**
+     * Image paths for the throwable bottle (rotation, splash and on-ground sprites).
+     * @type {{ rotation: string[], splash: string[], onGround: string[] }}
+     */
     static BOTTLE = {
         rotation: [
             "./assets/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
@@ -194,11 +228,19 @@ export class ImageHub {
         ],
     };
 
+    /**
+     * Animation frames for the coin collectible.
+     * @type {string[]}
+     */
     static COIN = [
         "./assets/img/8_coin/coin_1.png",
         "./assets/img/8_coin/coin_2.png",
     ];
 
+    /**
+     * Image paths for the win and lose end screens.
+     * @type {{ win: string, lose: string }}
+     */
     static ENDSCREEN = {
         win: "./assets/img/You won, you lost/You won A.png",
         lose: "./assets/img/You won, you lost/You lost b.png",
