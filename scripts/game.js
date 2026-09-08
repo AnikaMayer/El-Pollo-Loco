@@ -64,19 +64,14 @@ function init() {
 
 //#region manageClick
 
-/**
- * Registers all click event listeners for buttons and dialogs.
- */
+/** Registers all click event listeners for buttons and dialogs. */
 function manageClickEvents() {
     interfaceEvents();
     navEvents();
     dialogEvents();
 }
 
-/**
- * Registers click events for interface control buttons
- * (home, mute, unmute, fullscreen, normal screen).
- */
+/** Registers click events for interface control buttons. */
 function interfaceEvents() {
     homeButton.addEventListener("click", manageInterface);
     muteButton.addEventListener("click", manageInterface);
@@ -85,10 +80,7 @@ function interfaceEvents() {
     normScreenBtn.addEventListener("click", manageInterface);
 }
 
-/**
- * Registers click events for navigation buttons
- * (controls, imprint, close dialogs, start, restart).
- */
+/** Registers click events for navigation buttons. */
 function navEvents() {
     controlButton.addEventListener("click", manageDialog);
     imprintButton.addEventListener("click", manageDialog);
@@ -99,10 +91,7 @@ function navEvents() {
     restartBtn.addEventListener("click", manageStart);
 }
 
-/**
- * Registers click events for dialog backdrop closing, event bubbling protection
- * and orientation change handling.
- */
+/** Registers click events for dialog backdrop closing and orientation changes. */
 function dialogEvents() {
     imprintDialog.addEventListener("click", closeDialog);
     controlsDialog.addEventListener("click", closeDialog);
@@ -113,10 +102,7 @@ function dialogEvents() {
 
 //#endregion
 
-/**
- * Plays the main menu music on the first click anywhere on the page,
- * unless the start button was clicked directly.
- */
+/** Plays the main menu music on the first click, unless the start button was clicked. */
 function startMusic() {
     document.addEventListener(
         "click",
@@ -131,10 +117,7 @@ function startMusic() {
 
 //#region keyboard
 
-/**
- * Sets the corresponding keyboard state to true when a key is pressed.
- * Supports ArrowRight, ArrowLeft, ArrowUp, ArrowDown, Space and D.
- */
+/** Sets keyboard state to true on keydown. */
 window.addEventListener("keydown", (event) => {
     if (event.key === "ArrowRight") {
         keyboard.RIGHT = true;
@@ -156,10 +139,7 @@ window.addEventListener("keydown", (event) => {
     }
 });
 
-/**
- * Sets the corresponding keyboard state to false when a key is released.
- * Supports ArrowRight, ArrowLeft, ArrowUp, ArrowDown, Space and D.
- */
+/** Sets keyboard state to false on keyup. */
 window.addEventListener("keyup", (event) => {
     if (event.key === "ArrowRight") {
         keyboard.RIGHT = false;
@@ -196,11 +176,7 @@ function manageStart(event) {
     }
 }
 
-/**
- * Initializes or restarts the game world.
- * Cancels any existing animation frame, reinitializes the level,
- * creates a new World instance and updates the UI accordingly.
- */
+/** Initializes or restarts the game world and updates the UI. */
 function renderWorld() {
     canvas = document.getElementById("canvas");
     if (world) {
@@ -214,10 +190,7 @@ function renderWorld() {
     worldAudio();
 }
 
-/**
- * Manages audio transitions when starting a new game.
- * Stops menu and end screen sounds and plays the start jingle and background music.
- */
+/** Stops menu sounds and starts game audio. */
 function worldAudio() {
     AudioHub.stopOne(AudioHub.GAME.main);
     AudioHub.stopOne(AudioHub.GAME.win);
@@ -226,10 +199,7 @@ function worldAudio() {
     AudioHub.playOne(AudioHub.GAME.bgm);
 }
 
-/**
- * Updates the UI visibility when the game starts.
- * Hides the start screen and nav buttons; shows the home button and HUD.
- */
+/** Hides the start screen and shows the HUD and home button. */
 function toggleHideWorld() {
     startScreen.classList.add("hide-page");
     homeButton.classList.remove("hide-btn");
@@ -239,9 +209,7 @@ function toggleHideWorld() {
     hudPanel.classList.remove("hide-cntrl");
 }
 
-/**
- * Toggles the restart button visibility based on whether the game has ended.
- */
+/** Toggles the restart button based on whether the game has ended. */
 function toggleRestartBtn() {
     restartBtn.classList.toggle("hide-btn", world.gameEnd === false);
 }
@@ -269,9 +237,7 @@ function manageInterface(event) {
     }
 }
 
-/**
- * Stops all game intervals and the animation loop, then returns to the home screen.
- */
+/** Stops the game and returns to the home screen. */
 function goHome() {
     IntervalHub.stopAllIntervals();
     cancelAnimationFrame(world.drawID);
@@ -279,10 +245,7 @@ function goHome() {
     homeAudio();
 }
 
-/**
- * Manages audio transitions when returning to the home screen.
- * Stops game sounds and plays the main menu music.
- */
+/** Stops game sounds and plays the main menu music. */
 function homeAudio() {
     AudioHub.stopOne(AudioHub.GAME.bgm);
     AudioHub.stopOne(AudioHub.GAME.win);
@@ -290,10 +253,7 @@ function homeAudio() {
     AudioHub.playOne(AudioHub.GAME.main);
 }
 
-/**
- * Updates UI visibility when returning to the home screen.
- * Shows the start screen and nav buttons; hides the home button and HUD.
- */
+/** Shows the start screen and hides the HUD and home button. */
 function toggleHideHome() {
     startScreen.classList.remove("hide-page");
     homeButton.classList.add("hide-btn");
@@ -303,9 +263,7 @@ function toggleHideHome() {
     hudPanel.classList.add("hide-cntrl");
 }
 
-/**
- * Mutes all audio, persists the mute state in localStorage and updates the mute buttons.
- */
+/** Mutes all audio and persists the mute state in localStorage. */
 function muteAudio() {
     isMuted = true;
     localStorage.setItem("mutedKey", true);
@@ -314,9 +272,7 @@ function muteAudio() {
     AudioHub.muteAll();
 }
 
-/**
- * Unmutes all audio, persists the mute state in localStorage and updates the mute buttons.
- */
+/** Unmutes all audio and persists the mute state in localStorage. */
 function unmuteAudio() {
     isMuted = false;
     localStorage.setItem("mutedKey", false);
@@ -325,18 +281,14 @@ function unmuteAudio() {
     AudioHub.unmuteAll();
 }
 
-/**
- * Switches to fullscreen mode and updates the fullscreen toggle buttons.
- */
+/** Enters fullscreen mode and updates the toggle buttons. */
 function showFullscreen() {
     fullscreenBtn.classList.add("hide-btn");
     normScreenBtn.classList.remove("hide-btn");
     toggleFullscreen(fullscreen);
 }
 
-/**
- * Exits fullscreen mode and updates the fullscreen toggle buttons.
- */
+/** Exits fullscreen mode and updates the toggle buttons. */
 function exitFullscreen() {
     fullscreenBtn.classList.remove("hide-btn");
     normScreenBtn.classList.add("hide-btn");
@@ -345,8 +297,6 @@ function exitFullscreen() {
 
 /**
  * Toggles fullscreen mode for the given element.
- * Uses vendor-prefixed methods for broader browser compatibility.
- * Refocuses the canvas after the toggle if it exists.
  * @param {HTMLElement} element - The element to toggle fullscreen on.
  */
 function toggleFullscreen(element) {
@@ -362,10 +312,7 @@ function toggleFullscreen(element) {
     }
 }
 
-/**
- * Applies the stored mute state on page load.
- * If muted, hides the mute button, shows the unmute button and mutes all audio.
- */
+/** Applies the stored mute state on page load. */
 function applyMuteState() {
     if (isMuted) {
         muteButton.classList.add("hide-btn");
@@ -398,27 +345,21 @@ function manageDialog(event) {
     }
 }
 
-/**
- * Opens the imprint modal dialog and prevents background scrolling.
- */
+/** Opens the imprint dialog and prevents background scrolling. */
 function openImprintDialog() {
     document.body.classList.add("overscroll_stop");
     imprintDialog.showModal();
     imprintDialog.classList.add("opened");
 }
 
-/**
- * Opens the controls modal dialog and prevents background scrolling.
- */
+/** Opens the controls dialog and prevents background scrolling. */
 function openControlsDialog() {
     document.body.classList.add("overscroll_stop");
     controlsDialog.showModal();
     controlsDialog.classList.add("opened");
 }
 
-/**
- * Closes both modal dialogs and restores background scrolling.
- */
+/** Closes both dialogs and restores background scrolling. */
 function closeDialog() {
     document.body.classList.remove("overscroll_stop");
     imprintDialog.close();
