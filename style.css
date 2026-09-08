@@ -1,11 +1,6 @@
 body {
     min-height: 100dvh;
     margin: 0;
-    /* display: grid;
-    grid-template-columns: auto;
-    align-content: center;
-    place-items: start center; */
-    /* position: relative; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -128,6 +123,8 @@ dialog {
             button {
                 width: 50px;
                 height: 50px;
+                /* width: 15vh;
+                height: 15vh; */
                 background-color: rgba(255, 255, 255, 0.233);
                 border: 1px solid rgba(228, 228, 228, 0.925);
                 border-radius: 50%;
@@ -137,6 +134,8 @@ dialog {
                     transform: scaleX(-1);
                     width: 25px;
                     height: 25px;
+                    /* width: 5vh;
+                    height: 5vh; */
                 }
             }
 
@@ -424,26 +423,47 @@ dialog {
     }
 }
 
-:fullscreen.game_container {
-    width: 100vw;
-    height: 100dvh;
+@media screen and (min-width: 1024px) {
+    :fullscreen.game_container {
+        .game-wrapper {
+            .hud-wrapper {
+                .panel {
+                    gap: clamp(5px, calc(-7.727px + 3.977vw), 40px);
 
-    .game-wrapper .menu-wrapper {
-        div {
-            width: 300px;
-            gap: 10px;
+                    button {
+                        width: 15vh;
+                        height: 15vh;
 
-            button {
-                width: 60px;
-                height: 60px;
+                        svg {
+                            width: 5vh;
+                            height: 5vh;
+                        }
+                    }
+                }
+            }
+            .menu-wrapper {
+                div {
+                    width: 300px;
+                    gap: 10px;
 
-                svg {
-                    width: 40px;
-                    height: 40px;
+                    button {
+                        width: 60px;
+                        height: 60px;
+
+                        svg {
+                            width: 40px;
+                            height: 40px;
+                        }
+                    }
                 }
             }
         }
     }
+}
+
+:fullscreen.game_container {
+    width: 100vw;
+    height: 100dvh;
 
     .restart-wrapper {
         .restart_btn {
