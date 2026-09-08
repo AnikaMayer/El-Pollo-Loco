@@ -2,13 +2,14 @@ import { level1 } from "../levels/level1.js";
 import { Character } from "./character.class.js";
 import { IntervalHub } from "../scripts/intervall-hub.class.js";
 import { HealthBar } from "./statusbars/health-bar.class.js";
-import { ThrowableObject } from "./items/throwable-object.class.js";
 import { BottleBar } from "./statusbars/bottle-bar.class.js";
 import { CoinBar } from "./statusbars/coin-bar.class.js";
 import { EndbossBar } from "./statusbars/endboss-bar.class.js";
 import { Endboss } from "./enemies/endboss.class.js";
 import { Endscreen } from "./endscreen.class.js";
 import { AudioHub } from "../scripts/audio-hub.class.js";
+import { CollisionManager } from "./collision-manager.js";
+import { ItemManager } from "./item-manager.class.js";
 
 /**
  * Represents the game world and acts as the central controller.
@@ -60,6 +61,10 @@ export class World {
     drawID;
     /** @type {Function|undefined} Optional callback invoked when the game ends. */
     onEndScreen;
+    /** @type {CollisionManager} Manages all collision detection logic. */
+    collisionManager;
+    /** @type {ItemManager} Manages item collection and bottle throwing logic. */
+    itemManager;
 
     /**
      * Creates a new World, sets up the canvas context, starts the draw loop
@@ -73,8 +78,8 @@ export class World {
         this.keyboard = _keyboard;
         this.draw();
         this.setWorld();
-        IntervalHub.startInterval(this.checkEnemyCollisions, 1000 / 5);
-        IntervalHub.startInterval(this.checkBottleDamage, 1000 / 10);
+        this.collisionManager = new CollisionManager(this);
+        this.itemManager = new ItemManager(this);
         IntervalHub.startInterval(this.run, 1000 / 60);
     }
 
@@ -93,217 +98,11 @@ export class World {
      * @type {Function}
      */
     run = () => {
-        this.collectCoins();
-        this.collectBottles();
-        this.checkJumpCollision();
-        this.checkThrownObjects();
+        this.itemManager.collectCoins();
+        this.itemManager.collectBottles();
+        this.itemManager.checkThrownObjects();
         this.checkGameEnd();
     };
-
-    //#region throwBottle
-
-    /**
-     * Checks whether the player can throw a bottle.
-     * Shows an error message if D is pressed but no bottles are available.
-     */
-    checkThrownObjects() {
-        if (this.availableBottles > 0) {
-            this.throwObjects();
-        } else if (
-            this.availableBottles === 0 &&
-            this.keyboard.D &&
-            this.canThrow()
-        ) {
-            this.bottleError = true;
-            setTimeout(() => {
-                this.bottleError = false;
-            }, 1200);
-        }
-    }
-
-    /**
-     * Returns the starting x-position of a thrown bottle based on the character's facing direction.
-     * @returns {number} The x-position for the new throwable object.
-     */
-    getBottleX() {
-        return this.character.otherDirection
-            ? this.character.x - 50
-            : this.character.x + 100;
-    }
-
-    /**
-     * Creates and throws a bottle when D is pressed and the throw cooldown has elapsed.
-     * Decrements the available bottle count and updates the HUD.
-     */
-    throwObjects() {
-        if (this.keyboard.D && this.canThrow()) {
-            const bottleX = this.getBottleX();
-            const bottle = new ThrowableObject(
-                bottleX,
-                this.character.y + 100,
-                this.character.otherDirection,
-            );
-            this.throwableObjects.push(bottle);
-            this.availableBottles--;
-            this.bottleBar.setCount(this.availableBottles);
-            this.lastThrow = new Date().getTime();
-        }
-    }
-
-    /**
-     * Checks whether enough time has passed since the last throw (cooldown: 500ms).
-     * @returns {boolean} True if the player is allowed to throw.
-     */
-    canThrow() {
-        let timepassed = new Date().getTime() - this.lastThrow;
-        return timepassed > 500;
-    }
-
-    /**
-     * Checks each thrown bottle against each enemy for collision and applies damage.
-     * Removes bottles marked for removal after splashing.
-     * @type {Function}
-     */
-    checkBottleDamage = () => {
-        this.throwableObjects.forEach((bottle) => {
-            this.level.enemies.forEach((enemy) => {
-                this.causeDamage(enemy, bottle);
-            });
-        });
-        this.throwableObjects = this.throwableObjects.filter(
-            (bottle) => !bottle.removeBottle,
-        );
-    };
-
-    //#endregion
-
-    //#region damage
-
-    /**
-     * Applies damage to an enemy when hit by a bottle that has not yet splashed.
-     * Stops the bottle, triggers the splash and deals damage based on enemy type.
-     * @param {MovableObject} enemy - The enemy to check collision against.
-     * @param {ThrowableObject} bottle - The thrown bottle to check.
-     */
-    causeDamage(enemy, bottle) {
-        if (enemy.isColliding(bottle) && !bottle.isSplashing) {
-            this.checkEnemyType(enemy);
-            bottle.stopFalling();
-            bottle.hit(100);
-            bottle.splash();
-        }
-    }
-
-    /**
-     * Deals 10 damage to the character when colliding with a living enemy,
-     * provided the character is not currently in a hurt state.
-     * Updates the health bar accordingly.
-     * @param {MovableObject} enemy - The enemy to check collision against.
-     */
-    damageCharacter(enemy) {
-        if (
-            this.character.isColliding(enemy) &&
-            !enemy.isDead() &&
-            !this.character.isHurt()
-        ) {
-            this.character.hit(10);
-            this.healthBar.setPercentage(
-                this.character.energy,
-                this.healthBar.imgPath,
-            );
-        }
-    }
-
-    /**
-     * Deals damage to an enemy based on its type.
-     * The endboss takes 20 damage and updates the endboss bar; other enemies take 50.
-     * @param {MovableObject} enemy - The enemy to damage.
-     */
-    checkEnemyType(enemy) {
-        if (enemy === this.endboss) {
-            enemy.hit(20);
-            this.endbossBar.setPercentage(
-                this.endboss.energy,
-                this.endbossBar.imgPath,
-            );
-        } else {
-            enemy.hit(50);
-        }
-    }
-
-    //#endregion
-
-    //#region collisionCheck
-
-    /**
-     * Checks all enemies for collision with the character each interval tick.
-     * Skips damage if a jump collision is currently being handled.
-     * @type {Function}
-     */
-    checkEnemyCollisions = () => {
-        if (this.checkJumpCollision()) {
-            return;
-        } else {
-            this.level.enemies.forEach((enemy) => {
-                this.damageCharacter(enemy);
-            });
-        }
-    };
-
-    /**
-     * Checks whether the character is jumping onto an enemy from above.
-     * Triggers a bounce and deals damage on landing. The endboss is excluded.
-     */
-    checkJumpCollision() {
-        this.level.enemies.forEach((enemy) => {
-            if (enemy === this.endboss) {
-                return;
-            }
-            if (this.character.isCollidingFromAbove(enemy)) {
-                this.character.jumpOnMovObj(enemy);
-                AudioHub.playOne(AudioHub.CHARACTER.bounce);
-                this.checkEnemyType(enemy);
-            }
-        });
-    }
-
-    //#endregion
-
-    //#region collectItems
-
-    /**
-     * Checks whether the character is colliding with any coin.
-     * Collected coins are removed from the level and the coin counter is updated.
-     */
-    collectCoins() {
-        this.level.coins = this.level.coins.filter((coin) => {
-            if (this.character.isColliding(coin)) {
-                this.collectedCoins++;
-                this.coinBar.setCount(this.collectedCoins);
-                AudioHub.playOne(AudioHub.ITEMS.coin);
-                return false;
-            }
-            return true;
-        });
-    }
-
-    /**
-     * Checks whether the character is colliding with any bottle on the ground.
-     * Collected bottles are removed from the level and the bottle counter is updated.
-     */
-    collectBottles() {
-        this.level.bottles = this.level.bottles.filter((bottle) => {
-            if (this.character.isColliding(bottle)) {
-                this.availableBottles++;
-                this.bottleBar.setCount(this.availableBottles);
-                AudioHub.playOne(AudioHub.ITEMS.bottle);
-                return false;
-            }
-            return true;
-        });
-    }
-
-    //#endregion
 
     //#region draw
 
