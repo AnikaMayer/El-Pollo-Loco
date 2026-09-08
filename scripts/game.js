@@ -37,6 +37,8 @@ function init() {
     startMusic();
 }
 
+//#region manageClick
+
 // click-events für Buttons im Menü & Dialog
 function manageClickEvents() {
     interfaceEvents();
@@ -55,12 +57,13 @@ function interfaceEvents() {
 
 // Navigation-Buttons
 function navEvents() {
-    controlButton.addEventListener("click", manageNavigation);
-    imprintButton.addEventListener("click", manageNavigation);
-    closeButtonCntrl.addEventListener("click", manageNavigation);
-    closeButtonImpr.addEventListener("click", manageNavigation);
-    startButton.addEventListener("click", manageNavigation);
-    restartBtn.addEventListener("click", manageNavigation);
+    controlButton.addEventListener("click", manageDialog);
+    imprintButton.addEventListener("click", manageDialog);
+    closeButtonCntrl.addEventListener("click", manageDialog);
+    closeButtonImpr.addEventListener("click", manageDialog);
+
+    startButton.addEventListener("click", manageStart);
+    restartBtn.addEventListener("click", manageStart);
 }
 
 // Dialog schließen & bubblinProtection
@@ -71,6 +74,8 @@ function dialogEvents() {
     imprintPage.addEventListener("click", bubblingProtection);
     screen.orientation.addEventListener("change", closeDialog);
 }
+
+//#endregion
 
 // mit erstem Klick auf der Seite wird der Sound abgespielt
 function startMusic() {
@@ -131,49 +136,16 @@ window.addEventListener("keyup", (event) => {
 
 //#endregion
 
-//#region homeNavigation
+//#region startGame
 
-function manageNavigation(event) {
+function manageStart(event) {
     const clickedBtn = event.currentTarget.id;
-    if (clickedBtn === "control-btn") {
-        // showControls();
-        openControlsDialog();
-    } else if (clickedBtn === "imprint-btn") {
-        // showImprint();
-        openImprintDialog();
-    } else if (
-        clickedBtn === "close-btn-cntrl" ||
-        clickedBtn === "close-btn-imprint"
-    ) {
-        // goBack();
-        closeDialog();
-    } else if (clickedBtn === "start-btn" || clickedBtn === "restart-btn") {
+    if (clickedBtn === "start-btn" || clickedBtn === "restart-btn") {
         renderWorld();
     }
 }
 
-function showControls() {
-    // startScreen.classList.add("hide-page");
-    controlPage.classList.remove("hide-page");
-}
-
-function showImprint() {
-    // startScreen.classList.add("hide-page");
-    imprintPage.classList.remove("hide-page");
-}
-
-function goBack() {
-    controlPage.classList.add("hide-page");
-    imprintPage.classList.add("hide-page");
-    // startScreen.classList.remove("hide-page");
-}
-
 function renderWorld() {
-    startScreen.classList.add("hide-page");
-    homeButton.classList.remove("hide-btn");
-    restartBtn.classList.add("hide-btn");
-    controlButton.classList.add("hide-btn");
-    imprintButton.classList.add("hide-btn");
     canvas = document.getElementById("canvas");
     if (world) {
         cancelAnimationFrame(world.drawID);
@@ -182,11 +154,24 @@ function renderWorld() {
     world = new World(canvas, keyboard);
     world.onEndScreen = toggleRestartBtn;
     toggleRestartBtn();
+    toggleHideWorld();
+    worldAudio();
+}
+
+function worldAudio() {
     AudioHub.stopOne(AudioHub.GAME.main);
     AudioHub.stopOne(AudioHub.GAME.win);
     AudioHub.stopOne(AudioHub.GAME.gameOver);
     AudioHub.playOne(AudioHub.GAME.start);
     AudioHub.playOne(AudioHub.GAME.bgm);
+}
+
+function toggleHideWorld() {
+    startScreen.classList.add("hide-page");
+    homeButton.classList.remove("hide-btn");
+    restartBtn.classList.add("hide-btn");
+    controlButton.classList.add("hide-btn");
+    imprintButton.classList.add("hide-btn");
     hudPanel.classList.remove("hide-cntrl");
 }
 
@@ -214,17 +199,25 @@ function manageInterface(event) {
 }
 
 function goHome() {
+    IntervalHub.stopAllIntervals();
+    cancelAnimationFrame(world.drawID);
+    toggleHideHome();
+    homeAudio();
+}
+
+function homeAudio() {
+    AudioHub.stopOne(AudioHub.GAME.bgm);
+    AudioHub.stopOne(AudioHub.GAME.win);
+    AudioHub.stopOne(AudioHub.GAME.gameOver);
+    AudioHub.playOne(AudioHub.GAME.main);
+}
+
+function toggleHideHome() {
     startScreen.classList.remove("hide-page");
     homeButton.classList.add("hide-btn");
     restartBtn.classList.add("hide-btn");
     controlButton.classList.remove("hide-btn");
     imprintButton.classList.remove("hide-btn");
-    IntervalHub.stopAllIntervals();
-    cancelAnimationFrame(world.drawID);
-    AudioHub.stopOne(AudioHub.GAME.bgm);
-    AudioHub.stopOne(AudioHub.GAME.win);
-    AudioHub.stopOne(AudioHub.GAME.gameOver);
-    AudioHub.playOne(AudioHub.GAME.main);
     hudPanel.classList.add("hide-cntrl");
 }
 
@@ -280,6 +273,22 @@ function applyMuteState() {
 //#endregion
 
 //#region dialog
+
+function manageDialog(event) {
+    const clickedBtn = event.currentTarget.id;
+    if (clickedBtn === "control-btn") {
+        openControlsDialog();
+    } else if (clickedBtn === "imprint-btn") {
+        openImprintDialog();
+    } else if (
+        clickedBtn === "close-btn-cntrl" ||
+        clickedBtn === "close-btn-imprint"
+    ) {
+        closeDialog();
+    } else if (clickedBtn === "start-btn" || clickedBtn === "restart-btn") {
+        renderWorld();
+    }
+}
 
 function openImprintDialog() {
     document.body.classList.add("overscroll_stop");

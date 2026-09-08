@@ -319,19 +319,27 @@ export class World {
         //wenn das Ende schon abläuft, soll nicht weiter geprüft werden
         if (this.gameEnd === false) {
             if (this.endboss.isDead()) {
-                setTimeout(() => {
-                    this.endGame("win");
-                    AudioHub.stopOne(AudioHub.GAME.bgm);
-                    AudioHub.playOne(AudioHub.GAME.win);
-                }, 1000);
+                this.setWinState();
             } else if (this.character.isDead()) {
-                setTimeout(() => {
-                    this.endGame("lose");
-                    AudioHub.stopOne(AudioHub.GAME.bgm);
-                    AudioHub.playOne(AudioHub.GAME.gameOver);
-                }, 1000);
+                this.setLoseState();
             }
         }
+    }
+
+    setWinState() {
+        setTimeout(() => {
+            this.endGame("win");
+            AudioHub.stopOne(AudioHub.GAME.bgm);
+            AudioHub.playOne(AudioHub.GAME.win);
+        }, 1000);
+    }
+
+    setLoseState() {
+        setTimeout(() => {
+            this.endGame("lose");
+            AudioHub.stopOne(AudioHub.GAME.bgm);
+            AudioHub.playOne(AudioHub.GAME.gameOver);
+        }, 1000);
     }
 
     endGame(state) {
