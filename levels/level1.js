@@ -1,12 +1,12 @@
 import { BackgroundObject } from "../models/background-object.class.js";
 import { Bottle } from "../models/bottles.class.js";
-import { Chicken } from "../models/chicken.class.js";
+import { Chicken } from "../models/enemies/chicken.class.js";
 import { Cloud } from "../models/clouds.class.js";
 import { Coin } from "../models/coins.class.js";
-import { Endboss } from "../models/endboss.class.js";
+import { Endboss } from "../models/enemies/endboss.class.js";
 import { ImageHub } from "../scripts/img-hub.class.js";
 import { Level } from "../models/level.class.js";
-import { BabyChicken } from "../models/baby-chicken.class.js";
+import { BabyChicken } from "../models/enemies/baby-chicken.class.js";
 
 export let level1;
 let clouds = [];

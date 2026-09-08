@@ -6,7 +6,7 @@ import { ThrowableObject } from "./throwable-object.class.js";
 import { BottleBar } from "./statusbars/bottle-bar.class.js";
 import { CoinBar } from "./statusbars/coin-bar.class.js";
 import { EndbossBar } from "./statusbars/endboss-bar.class.js";
-import { Endboss } from "./endboss.class.js";
+import { Endboss } from "./enemies/endboss.class.js";
 import { Endscreen } from "./endscreen.class.js";
 import { AudioHub } from "../scripts/audio-hub.class.js";
 
