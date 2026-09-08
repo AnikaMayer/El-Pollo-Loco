@@ -268,7 +268,7 @@ export class World {
     }
 
     checkBossEncounter() {
-        if (this.character.x >= 2800) {
+        if (this.character.x >= 4400) {
             this.endboss.encounter = true;
         }
         if (this.endboss.encounter === true) {

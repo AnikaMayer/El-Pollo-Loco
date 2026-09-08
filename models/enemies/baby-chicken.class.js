@@ -23,7 +23,7 @@ export class BabyChicken extends MovableObject {
         this.loadImages(this.imgPath.walk);
         this.loadImages(this.imgPath.dead);
         this.movingLeft = Math.random() >= 0.5 ? true : false;
-        this.x = 420 + Math.random() * 2900;
+        this.x = 420 + Math.random() * 4300;
         this.speed = 0.15 + Math.random() * 0.5;
         IntervalHub.startInterval(this.moveBabyChicken, 1000 / 60);
         IntervalHub.startInterval(this.animateBabyChicken, 1000 / 5);
@@ -56,7 +56,7 @@ export class BabyChicken extends MovableObject {
     stopAtMapEnd() {
         if (this.x <= 120 && this.movingLeft) {
             this.movingLeft = false;
-        } else if (this.x >= 3000 && !this.movingLeft) {
+        } else if (this.x >= 4300 && !this.movingLeft) {
             this.movingLeft = true;
         }
     }

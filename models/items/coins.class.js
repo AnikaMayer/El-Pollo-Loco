@@ -53,6 +53,15 @@ export class Coin extends MovableObject {
         return coins;
     }
 
+    static shortHorizontalLinePattern(baseX, y) {
+        const coins = [];
+        const coin1 = new Coin(baseX, y);
+        const coin2 = new Coin(baseX + 50, y);
+        const coin3 = new Coin(baseX + 100, y);
+        coins.push(coin1, coin2, coin3);
+        return coins;
+    }
+
     // Münzvorlage für vertikale Linie
     static verticalLinePattern(x, baseY) {
         const coins = [];

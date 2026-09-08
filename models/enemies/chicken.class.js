@@ -22,7 +22,7 @@ export class Chicken extends MovableObject {
         this.loadImages(this.imgPath.walk);
         this.loadImages(this.imgPath.dead);
         this.movingLeft = Math.random() >= 0.5 ? true : false;
-        this.x = 370 + Math.random() * 3000;
+        this.x = 370 + Math.random() * 4400;
         this.speed = 0.15 + Math.random() * 0.5;
         IntervalHub.startInterval(this.moveChicken, 1000 / 60);
         IntervalHub.startInterval(this.animateChicken, 1000 / 5);
@@ -55,7 +55,7 @@ export class Chicken extends MovableObject {
     stopAtMapEnd() {
         if (this.x <= 120 && this.movingLeft) {
             this.movingLeft = false;
-        } else if (this.x >= 3000 && !this.movingLeft) {
+        } else if (this.x >= 4400 && !this.movingLeft) {
             this.movingLeft = true;
         }
     }

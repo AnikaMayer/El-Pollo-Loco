@@ -7,10 +7,10 @@ export class Endboss extends MovableObject {
     y = 55;
     width = 250;
     height = 400;
-    speed = 1.6;
+    speed = 2;
     baseSpeed = this.speed;
     imgPath = ImageHub.BOSS;
-    audioPath = AudioHub.ENEMIES.EndbossApproach;
+    audioPath = AudioHub.ENEMIES;
     encounter = false;
     movingLeft = true;
     // showFrame = true;
@@ -30,7 +30,7 @@ export class Endboss extends MovableObject {
         this.loadImages(this.imgPath.dead);
         this.loadImages(this.imgPath.hurt);
         this.loadImages(this.imgPath.attack);
-        this.x = 3490;
+        this.x = 5000;
         IntervalHub.startInterval(this.moveEndboss, 1000 / 60);
         IntervalHub.startInterval(this.animate, 1000 / 5);
         IntervalHub.startInterval(this.endbossSound, 1000 / 60);
@@ -73,7 +73,14 @@ export class Endboss extends MovableObject {
     // Sounds gemanaged über toggle-methode in MovableObj -> dafür Path übergeben mit Bedingung
     endbossSound = () => {
         const audio = this.audioPath;
-        this.playSound(audio, this.state === "alert" && !this.isDead());
+        this.playSound(
+            audio.bossApproach,
+            this.state === "alert" && !this.isDead(),
+        );
+        if (this.isDead() && !this.soundPlayed) {
+            this.soundPlayed = true;
+            this.playSound(audio.bossDead, this.isDead());
+        }
     };
 
     // animation für endboss

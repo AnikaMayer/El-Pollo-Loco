@@ -33,7 +33,12 @@ export function initLevel() {
             new Bottle(2200),
             new Bottle(2450),
             new Bottle(2670),
+            new Bottle(2890),
             new Bottle(3000),
+            new Bottle(3400),
+            new Bottle(3700),
+            new Bottle(4200),
+            new Bottle(4500),
         ],
         [
             ...Coin.shortVerticalLinePattern(300, 250),
@@ -42,14 +47,17 @@ export function initLevel() {
             ...Coin.verticalLinePattern(1600, 250),
             ...Coin.diagonalPattern(1900, 250),
             ...Coin.horizontalLinePattern(2400, 250),
-            ...Coin.diagonalPattern(2900, 250),
+            ...Coin.shortHorizontalLinePattern(2900, 200),
+            ...Coin.shortVerticalLinePattern(3300, 250),
+            ...Coin.arcPattern(3700, 275),
+            ...Coin.diagonalPattern(4300, 250),
         ],
         backgroundObjects,
     );
 }
 
 function getBackground() {
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 9; i++) {
         const layerIndex = 1 - (i % 2);
         backgroundObjects.push(new BackgroundObject(ImageHub.BACKGROUND.air));
         backgroundObjects.push(
@@ -65,7 +73,7 @@ function getBackground() {
 }
 
 function getClouds() {
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 8; i++) {
         clouds.push(new Cloud());
     }
 }
