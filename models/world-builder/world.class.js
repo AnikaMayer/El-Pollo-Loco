@@ -1,13 +1,13 @@
-import { level1 } from "../levels/level1.js";
-import { Character } from "./character.class.js";
-import { IntervalHub } from "../scripts/intervall-hub.class.js";
-import { HealthBar } from "./statusbars/health-bar.class.js";
-import { BottleBar } from "./statusbars/bottle-bar.class.js";
-import { CoinBar } from "./statusbars/coin-bar.class.js";
-import { EndbossBar } from "./statusbars/endboss-bar.class.js";
-import { Endboss } from "./enemies/endboss.class.js";
+import { level1 } from "../../levels/level1.js";
+import { Character } from "../character.class.js";
+import { IntervalHub } from "../../scripts/intervall-hub.class.js";
+import { HealthBar } from "../statusbars/health-bar.class.js";
+import { BottleBar } from "../statusbars/bottle-bar.class.js";
+import { CoinBar } from "../statusbars/coin-bar.class.js";
+import { EndbossBar } from "../statusbars/endboss-bar.class.js";
+import { Endboss } from "../enemies/endboss.class.js";
 import { Endscreen } from "./endscreen.class.js";
-import { AudioHub } from "../scripts/audio-hub.class.js";
+import { AudioHub } from "../../scripts/audio-hub.class.js";
 import { CollisionManager } from "./collision-manager.js";
 import { ItemManager } from "./item-manager.class.js";
 

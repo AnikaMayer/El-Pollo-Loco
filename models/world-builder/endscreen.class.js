@@ -1,5 +1,5 @@
-import { ImageHub } from "../scripts/img-hub.class.js";
-import { DrawableObject } from "./drawable-object.class.js";
+import { ImageHub } from "../../scripts/img-hub.class.js";
+import { DrawableObject } from "../drawable-object.class.js";
 
 /**
  * Represents the end screen overlay displayed when the game is won or lost.

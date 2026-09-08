@@ -1,6 +1,6 @@
-import { AudioHub } from "../scripts/audio-hub.class.js";
-import { IntervalHub } from "../scripts/intervall-hub.class.js";
-import { ThrowableObject } from "./items/throwable-object.class.js";
+import { AudioHub } from "../../scripts/audio-hub.class.js";
+import { IntervalHub } from "../../scripts/intervall-hub.class.js";
+import { ThrowableObject } from "../items/throwable-object.class.js";
 
 /**
  * Manages item collection and bottle throwing logic.

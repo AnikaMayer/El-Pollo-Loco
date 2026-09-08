@@ -1,5 +1,5 @@
-import { AudioHub } from "../scripts/audio-hub.class.js";
-import { IntervalHub } from "../scripts/intervall-hub.class.js";
+import { AudioHub } from "../../scripts/audio-hub.class.js";
+import { IntervalHub } from "../../scripts/intervall-hub.class.js";
 
 /**
  * Manages all collision detection between game objects.
