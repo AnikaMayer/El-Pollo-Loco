@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/items/coins.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/items/coins.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { ImageHub } from "../../scripts/img-hub.class.js";
+import { IntervalHub } from "../../scripts/intervall-hub.class.js";
+import { MovableObject } from "../movable-object.class.js";
+
+/**
+ * Represents a coin collectible in the game world.
+ * Coins animate continuously and can be arranged in predefined patterns.
+ * @extends MovableObject
+ */
+export class Coin extends MovableObject {
+    /** @type {number} The x-position of the coin in pixels. */
+    x;
+    /** @type {number} The y-position of the coin in pixels. */
+    y;
+    /** @type {number} The width of the coin in pixels. */
+    width = 140;
+    /** @type {number} The height of the coin in pixels. */
+    height = 140;
+    /** @type {string[]} The image paths for the coin animation, loaded from the ImageHub. */
+    imgPath = ImageHub.COIN;
+    /**
+     * Hitbox offsets in pixels to fine-tune collision detection.
+     * @type {{ top: number, right: number, bottom: number, left: number }}
+     */
+    offset = {
+        top: 50,
+        right: 50,
+        bottom: 50,
+        left: 50,
+    };
+
+    /**
+     * Creates a new Coin at the given position and starts its animation interval.
+     * @param {number} _x - The x-position of the coin.
+     * @param {number} _y - The y-position of the coin.
+     */
+    constructor(_x, _y) {
+        super().loadImage(this.imgPath[0]);
+        this.loadImages(this.imgPath);
+        IntervalHub.startInterval(this.animateCoin, 1000 / 2.5);
+        this.x = _x;
+        this.y = _y;
+        this.getRealFrame();
+    }
+
+    /**
+     * Plays the coin's spinning animation on each interval tick.
+     * @type {Function}
+     */
+    animateCoin = () => {
+        this.playAnimation(this.imgPath, 0);
+    };
+
+    /**
+     * Creates an arc-shaped pattern of 5 coins.
+     * @param {number} baseX - The x-position of the leftmost coin.
+     * @param {number} baseY - The y-position of the leftmost coin.
+     * @returns {Coin[]} An array of 5 coins arranged in an arc.
+     */
+    static arcPattern(baseX, baseY) {
+        const coins = [];
+        const coin1 = new Coin(baseX, baseY);
+        const coin2 = new Coin(baseX + 60, baseY - 50);
+        const coin3 = new Coin(baseX + 130, baseY - 90);
+        const coin4 = new Coin(baseX + 200, baseY - 50);
+        const coin5 = new Coin(baseX + 260, baseY);
+        coins.push(coin1, coin2, coin3, coin4, coin5);
+        return coins;
+    }
+
+    /**
+     * Creates a horizontal line pattern of 5 coins spaced 50px apart.
+     * @param {number} baseX - The x-position of the leftmost coin.
+     * @param {number} y - The y-position of all coins.
+     * @returns {Coin[]} An array of 5 coins arranged in a horizontal line.
+     */
+    static horizontalLinePattern(baseX, y) {
+        const coins = [];
+        const coin1 = new Coin(baseX, y);
+        const coin2 = new Coin(baseX + 50, y);
+        const coin3 = new Coin(baseX + 100, y);
+        const coin4 = new Coin(baseX + 150, y);
+        const coin5 = new Coin(baseX + 200, y);
+        coins.push(coin1, coin2, coin3, coin4, coin5);
+        return coins;
+    }
+
+    /**
+     * Creates a short horizontal line pattern of 3 coins spaced 50px apart.
+     * @param {number} baseX - The x-position of the leftmost coin.
+     * @param {number} y - The y-position of all coins.
+     * @returns {Coin[]} An array of 3 coins arranged in a short horizontal line.
+     */
+    static shortHorizontalLinePattern(baseX, y) {
+        const coins = [];
+        const coin1 = new Coin(baseX, y);
+        const coin2 = new Coin(baseX + 50, y);
+        const coin3 = new Coin(baseX + 100, y);
+        coins.push(coin1, coin2, coin3);
+        return coins;
+    }
+
+    /**
+     * Creates a vertical line pattern of 3 coins spaced 50px apart.
+     * @param {number} x - The x-position of all coins.
+     * @param {number} baseY - The y-position of the bottommost coin.
+     * @returns {Coin[]} An array of 3 coins arranged in a vertical line.
+     */
+    static verticalLinePattern(x, baseY) {
+        const coins = [];
+        const coin1 = new Coin(x, baseY);
+        const coin2 = new Coin(x, baseY - 50);
+        const coin3 = new Coin(x, baseY - 100);
+        coins.push(coin1, coin2, coin3);
+        return coins;
+    }
+
+    /**
+     * Creates a short vertical line pattern of 2 coins spaced 50px apart.
+     * @param {number} x - The x-position of all coins.
+     * @param {number} baseY - The y-position of the bottommost coin.
+     * @returns {Coin[]} An array of 2 coins arranged in a short vertical line.
+     */
+    static shortVerticalLinePattern(x, baseY) {
+        const coins = [];
+        const coin1 = new Coin(x, baseY);
+        const coin2 = new Coin(x, baseY - 50);
+        coins.push(coin1, coin2);
+        return coins;
+    }
+
+    /**
+     * Creates a diagonal pattern of 5 coins going up to the right, spaced 50px apart.
+     * @param {number} baseX - The x-position of the bottommost coin.
+     * @param {number} baseY - The y-position of the bottommost coin.
+     * @returns {Coin[]} An array of 5 coins arranged diagonally.
+     */
+    static diagonalPattern(baseX, baseY) {
+        const coins = [];
+        const coin1 = new Coin(baseX, baseY);
+        const coin2 = new Coin(baseX + 50, baseY - 25);
+        const coin3 = new Coin(baseX + 100, baseY - 50);
+        const coin4 = new Coin(baseX + 150, baseY - 75);
+        const coin5 = new Coin(baseX + 200, baseY - 100);
+        coins.push(coin1, coin2, coin3, coin4, coin5);
+        return coins;
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AudioHub.html">AudioHub</a></li><li><a href="BabyChicken.html">BabyChicken</a></li><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Bottle.html">Bottle</a></li><li><a href="BottleBar.html">BottleBar</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="CoinBar.html">CoinBar</a></li><li><a href="CollisionManager.html">CollisionManager</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="EndbossBar.html">EndbossBar</a></li><li><a href="Endscreen.html">Endscreen</a></li><li><a href="HealthBar.html">HealthBar</a></li><li><a href="ImageHub.html">ImageHub</a></li><li><a href="IntervalHub.html">IntervalHub</a></li><li><a href="ItemManager.html">ItemManager</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="Sound.html">Sound</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="StatusCounter.html">StatusCounter</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#applyMuteState">applyMuteState</a></li><li><a href="global.html#backgroundObjects">backgroundObjects</a></li><li><a href="global.html#bubblingProtection">bubblingProtection</a></li><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#closeButtonCntrl">closeButtonCntrl</a></li><li><a href="global.html#closeButtonImpr">closeButtonImpr</a></li><li><a href="global.html#closeDialog">closeDialog</a></li><li><a href="global.html#clouds">clouds</a></li><li><a href="global.html#controlButton">controlButton</a></li><li><a href="global.html#controlPage">controlPage</a></li><li><a href="global.html#controlsDialog">controlsDialog</a></li><li><a href="global.html#dialogEvents">dialogEvents</a></li><li><a href="global.html#enemies">enemies</a></li><li><a href="global.html#exitFullscreen">exitFullscreen</a></li><li><a href="global.html#fullscreen">fullscreen</a></li><li><a href="global.html#fullscreenBtn">fullscreenBtn</a></li><li><a href="global.html#getBackground">getBackground</a></li><li><a href="global.html#getClouds">getClouds</a></li><li><a href="global.html#getEnemies">getEnemies</a></li><li><a href="global.html#getNormalEnemies">getNormalEnemies</a></li><li><a href="global.html#goHome">goHome</a></li><li><a href="global.html#homeAudio">homeAudio</a></li><li><a href="global.html#homeButton">homeButton</a></li><li><a href="global.html#hudPanel">hudPanel</a></li><li><a href="global.html#imprintButton">imprintButton</a></li><li><a href="global.html#imprintDialog">imprintDialog</a></li><li><a href="global.html#imprintPage">imprintPage</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initLevel">initLevel</a></li><li><a href="global.html#interfaceEvents">interfaceEvents</a></li><li><a href="global.html#isMuted">isMuted</a></li><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#manageClickEvents">manageClickEvents</a></li><li><a href="global.html#manageDialog">manageDialog</a></li><li><a href="global.html#manageInterface">manageInterface</a></li><li><a href="global.html#manageStart">manageStart</a></li><li><a href="global.html#muteAudio">muteAudio</a></li><li><a href="global.html#muteButton">muteButton</a></li><li><a href="global.html#navEvents">navEvents</a></li><li><a href="global.html#normScreenBtn">normScreenBtn</a></li><li><a href="global.html#openControlsDialog">openControlsDialog</a></li><li><a href="global.html#openImprintDialog">openImprintDialog</a></li><li><a href="global.html#renderWorld">renderWorld</a></li><li><a href="global.html#restartBtn">restartBtn</a></li><li><a href="global.html#showFullscreen">showFullscreen</a></li><li><a href="global.html#startButton">startButton</a></li><li><a href="global.html#startMusic">startMusic</a></li><li><a href="global.html#startScreen">startScreen</a></li><li><a href="global.html#toggleFullscreen">toggleFullscreen</a></li><li><a href="global.html#toggleHideHome">toggleHideHome</a></li><li><a href="global.html#toggleHideWorld">toggleHideWorld</a></li><li><a href="global.html#toggleRestartBtn">toggleRestartBtn</a></li><li><a href="global.html#unmuteAudio">unmuteAudio</a></li><li><a href="global.html#unmuteButton">unmuteButton</a></li><li><a href="global.html#world">world</a></li><li><a href="global.html#worldAudio">worldAudio</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Tue Sep 08 2026 16:15:13 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
