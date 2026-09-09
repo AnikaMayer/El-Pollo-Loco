@@ -26,7 +26,8 @@ const fullscreenBtn = document.getElementById("fullscrn-btn");
 const normScreenBtn = document.getElementById("normscrn-btn");
 /** @type {HTMLButtonElement} Button to restart the game. */
 const restartBtn = document.getElementById("restart-btn");
-
+/** @type {HTMLButtonElement} Button to return to menu. */
+const menuBtn = document.getElementById("menu-btn");
 /** @type {HTMLElement} The start screen container. */
 const startScreen = document.getElementById("startScreen");
 /** @type {HTMLElement} The controls page inside the dialog. */
@@ -37,7 +38,6 @@ const imprintPage = document.getElementById("imprint-page");
 const hudPanel = document.getElementById("hud");
 /** @type {HTMLElement} The fullscreen container element. */
 const fullscreen = document.getElementById("fullscreen");
-
 /** @type {HTMLDialogElement} The imprint modal dialog. */
 const imprintDialog = document.getElementById("imprint_dialog");
 /** @type {HTMLDialogElement} The controls modal dialog. */
@@ -76,6 +76,7 @@ function manageClickEvents() {
 /** Registers click events for interface control buttons. */
 function interfaceEvents() {
     homeButton.addEventListener("click", manageInterface);
+    menuBtn.addEventListener("click", manageInterface);
     muteButton.addEventListener("click", manageInterface);
     unmuteButton.addEventListener("click", manageInterface);
     fullscreenBtn.addEventListener("click", manageInterface);
@@ -198,7 +199,7 @@ function renderWorld() {
     }
     initLevel();
     world = new World(canvas, keyboard);
-    world.onEndScreen = toggleRestartBtn;
+    world.onEndScreen = toggleRestart;
     toggleRestart();
     toggleHideWorld();
     worldAudio();
@@ -226,6 +227,7 @@ function toggleHideWorld() {
 /** Toggles the restart button, hides touch- and home-buttons based on whether the game has ended. */
 function toggleRestart() {
     restartBtn.classList.toggle("hide-btn", world.gameEnd === false);
+    menuBtn.classList.toggle("hide-btn", world.gameEnd === false);
     hudPanel.classList.add("hide-cntrl");
     homeButton.classList.add("hide-btn");
 }
@@ -240,7 +242,7 @@ function toggleRestart() {
  */
 function manageInterface(event) {
     const clickedBtn = event.currentTarget.id;
-    if (clickedBtn === "home-btn") {
+    if (clickedBtn === "home-btn" || "menu-btn") {
         goHome();
     } else if (clickedBtn === "mute-btn") {
         muteAudio();
@@ -273,6 +275,7 @@ function homeAudio() {
 function toggleHideHome() {
     startScreen.classList.remove("hide-page");
     homeButton.classList.add("hide-btn");
+    menuBtn.classList.add("hide-btn");
     restartBtn.classList.add("hide-btn");
     controlButton.classList.remove("hide-btn");
     imprintButton.classList.remove("hide-btn");
