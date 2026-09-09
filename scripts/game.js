@@ -55,11 +55,13 @@ let isMuted = localStorage.getItem("mutedKey") === "true";
 /**
  * Initializes the game on page load.
  * Sets up all click events, applies the stored mute state and starts the main menu music.
+ * Checks, if fullscreen-button should be hidden for browsers without Fullscreen API support.
  */
 function init() {
     manageClickEvents();
     applyMuteState();
     startMusic();
+    checkFullscreen();
 }
 
 //#region manageClick
@@ -113,6 +115,18 @@ function startMusic() {
         },
         { once: true },
     );
+}
+
+/** Hides the fullscreen button on browsers without Fullscreen API support (e.g. iPhone Safari). */
+function checkFullscreen() {
+    const fullscreenSupported =
+        document.documentElement.requestFullscreen ||
+        document.documentElement.webkitRequestFullscreen ||
+        document.documentElement.msRequestFullscreen;
+
+    if (!fullscreenSupported) {
+        fullscreenBtn.classList.add("hide-btn");
+    }
 }
 
 //#region keyboard
