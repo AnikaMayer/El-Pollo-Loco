@@ -120,7 +120,7 @@ export class AudioHub {
             sound.isLoaded = true;
             sound.isPlaying = true;
             sound.file.currentTime = 0;
-            sound.file.play();
+            sound.file.play().catch((e) => {});
             sound.file.onended = () => {
                 sound.isPlaying = false;
             };
