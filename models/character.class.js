@@ -48,7 +48,6 @@ export class Character extends MovableObject {
         this.loadImages(this.imgPath.hurt);
         this.loadImages(this.imgPath.idle);
         this.loadImages(this.imgPath.longIdle);
-        this.applyGravity();
         IntervalHub.startInterval(this.applyGravity, 1000 / 25);
         IntervalHub.startInterval(this.moveCharacter, 1000 / 60);
         IntervalHub.startInterval(this.animateCharacter, 1000 / 20);

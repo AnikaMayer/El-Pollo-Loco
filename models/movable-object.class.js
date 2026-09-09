@@ -54,6 +54,7 @@ export class MovableObject extends DrawableObject {
     /**
      * Applies gravity each frame by reducing vertical speed and moving the object downward.
      * Stops if the object is dead and not set to keep falling.
+     * Object lands at the same height as at the start.
      * @type {Function}
      */
     applyGravity = () => {
@@ -63,6 +64,10 @@ export class MovableObject extends DrawableObject {
         if (this.isAboveGround() || this.speedY > 0) {
             this.y -= this.speedY;
             this.speedY -= this.acceleration;
+            if (this.y >= 180 && !this.keepFalling) {
+                this.y = 180;
+                this.speedY = 0;
+            }
         }
     };
 
