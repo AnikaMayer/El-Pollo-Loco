@@ -54,7 +54,8 @@ const fullscreenBtn = document.getElementById("fullscrn-btn");
 const normScreenBtn = document.getElementById("normscrn-btn");
 /** @type {HTMLButtonElement} Button to restart the game. */
 const restartBtn = document.getElementById("restart-btn");
-
+/** @type {HTMLButtonElement} Button to return to menu. */
+const menuBtn = document.getElementById("menu-btn");
 /** @type {HTMLElement} The start screen container. */
 const startScreen = document.getElementById("startScreen");
 /** @type {HTMLElement} The controls page inside the dialog. */
@@ -65,12 +66,10 @@ const imprintPage = document.getElementById("imprint-page");
 const hudPanel = document.getElementById("hud");
 /** @type {HTMLElement} The fullscreen container element. */
 const fullscreen = document.getElementById("fullscreen");
-
 /** @type {HTMLDialogElement} The imprint modal dialog. */
 const imprintDialog = document.getElementById("imprint_dialog");
 /** @type {HTMLDialogElement} The controls modal dialog. */
 const controlsDialog = document.getElementById("controls_dialog");
-
 /** @type {HTMLCanvasElement} The game canvas element. */
 let canvas;
 /** @type {World} The current game world instance. */
@@ -82,8 +81,8 @@ let isMuted = localStorage.getItem("mutedKey") === "true";
 
 /**
  * Initializes the game on page load.
- * Sets up all click events, applies the stored mute state and starts the main menu music.
- * Checks, if fullscreen-button should be hidden for browsers without Fullscreen API support.
+ * Sets up click events, mute state and menu music on load.
+ * Hides the fullscreen button if unsupported.
  */
 function init() {
     manageClickEvents();
@@ -104,6 +103,7 @@ function manageClickEvents() {
 /** Registers click events for interface control buttons. */
 function interfaceEvents() {
     homeButton.addEventListener("click", manageInterface);
+    menuBtn.addEventListener("click", manageInterface);
     muteButton.addEventListener("click", manageInterface);
     unmuteButton.addEventListener("click", manageInterface);
     fullscreenBtn.addEventListener("click", manageInterface);
@@ -226,8 +226,8 @@ function renderWorld() {
     }
     initLevel();
     world = new World(canvas, keyboard);
-    world.onEndScreen = toggleRestartBtn;
-    toggleRestartBtn();
+    world.onEndScreen = toggleRestart;
+    toggleRestart();
     toggleHideWorld();
     worldAudio();
 }
@@ -251,9 +251,12 @@ function toggleHideWorld() {
     hudPanel.classList.remove("hide-cntrl");
 }
 
-/** Toggles the restart button based on whether the game has ended. */
-function toggleRestartBtn() {
+/** Toggles restart/menu buttons based on whether the game ended. */
+function toggleRestart() {
     restartBtn.classList.toggle("hide-btn", world.gameEnd === false);
+    menuBtn.classList.toggle("hide-btn", world.gameEnd === false);
+    hudPanel.classList.add("hide-cntrl");
+    homeButton.classList.add("hide-btn");
 }
 
 //#endregion
@@ -266,7 +269,7 @@ function toggleRestartBtn() {
  */
 function manageInterface(event) {
     const clickedBtn = event.currentTarget.id;
-    if (clickedBtn === "home-btn") {
+    if (clickedBtn === "home-btn" || clickedBtn === "menu-btn") {
         goHome();
     } else if (clickedBtn === "mute-btn") {
         muteAudio();
@@ -299,6 +302,7 @@ function homeAudio() {
 function toggleHideHome() {
     startScreen.classList.remove("hide-page");
     homeButton.classList.add("hide-btn");
+    menuBtn.classList.add("hide-btn");
     restartBtn.classList.add("hide-btn");
     controlButton.classList.remove("hide-btn");
     imprintButton.classList.remove("hide-btn");
@@ -411,9 +415,8 @@ function closeDialog() {
 }
 
 /**
- * Stops a click event from bubbling up to the dialog backdrop,
- * preventing the dialog from closing when clicking inside the content area.
- * @param {MouseEvent} event - The click event to stop.
+ * Stops a click from bubbling to the dialog backdrop.
+ * @param {MouseEvent} event - Click event to stop.
  */
 function bubblingProtection(event) {
     event.stopPropagation();
@@ -432,13 +435,13 @@ init();
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AudioHub.html">AudioHub</a></li><li><a href="BabyChicken.html">BabyChicken</a></li><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Bottle.html">Bottle</a></li><li><a href="BottleBar.html">BottleBar</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="CoinBar.html">CoinBar</a></li><li><a href="CollisionManager.html">CollisionManager</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="EndbossBar.html">EndbossBar</a></li><li><a href="Endscreen.html">Endscreen</a></li><li><a href="HealthBar.html">HealthBar</a></li><li><a href="ImageHub.html">ImageHub</a></li><li><a href="IntervalHub.html">IntervalHub</a></li><li><a href="ItemManager.html">ItemManager</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="Sound.html">Sound</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="StatusCounter.html">StatusCounter</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#applyMuteState">applyMuteState</a></li><li><a href="global.html#backgroundObjects">backgroundObjects</a></li><li><a href="global.html#bubblingProtection">bubblingProtection</a></li><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#checkFullscreen">checkFullscreen</a></li><li><a href="global.html#closeButtonCntrl">closeButtonCntrl</a></li><li><a href="global.html#closeButtonImpr">closeButtonImpr</a></li><li><a href="global.html#closeDialog">closeDialog</a></li><li><a href="global.html#clouds">clouds</a></li><li><a href="global.html#controlButton">controlButton</a></li><li><a href="global.html#controlPage">controlPage</a></li><li><a href="global.html#controlsDialog">controlsDialog</a></li><li><a href="global.html#dialogEvents">dialogEvents</a></li><li><a href="global.html#enemies">enemies</a></li><li><a href="global.html#exitFullscreen">exitFullscreen</a></li><li><a href="global.html#fullscreen">fullscreen</a></li><li><a href="global.html#fullscreenBtn">fullscreenBtn</a></li><li><a href="global.html#getBackground">getBackground</a></li><li><a href="global.html#getClouds">getClouds</a></li><li><a href="global.html#getEnemies">getEnemies</a></li><li><a href="global.html#getNormalEnemies">getNormalEnemies</a></li><li><a href="global.html#goHome">goHome</a></li><li><a href="global.html#homeAudio">homeAudio</a></li><li><a href="global.html#homeButton">homeButton</a></li><li><a href="global.html#hudPanel">hudPanel</a></li><li><a href="global.html#imprintButton">imprintButton</a></li><li><a href="global.html#imprintDialog">imprintDialog</a></li><li><a href="global.html#imprintPage">imprintPage</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initLevel">initLevel</a></li><li><a href="global.html#interfaceEvents">interfaceEvents</a></li><li><a href="global.html#isMuted">isMuted</a></li><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#manageClickEvents">manageClickEvents</a></li><li><a href="global.html#manageDialog">manageDialog</a></li><li><a href="global.html#manageInterface">manageInterface</a></li><li><a href="global.html#manageStart">manageStart</a></li><li><a href="global.html#muteAudio">muteAudio</a></li><li><a href="global.html#muteButton">muteButton</a></li><li><a href="global.html#navEvents">navEvents</a></li><li><a href="global.html#normScreenBtn">normScreenBtn</a></li><li><a href="global.html#openControlsDialog">openControlsDialog</a></li><li><a href="global.html#openImprintDialog">openImprintDialog</a></li><li><a href="global.html#renderWorld">renderWorld</a></li><li><a href="global.html#restartBtn">restartBtn</a></li><li><a href="global.html#showFullscreen">showFullscreen</a></li><li><a href="global.html#startButton">startButton</a></li><li><a href="global.html#startMusic">startMusic</a></li><li><a href="global.html#startScreen">startScreen</a></li><li><a href="global.html#toggleFullscreen">toggleFullscreen</a></li><li><a href="global.html#toggleHideHome">toggleHideHome</a></li><li><a href="global.html#toggleHideWorld">toggleHideWorld</a></li><li><a href="global.html#toggleRestartBtn">toggleRestartBtn</a></li><li><a href="global.html#unmuteAudio">unmuteAudio</a></li><li><a href="global.html#unmuteButton">unmuteButton</a></li><li><a href="global.html#world">world</a></li><li><a href="global.html#worldAudio">worldAudio</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AudioHub.html">AudioHub</a></li><li><a href="BabyChicken.html">BabyChicken</a></li><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Bottle.html">Bottle</a></li><li><a href="BottleBar.html">BottleBar</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="CoinBar.html">CoinBar</a></li><li><a href="CollisionManager.html">CollisionManager</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="EndbossBar.html">EndbossBar</a></li><li><a href="Endscreen.html">Endscreen</a></li><li><a href="HealthBar.html">HealthBar</a></li><li><a href="ImageHub.html">ImageHub</a></li><li><a href="IntervalHub.html">IntervalHub</a></li><li><a href="ItemManager.html">ItemManager</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="Sound.html">Sound</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="StatusCounter.html">StatusCounter</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#applyMuteState">applyMuteState</a></li><li><a href="global.html#backgroundObjects">backgroundObjects</a></li><li><a href="global.html#bubblingProtection">bubblingProtection</a></li><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#checkFullscreen">checkFullscreen</a></li><li><a href="global.html#closeButtonCntrl">closeButtonCntrl</a></li><li><a href="global.html#closeButtonImpr">closeButtonImpr</a></li><li><a href="global.html#closeDialog">closeDialog</a></li><li><a href="global.html#clouds">clouds</a></li><li><a href="global.html#controlButton">controlButton</a></li><li><a href="global.html#controlPage">controlPage</a></li><li><a href="global.html#controlsDialog">controlsDialog</a></li><li><a href="global.html#dialogEvents">dialogEvents</a></li><li><a href="global.html#enemies">enemies</a></li><li><a href="global.html#exitFullscreen">exitFullscreen</a></li><li><a href="global.html#fullscreen">fullscreen</a></li><li><a href="global.html#fullscreenBtn">fullscreenBtn</a></li><li><a href="global.html#getBackground">getBackground</a></li><li><a href="global.html#getClouds">getClouds</a></li><li><a href="global.html#getEnemies">getEnemies</a></li><li><a href="global.html#getNormalEnemies">getNormalEnemies</a></li><li><a href="global.html#goHome">goHome</a></li><li><a href="global.html#homeAudio">homeAudio</a></li><li><a href="global.html#homeButton">homeButton</a></li><li><a href="global.html#hudPanel">hudPanel</a></li><li><a href="global.html#imprintButton">imprintButton</a></li><li><a href="global.html#imprintDialog">imprintDialog</a></li><li><a href="global.html#imprintPage">imprintPage</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initLevel">initLevel</a></li><li><a href="global.html#interfaceEvents">interfaceEvents</a></li><li><a href="global.html#isMuted">isMuted</a></li><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#manageClickEvents">manageClickEvents</a></li><li><a href="global.html#manageDialog">manageDialog</a></li><li><a href="global.html#manageInterface">manageInterface</a></li><li><a href="global.html#manageStart">manageStart</a></li><li><a href="global.html#menuBtn">menuBtn</a></li><li><a href="global.html#muteAudio">muteAudio</a></li><li><a href="global.html#muteButton">muteButton</a></li><li><a href="global.html#navEvents">navEvents</a></li><li><a href="global.html#normScreenBtn">normScreenBtn</a></li><li><a href="global.html#openControlsDialog">openControlsDialog</a></li><li><a href="global.html#openImprintDialog">openImprintDialog</a></li><li><a href="global.html#renderWorld">renderWorld</a></li><li><a href="global.html#restartBtn">restartBtn</a></li><li><a href="global.html#showFullscreen">showFullscreen</a></li><li><a href="global.html#startButton">startButton</a></li><li><a href="global.html#startMusic">startMusic</a></li><li><a href="global.html#startScreen">startScreen</a></li><li><a href="global.html#toggleFullscreen">toggleFullscreen</a></li><li><a href="global.html#toggleHideHome">toggleHideHome</a></li><li><a href="global.html#toggleHideWorld">toggleHideWorld</a></li><li><a href="global.html#toggleRestart">toggleRestart</a></li><li><a href="global.html#unmuteAudio">unmuteAudio</a></li><li><a href="global.html#unmuteButton">unmuteButton</a></li><li><a href="global.html#world">world</a></li><li><a href="global.html#worldAudio">worldAudio</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Sep 09 2026 11:26:28 GMT+0200 (Mitteleuropäische Sommerzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Sep 09 2026 15:23:36 GMT+0200 (Mitteleuropäische Sommerzeit)
 </footer>
 
 <script> prettyPrint(); </script>
