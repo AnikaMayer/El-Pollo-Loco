@@ -36,6 +36,25 @@
     .game-wrapper .hide-cntrl {
         display: none;
     }
+
+    .controls,
+    .imprint {
+        .ctrls-table {
+            table {
+                tr {
+                    td {
+                        .hideTouch {
+                            display: none;
+                        }
+
+                        .showTouch {
+                            display: inline-flex;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 900px) {

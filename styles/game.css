@@ -275,6 +275,19 @@
                         border-radius: 5px;
                         border: 2px solid grey;
                     }
+
+                    kbd.showTouch {
+                        width: 60px;
+                        height: 60px;
+                        background-color: rgba(255, 255, 255, 0.233);
+                        border: 1px solid rgba(228, 228, 228, 0.925);
+                        border-radius: 50%;
+                        color: white;
+                    }
+
+                    .showTouch {
+                        display: none;
+                    }
                 }
             }
         }
