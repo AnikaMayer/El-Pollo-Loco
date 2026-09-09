@@ -114,7 +114,8 @@ export class AudioHub {
         if (sound.isPlaying && !sound.playOnce) {
             return;
         }
-        sound.file.volume = sound.muted ? 0 : 0.2;
+        sound.file.volume = 0.2;
+        sound.file.muted = sound.muted;
         if (sound.file.readyState > 0 || sound.isLoaded) {
             sound.isLoaded = true;
             sound.isPlaying = true;
@@ -133,7 +134,7 @@ export class AudioHub {
         AudioHub.allSounds.forEach((array) => {
             Object.values(array).forEach((sound) => {
                 sound.muted = true;
-                sound.file.volume = 0;
+                sound.file.muted = true;
             });
         });
     }
@@ -145,7 +146,7 @@ export class AudioHub {
         AudioHub.allSounds.forEach((array) => {
             Object.values(array).forEach((sound) => {
                 sound.muted = false;
-                sound.file.volume = 0.2;
+                sound.file.muted = false;
             });
         });
     }
