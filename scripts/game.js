@@ -199,7 +199,7 @@ function renderWorld() {
     initLevel();
     world = new World(canvas, keyboard);
     world.onEndScreen = toggleRestartBtn;
-    toggleRestartBtn();
+    toggleRestart();
     toggleHideWorld();
     worldAudio();
 }
@@ -223,9 +223,11 @@ function toggleHideWorld() {
     hudPanel.classList.remove("hide-cntrl");
 }
 
-/** Toggles the restart button based on whether the game has ended. */
-function toggleRestartBtn() {
+/** Toggles the restart button, hides touch- and home-buttons based on whether the game has ended. */
+function toggleRestart() {
     restartBtn.classList.toggle("hide-btn", world.gameEnd === false);
+    hudPanel.classList.add("hide-cntrl");
+    homeButton.classList.add("hide-btn");
 }
 
 //#endregion
