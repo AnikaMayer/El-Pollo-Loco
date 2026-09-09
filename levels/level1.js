@@ -75,7 +75,7 @@ export function initLevel() {
  * @returns {void}
  */
 function getBackground() {
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 10; i++) {
         const layerIndex = 1 - (i % 2);
         backgroundObjects.push(new BackgroundObject(ImageHub.BACKGROUND.air));
         backgroundObjects.push(

@@ -87,7 +87,7 @@ export class Endboss extends MovableObject {
      * Updates the movement direction so the endboss always faces and moves toward the character.
      */
     moveToCharacter() {
-        if (this.x >= this.world.character.x) {
+        if (this.x > this.world.character.x) {
             this.movingLeft = true;
         } else if (this.x < this.world.character.x) {
             this.movingLeft = false;
