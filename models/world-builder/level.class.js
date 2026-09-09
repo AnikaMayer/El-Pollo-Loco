@@ -13,7 +13,7 @@ export class Level {
     /** @type {BackgroundObject[]} The background objects in this level. */
     backgroundObjects;
     /** @type {number} The x-position at which the level ends. */
-    level_end_x = 4800;
+    level_end_x = 5000;
 
     /**
      * Creates a new Level with the given game objects.
