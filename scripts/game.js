@@ -42,7 +42,6 @@ const fullscreen = document.getElementById("fullscreen");
 const imprintDialog = document.getElementById("imprint_dialog");
 /** @type {HTMLDialogElement} The controls modal dialog. */
 const controlsDialog = document.getElementById("controls_dialog");
-
 /** @type {HTMLCanvasElement} The game canvas element. */
 let canvas;
 /** @type {World} The current game world instance. */
@@ -54,8 +53,8 @@ let isMuted = localStorage.getItem("mutedKey") === "true";
 
 /**
  * Initializes the game on page load.
- * Sets up all click events, applies the stored mute state and starts the main menu music.
- * Checks, if fullscreen-button should be hidden for browsers without Fullscreen API support.
+ * Sets up click events, mute state and menu music on load.
+ * Hides the fullscreen button if unsupported.
  */
 function init() {
     manageClickEvents();
@@ -224,7 +223,7 @@ function toggleHideWorld() {
     hudPanel.classList.remove("hide-cntrl");
 }
 
-/** Toggles the restart button, hides touch- and home-buttons based on whether the game has ended. */
+/** Toggles restart/menu buttons based on whether the game ended. */
 function toggleRestart() {
     restartBtn.classList.toggle("hide-btn", world.gameEnd === false);
     menuBtn.classList.toggle("hide-btn", world.gameEnd === false);
@@ -242,7 +241,7 @@ function toggleRestart() {
  */
 function manageInterface(event) {
     const clickedBtn = event.currentTarget.id;
-    if (clickedBtn === "home-btn" || "menu-btn") {
+    if (clickedBtn === "home-btn" || clickedBtn === "menu-btn") {
         goHome();
     } else if (clickedBtn === "mute-btn") {
         muteAudio();
@@ -388,9 +387,8 @@ function closeDialog() {
 }
 
 /**
- * Stops a click event from bubbling up to the dialog backdrop,
- * preventing the dialog from closing when clicking inside the content area.
- * @param {MouseEvent} event - The click event to stop.
+ * Stops a click from bubbling to the dialog backdrop.
+ * @param {MouseEvent} event - Click event to stop.
  */
 function bubblingProtection(event) {
     event.stopPropagation();

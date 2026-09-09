@@ -25,6 +25,8 @@ export class Character extends MovableObject {
     deathJump = true;
     /** @type {number} Timestamp of the last movement or action, used to track idle time. */
     idleStart = new Date().getTime();
+    /** @type {boolean} Whether the character just landed on an enemy, used to briefly suppress regular collision damage. */
+    justBounced = false;
     /**
      * Hitbox offsets in pixels to fine-tune collision detection.
      * @type {{ top: number, right: number, bottom: number, left: number }}

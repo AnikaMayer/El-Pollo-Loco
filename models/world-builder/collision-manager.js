@@ -35,7 +35,9 @@ export class CollisionManager {
 
     /**
      * Deals 10 damage to the character when colliding with a living enemy,
-     * provided the character is not currently in a hurt state.
+     * provided the character is not currently in a hurt state and did not
+     * just land on top of an enemy (to avoid a race condition with the
+     * jump-collision check).
      * Updates the health bar accordingly.
      * @param {MovableObject} enemy - The enemy to check collision against.
      */
@@ -43,7 +45,8 @@ export class CollisionManager {
         if (
             this.world.character.isColliding(enemy) &&
             !enemy.isDead() &&
-            !this.world.character.isHurt()
+            !this.world.character.isHurt() &&
+            !this.world.character.justJumpedOn
         ) {
             this.world.character.hit(10);
             this.world.healthBar.setPercentage(
@@ -87,6 +90,8 @@ export class CollisionManager {
     /**
      * Checks whether the character is jumping onto an enemy from above.
      * Triggers a bounce and deals damage on landing. The endboss is excluded.
+     * Sets a short-lived flag on the character to prevent the lower-frequency
+     * enemy collision check from also dealing damage in the same window.
      */
     checkJumpCollision = () => {
         this.world.level.enemies.forEach((enemy) => {
@@ -97,6 +102,10 @@ export class CollisionManager {
                 this.world.character.jumpOnMovObj(enemy);
                 AudioHub.playOne(AudioHub.CHARACTER.bounce);
                 this.checkEnemyType(enemy);
+                this.world.character.justJumpedOn = true;
+                setTimeout(() => {
+                    this.world.character.justJumpedOn = false;
+                }, 200);
             }
         });
     };
