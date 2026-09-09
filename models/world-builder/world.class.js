@@ -261,10 +261,10 @@ export class World {
      * @param {'win' | 'lose'} state - The outcome state to display.
      */
     endGame(state) {
+        this.gameEnd = true;
         if (this.onEndScreen) {
             this.onEndScreen();
         }
-        this.gameEnd = true;
         this.endscreen.setState(state);
     }
 
