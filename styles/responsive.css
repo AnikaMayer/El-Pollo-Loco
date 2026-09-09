@@ -75,8 +75,8 @@
                     gap: clamp(5px, calc(-7.727px + 3.977vw), 40px);
 
                     button {
-                        width: 15vh;
-                        height: 15vh;
+                        width: 10vh;
+                        height: 10vh;
 
                         svg {
                             width: 5vh;
