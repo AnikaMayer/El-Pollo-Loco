@@ -38,6 +38,29 @@
     }
 }
 
+@media screen and (max-width: 900px) {
+    .controls,
+    .imprint {
+        padding: 20px;
+        padding-top: 15px;
+
+        .page-header {
+            height: 40px;
+            margin-bottom: 10px;
+            padding: 5px;
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .close-btn {
+                width: 35px;
+                height: 35px;
+            }
+        }
+    }
+}
+
 @media only screen and (max-width: 900px) and (orientation: portrait) {
     .rotate-hint {
         display: flex;
