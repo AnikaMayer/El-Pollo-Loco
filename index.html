@@ -24,14 +24,14 @@
         <div class="rotate-hint">
             <img
                 src="./assets/img/1_startscreen/rotate_phone.gif"
-                alt="rotate-phone-hint"
+                alt="Please rotate your device to landscape mode"
             />
         </div>
         <div id="fullscreen" class="game-container">
             <div class="game-wrapper">
                 <div id="hud" class="hud-wrapper hide-cntrl">
                     <div class="panel">
-                        <button id="btnLeft">
+                        <button id="btnLeft" aria-label="Move left">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -39,13 +39,14 @@
                                 fill="currentColor"
                                 class="bi bi-caret-left-fill"
                                 viewBox="0 0 16 16"
+                                aria-hidden="true"
                             >
                                 <path
                                     d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"
                                 />
                             </svg>
                         </button>
-                        <button id="btnRight">
+                        <button id="btnRight" aria-label="Move right">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -53,6 +54,7 @@
                                 fill="currentColor"
                                 class="bi bi-caret-right-fill"
                                 viewBox="0 0 16 16"
+                                aria-hidden="true"
                             >
                                 <path
                                     d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"
@@ -61,7 +63,7 @@
                         </button>
                     </div>
                     <div class="panel">
-                        <button id="btnJump">
+                        <button id="btnJump" aria-label="Jump">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -69,13 +71,14 @@
                                 fill="currentColor"
                                 class="bi bi-caret-up-fill"
                                 viewBox="0 0 16 16"
+                                aria-hidden="true"
                             >
                                 <path
                                     d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"
                                 />
                             </svg>
                         </button>
-                        <button id="btnThrow">
+                        <button id="btnThrow" aria-label="Throw bottle">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -83,6 +86,7 @@
                                 fill="currentColor"
                                 class="bi bi-reply-fill svgThrow"
                                 viewBox="0 0 16 16"
+                                aria-hidden="true"
                             >
                                 <path
                                     d="M5.921 11.9 1.353 8.62a.72.72 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"
@@ -93,7 +97,7 @@
                 </div>
                 <div class="menu-wrapper">
                     <div class="panelLeft">
-                        <button id="imprint-btn">
+                        <button id="imprint-btn" aria-label="Open imprint">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -101,6 +105,7 @@
                                 fill="currentColor"
                                 class="bi bi-info-square"
                                 viewBox="0 0 16 16"
+                                aria-hidden="true"
                             >
                                 <path
                                     d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"
@@ -110,7 +115,7 @@
                                 />
                             </svg>
                         </button>
-                        <button id="control-btn">
+                        <button id="control-btn" aria-label="Open controls">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -118,6 +123,7 @@
                                 fill="currentColor"
                                 class="bi bi-controller"
                                 viewBox="0 0 16 16"
+                                aria-hidden="true"
                             >
                                 <path
                                     d="M11.5 6.027a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m2.5-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m-6.5-3h1v1h1v1h-1v1h-1v-1h-1v-1h1z"
@@ -127,7 +133,11 @@
                                 />
                             </svg>
                         </button>
-                        <button id="home-btn" class="hide-btn">
+                        <button
+                            id="home-btn"
+                            class="hide-btn"
+                            aria-label="Back to home"
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -136,6 +146,7 @@
                                 stroke="currentColor"
                                 class="bi bi-house"
                                 viewBox="0 0 16 16"
+                                aria-hidden="true"
                             >
                                 <path
                                     d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"
@@ -144,7 +155,7 @@
                         </button>
                     </div>
                     <div class="panelRight">
-                        <button id="mute-btn">
+                        <button id="mute-btn" aria-label="Mute audio">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -154,6 +165,7 @@
                                 stroke-width=".5"
                                 class="bi bi-volume-up"
                                 viewBox="0 0 16 16"
+                                aria-hidden="true"
                             >
                                 <path
                                     d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303z"
@@ -166,7 +178,11 @@
                                 />
                             </svg>
                         </button>
-                        <button id="unmute-btn" class="hide-btn">
+                        <button
+                            id="unmute-btn"
+                            class="hide-btn"
+                            aria-label="Unmute audio"
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -176,13 +192,14 @@
                                 stroke-width=".5"
                                 class="bi bi-volume-mute"
                                 viewBox="0 0 16 16"
+                                aria-hidden="true"
                             >
                                 <path
                                     d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06M6 5.04 4.312 6.39A.5.5 0 0 1 4 6.5H2v3h2a.5.5 0 0 1 .312.11L6 10.96zm7.854.606a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0 0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5 7.293l1.646-1.647a.5.5 0 0 1 .708 0"
                                 />
                             </svg>
                         </button>
-                        <button id="fullscrn-btn">
+                        <button id="fullscrn-btn" aria-label="Enter fullscreen">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -191,13 +208,18 @@
                                 stroke="currentColor"
                                 class="bi bi-fullscreen"
                                 viewBox="0 0 16 16"
+                                aria-hidden="true"
                             >
                                 <path
                                     d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5M.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5"
                                 />
                             </svg>
                         </button>
-                        <button id="normscrn-btn" class="hide-btn">
+                        <button
+                            id="normscrn-btn"
+                            class="hide-btn"
+                            aria-label="Exit fullscreen"
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -206,6 +228,7 @@
                                 stroke="currentColor"
                                 class="bi bi-fullscreen-exit"
                                 viewBox="0 0 16 16"
+                                aria-hidden="true"
                             >
                                 <path
                                     d="M5.5 0a.5.5 0 0 1 .5.5v4A1.5 1.5 0 0 1 4.5 6h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5m5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 4.5v-4a.5.5 0 0 1 .5-.5M0 10.5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 6 11.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5m10 1a1.5 1.5 0 0 1 1.5-1.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0z"
@@ -215,27 +238,39 @@
                     </div>
                 </div>
                 <div class="restart-wrapper">
-                    <button id="restart-btn" class="restart_btn hide-btn">
+                    <button
+                        id="restart-btn"
+                        class="restart_btn hide-btn"
+                        aria-label="Restart game"
+                    >
                         Restart
                     </button>
                 </div>
-                <canvas id="canvas" width="720" height="480"></canvas>
+                <canvas id="canvas" width="720" height="480"
+                    >Your browser does not support the canvas element.</canvas
+                >
             </div>
             <div id="startScreen" class="start-wrapper">
                 <img
                     class="startscreen"
                     src="./assets/img/9_intro_outro_screens/start/startscreen_1.png"
-                    alt="startscreen"
+                    alt="startscreen-image"
                 />
                 <div class="nav-wrapper">
-                    <button id="start-btn">Start</button>
+                    <button id="start-btn" aria-label="Start game">
+                        Start
+                    </button>
                 </div>
             </div>
-            <dialog id="controls_dialog">
+            <dialog id="controls_dialog" aria-labelledby="controls-heading">
                 <article id="control-page" class="controls">
-                    <div class="page-header">
-                        <h2>Controls</h2>
-                        <button id="close-btn-cntrl" class="close-btn">
+                    <header class="page-header">
+                        <h2 id="imprint-heading">Controls</h2>
+                        <button
+                            id="close-btn-cntrl"
+                            class="close-btn"
+                            aria-label="Close dialog"
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -244,6 +279,7 @@
                                 stroke="currentColor"
                                 class="bi bi-x-circle"
                                 viewBox="0 0 16 16"
+                                aria-hidden="true"
                             >
                                 <path
                                     d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
@@ -253,12 +289,12 @@
                                 />
                             </svg>
                         </button>
-                    </div>
-                    <div class="ctrls-table">
+                    </header>
+                    <section class="ctrls-table">
                         <table>
                             <tr>
                                 <td>
-                                    <button>
+                                    <kbd>
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             width="16"
@@ -266,14 +302,15 @@
                                             fill="currentColor"
                                             class="bi bi-caret-left"
                                             viewBox="0 0 16 16"
+                                            aria-hidden="true"
                                         >
                                             <path
                                                 d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753"
                                             />
                                         </svg>
-                                    </button>
+                                    </kbd>
                                     <p>/</p>
-                                    <button>
+                                    <kbd>
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             width="16"
@@ -281,36 +318,41 @@
                                             fill="currentColor"
                                             class="bi bi-caret-right"
                                             viewBox="0 0 16 16"
+                                            aria-hidden="true"
                                         >
                                             <path
                                                 d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"
                                             />
                                         </svg>
-                                    </button>
+                                    </kbd>
                                 </td>
                                 <td>Move left/ right</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <button>SPACE</button>
+                                    <kbd>SPACE</kbd>
                                 </td>
                                 <td>Jump</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <button>D</button>
+                                    <kbd>D</kbd>
                                 </td>
                                 <td>Throw Bottle</td>
                             </tr>
                         </table>
-                    </div>
+                    </section>
                 </article>
             </dialog>
-            <dialog id="imprint_dialog">
+            <dialog id="imprint_dialog" aria-labelledby="imprint-heading">
                 <article id="imprint-page" class="imprint">
-                    <div class="page-header">
-                        <h2>Imprint</h2>
-                        <button id="close-btn-imprint" class="close-btn">
+                    <header class="page-header">
+                        <h2 id="imprint-heading">Imprint</h2>
+                        <button
+                            id="close-btn-imprint"
+                            class="close-btn"
+                            aria-label="Close dialog"
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -319,6 +361,7 @@
                                 stroke="currentColor"
                                 class="bi bi-x-circle"
                                 viewBox="0 0 16 16"
+                                aria-hidden="true"
                             >
                                 <path
                                     d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
@@ -328,7 +371,7 @@
                                 />
                             </svg>
                         </button>
-                    </div>
+                    </header>
                     <section class="disclaimer">
                         <h3>Information according to applicable law</h3>
                         <p>
