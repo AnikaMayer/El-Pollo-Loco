@@ -277,12 +277,16 @@
                     }
 
                     kbd.showTouch {
-                        width: 60px;
-                        height: 60px;
+                        width: 40px;
+                        height: 40px;
                         background-color: rgba(255, 255, 255, 0.233);
                         border: 1px solid rgba(228, 228, 228, 0.925);
                         border-radius: 50%;
                         color: white;
+
+                        .svgThrow {
+                            transform: scaleX(-1);
+                        }
                     }
 
                     .showTouch {
