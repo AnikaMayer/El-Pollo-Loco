@@ -19,11 +19,13 @@ class Sound {
      * @param {string} _file - The path to the audio file.
      * @param {boolean} [_loop=false] - Whether the sound should loop continuously.
      * @param {boolean} [_playOnce=false] - Whether the sound should always restart on play.
+     * * @param {number} [_volume=0.2] - The playback volume between 0.0 and 1.0.
      */
-    constructor(_file, _loop = false, _playOnce = false) {
+    constructor(_file, _loop = false, _playOnce = false, _volume = 0.2) {
         this.file = new Audio(_file);
         this.file.loop = _loop;
         this.playOnce = _playOnce;
+        this.volume = _volume;
     }
 }
 
@@ -87,8 +89,13 @@ export class AudioHub {
      */
     static GAME = {
         start: new Sound("./assets/sounds/game/gameStart.mp3", false, true),
-        bgm: new Sound("./assets/sounds/game/bgmMusic.mp3", true),
-        main: new Sound("./assets/sounds/game/mainTitle.mp3", true),
+        bgm: new Sound("./assets/sounds/game/bgmMusic.mp3", true, false, 0.08),
+        main: new Sound(
+            "./assets/sounds/game/mainTitle.mp3",
+            true,
+            false,
+            0.08,
+        ),
         win: new Sound("./assets/sounds/game/game-won.mp3"),
         gameOver: new Sound("./assets/sounds/game/game-over.mp3"),
     };
@@ -114,7 +121,7 @@ export class AudioHub {
         if (sound.isPlaying && !sound.playOnce) {
             return;
         }
-        sound.file.volume = 0.2;
+        sound.file.volume = sound.volume;
         sound.file.muted = sound.muted;
         if (sound.file.readyState > 0 || sound.isLoaded) {
             sound.isLoaded = true;
