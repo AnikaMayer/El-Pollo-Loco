@@ -124,8 +124,17 @@ export class MovableObject extends DrawableObject {
      * @param {MovableObject} mO - The object that was landed on.
      */
     jumpOnMovObj(mO) {
-        this.y = mO.y + mO.offset.top - this.height;
+        this.y = mO.y + mO.offset.top - this.height + this.offset.bottom;
         this.bounce();
+    }
+
+    /**
+     * Checks whether the character landed on an enemy within the last 200 milliseconds.
+     * Used to prevent damage collision from triggering immediately after a jump-on.
+     * @returns {boolean} True if less than 200ms have passed since the last jump-on.
+     */
+    justJumpedOnEnemy() {
+        return new Date().getTime() - this.lastJumpedOn < 200;
     }
 
     /**
