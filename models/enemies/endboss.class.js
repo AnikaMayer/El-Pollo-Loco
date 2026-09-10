@@ -70,7 +70,7 @@ export class Endboss extends MovableObject {
      * @type {Function}
      */
     moveEndboss = () => {
-        if (this.encounter === true) {
+        if (this.encounter === true && !this.isNearCharacter()) {
             this.moveToCharacter();
             if (this.movingLeft) {
                 this.moveLeft();
@@ -84,25 +84,38 @@ export class Endboss extends MovableObject {
     };
 
     /**
-     * Updates the movement direction so the endboss always faces and moves toward the character.
+     * Checks whether the endboss is close enough to the character horizontally
+     * that further movement would cause it to overshoot and oscillate.
+     * @returns {boolean} True if the distance between center points is within one movement step.
+     */
+    isNearCharacter() {
+        const bossMid = this.x + this.width / 2;
+        const charMid = this.world.character.x + this.world.character.width / 2;
+        return Math.abs(bossMid - charMid) <= this.speed;
+    }
+
+    /**
+     * Updates the movement direction so the endboss always faces and moves toward the character,
+     * based on their center points.
      */
     moveToCharacter() {
-        if (this.x > this.world.character.x) {
+        const bossMid = this.x + this.width / 2;
+        const charMid = this.world.character.x + this.world.character.width / 2;
+        if (bossMid > charMid) {
             this.movingLeft = true;
-        } else if (this.x < this.world.character.x) {
+        } else if (bossMid < charMid) {
             this.movingLeft = false;
         }
     }
 
     /**
-     * Prevents the endboss from leaving the map boundaries.
-     * Reverses direction when reaching the left (x ≤ 120) or right (x ≥ 3500) edge.
+     * Prevents the endboss from leaving the map on the left side.
+     * No right-side boundary is needed since moveToCharacter already
+     * keeps the endboss oriented toward the character during the encounter.
      */
     stopAtMapEnd() {
         if (this.x <= 120 && this.movingLeft) {
             this.movingLeft = false;
-        } else if (this.x >= 3500 && !this.movingLeft) {
-            this.movingLeft = true;
         }
     }
 

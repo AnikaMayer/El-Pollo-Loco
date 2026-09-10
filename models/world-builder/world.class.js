@@ -302,9 +302,9 @@ export class World {
      */
     flipImage(mO) {
         this.ctx.save();
-        this.ctx.translate(mO.width, 0);
+        this.ctx.translate(mO.x + mO.width, 0);
         this.ctx.scale(-1, 1);
-        mO.x = mO.x * -1;
+        this.ctx.translate(-mO.x, 0);
     }
 
     /**
@@ -312,7 +312,6 @@ export class World {
      * @param {DrawableObject} mO - The object to restore.
      */
     flipImageBack(mO) {
-        mO.x = mO.x * -1;
         this.ctx.restore();
     }
 
