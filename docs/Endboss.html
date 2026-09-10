@@ -296,7 +296,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line131">line 131</a>
+        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line144">line 144</a>
     </li></ul></dd>
     
 
@@ -815,7 +815,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line114">line 114</a>
+        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -2806,7 +2806,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line145">line 145</a>
+        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line158">line 158</a>
     </li></ul></dd>
     
 
@@ -3223,7 +3223,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line178">line 178</a>
+        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line191">line 191</a>
     </li></ul></dd>
     
 
@@ -3546,7 +3546,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line162">line 162</a>
+        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line175">line 175</a>
     </li></ul></dd>
     
 
@@ -4419,6 +4419,116 @@
     
 
     
+    <h4 class="name" id="isNearCharacter"><span class="type-signature"></span>isNearCharacter<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Checks whether the endboss is close enough to the character horizontallythat further movement would cause it to overshoot and oscillate.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line91">line 91</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    True if the distance between center points is within one movement step.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="jump"><span class="type-signature"></span>jump<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -5247,7 +5357,7 @@
 
 
 <div class="description">
-    Updates the movement direction so the endboss always faces and moves toward the character.
+    Updates the movement direction so the endboss always faces and moves toward the character,based on their center points.
 </div>
 
 
@@ -5291,7 +5401,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line89">line 89</a>
+        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line101">line 101</a>
     </li></ul></dd>
     
 
@@ -5665,7 +5775,7 @@
 
 
 <div class="description">
-    Prevents the endboss from leaving the map boundaries.Reverses direction when reaching the left (x ≤ 120) or right (x ≥ 3500) edge.
+    Prevents the endboss from leaving the map on the left side.No right-side boundary is needed since moveToCharacter alreadykeeps the endboss oriented toward the character during the encounter.
 </div>
 
 
@@ -5709,7 +5819,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line101">line 101</a>
+        <a href="models_enemies_endboss.class.js.html">models/enemies/endboss.class.js</a>, <a href="models_enemies_endboss.class.js.html#line116">line 116</a>
     </li></ul></dd>
     
 
@@ -5761,7 +5871,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Sep 10 2026 08:20:17 GMT+0200 (Mitteleuropäische Sommerzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Sep 10 2026 09:02:55 GMT+0200 (Mitteleuropäische Sommerzeit)
 </footer>
 
 <script> prettyPrint(); </script>
